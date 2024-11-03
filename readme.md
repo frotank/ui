@@ -62,7 +62,7 @@ This will start the Expo development environment, where you can preview the app 
 
 ```plaintext
 .
-├── App.js             # Main application entry
+├── App.jsx             # Main application entry
 ├── assets/            # Asset files (images, fonts, etc.)
 ├── components/        # Reusable components
 ├── screens/           # Screen components for navigation
