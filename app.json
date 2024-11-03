@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Nativewind-Starter",
-    "slug": "Nativewind-Starter",
+    "name": "ProjectFuncpro",
+    "slug": "ProjectFuncpro",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,6 +21,7 @@
       }
     },
     "web": {
+      "bundler": "metro",
       "favicon": "./assets/favicon.png"
     }
   }
