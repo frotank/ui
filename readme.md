@@ -15,7 +15,7 @@ This is a starter template for building mobile applications using **React Native
 Make sure you have the following installed:
 
 - **Node.js** (v14 or newer)
-- **pnpm** package manager
+- **npm** or **pnpm** package manager
 - **Expo CLI**: Install via `npm install -g expo-cli`
 
 ## Getting Started
