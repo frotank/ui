@@ -63,7 +63,7 @@ export default function ProfitPilotOnboardingScreen() {
                 <View className="flex-row items-center mb-3">
                   <View className="w-7 h-5 rounded-sm mr-2 overflow-hidden">
                     <View className="flex-1 bg-red-600"></View>
-                    <View className="absolute top-0 left-0 w-3 h-3 bg-blue-800"></View>
+                    <View className="absolute top-0 left-0 w-3 h-3 bg-primary-800"></View>
                     <View className="w-full h-0.5 bg-white absolute top-1"></View>
                     <View className="w-full h-0.5 bg-white absolute top-2"></View>
                     <View className="w-full h-0.5 bg-white absolute top-3"></View>
@@ -116,7 +116,7 @@ export default function ProfitPilotOnboardingScreen() {
                 <View className="flex-row items-center mb-3">
                   <View className="w-7 h-5 rounded-sm mr-2 overflow-hidden">
                     <View className="flex-1 bg-red-600"></View>
-                    <View className="absolute top-0 left-0 w-3 h-3 bg-blue-800"></View>
+                    <View className="absolute top-0 left-0 w-3 h-3 bg-primary-800"></View>
                     <View className="w-full h-0.5 bg-white absolute top-1"></View>
                     <View className="w-full h-0.5 bg-white absolute top-2"></View>
                     <View className="w-full h-0.5 bg-white absolute top-3"></View>

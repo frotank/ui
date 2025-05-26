@@ -53,7 +53,7 @@ export default function BankingScreen() {
               className="w-10 h-10 rounded-full"
             />
           </View>
-          <View className="mt-10">
+          <View>
             <Text className="text-gray-600 text-sm">Welcome back,</Text>
             <Text className="text-gray-900 text-lg font-semibold">
               Sarah Muller
@@ -76,18 +76,18 @@ export default function BankingScreen() {
             showsHorizontalScrollIndicator={false}
             className="mb-8"
           >
-            {/* Main Card - Cyan/Light Blue */}
+            {/* Main Card - Primary Blue */}
             <View
-              className="bg-cyan-400 rounded-2xl p-5 mr-4"
-              style={{ width: 280, height: 230 }}
+              className="bg-primary-500 rounded-2xl p-5 mr-4"
+              style={{ width: 280, height: 180 }}
             >
               <View className="flex-row justify-between items-start mb-6">
                 <View className="flex-1">
                   <Text className="text-white/90 text-xs font-medium mb-1 tracking-wide">
-                    Your Balance
+                    Hi Muller
                   </Text>
-                  <Text className="text- text-4xl  pt-20 text-center font-semibold">
-                    $ 40,500.80
+                  <Text className="text-white text-2xl font-bold">
+                    $40,500.80
                   </Text>
                 </View>
                 <View className="bg-white/30 rounded-lg p-2">
@@ -97,33 +97,32 @@ export default function BankingScreen() {
 
               <View className="flex-row justify-between items-end mt-auto">
                 <View>
-                  <Text className="text-white/90 text-lg font-medium">
-                    Card Number
-                  </Text>
-                  <Text className="text-black/90 text-xs font-medium mt-0.5 ml-4">
+                  <Text className="text-white/90 text-xs font-medium">
                     ••••9934
+                  </Text>
+                  <Text className="text-white/90 text-xs font-medium mt-0.5">
+                    05/28
                   </Text>
                 </View>
                 <View className="bg-white rounded-md px-3 py-1.5">
-                  <Text className="text-cyan-600 font-bold text-sm">VISA</Text>
+                  <Text className="text-primary-600 font-bold text-sm">
+                    VISA
+                  </Text>
                 </View>
               </View>
             </View>
 
             {/* Secondary Card - Red */}
-
             <View
-              className="bg-green-400 rounded-2xl p-5 mr-4"
-              style={{ width: 280, height: 230 }}
+              className="bg-red-500 rounded-2xl p-5"
+              style={{ width: 280, height: 180 }}
             >
               <View className="flex-row justify-between items-start mb-6">
                 <View className="flex-1">
                   <Text className="text-white/90 text-xs font-medium mb-1 tracking-wide">
-                    Your Balance
+                    SAVINGS
                   </Text>
-                  <Text className="text- text-4xl  pt-20 text-center font-semibold">
-                    $ 40,500.80
-                  </Text>
+                  <Text className="text-white text-2xl font-bold">Rp4</Text>
                 </View>
                 <View className="bg-white/30 rounded-lg p-2">
                   <Ionicons name="eye-outline" size={18} color="white" />
@@ -132,48 +131,15 @@ export default function BankingScreen() {
 
               <View className="flex-row justify-between items-end mt-auto">
                 <View>
-                  <Text className="text-white/90 text-lg font-medium">
-                    Card Number
+                  <Text className="text-white/90 text-xs font-medium">
+                    ••••7732
                   </Text>
-                  <Text className="text-black/90 text-xs font-medium mt-0.5 ml-4">
-                    ••••9934
-                  </Text>
-                </View>
-                <View className="bg-white rounded-md px-3 py-1.5">
-                  <Text className="text-cyan-600 font-bold text-sm">VISA</Text>
-                </View>
-              </View>
-            </View>
-
-            <View
-              className="bg-yellow-100 rounded-2xl p-5 mr-4"
-              style={{ width: 280, height: 230 }}
-            >
-              <View className="flex-row justify-between items-start mb-6">
-                <View className="flex-1">
-                  <Text className="text-white/90 text-xs font-medium mb-1 tracking-wide">
-                    Your Balance
-                  </Text>
-                  <Text className="text- text-4xl  pt-20 text-center font-semibold">
-                    $ 40,500.80
-                  </Text>
-                </View>
-                <View className="bg-white/30 rounded-lg p-2">
-                  <Ionicons name="eye-outline" size={18} color="white" />
-                </View>
-              </View>
-
-              <View className="flex-row justify-between items-end mt-auto">
-                <View>
-                  <Text className="text-white/90 text-lg font-medium">
-                    Card Number
-                  </Text>
-                  <Text className="text-black/90 text-xs font-medium mt-0.5 ml-4">
-                    ••••9934
+                  <Text className="text-white/90 text-xs font-medium mt-0.5">
+                    12/26
                   </Text>
                 </View>
                 <View className="bg-white rounded-md px-3 py-1.5">
-                  <Text className="text-cyan-600 font-bold text-sm">VISA</Text>
+                  <Text className="text-red-600 font-bold text-sm">MASTER</Text>
                 </View>
               </View>
             </View>
@@ -211,7 +177,7 @@ export default function BankingScreen() {
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-gray-900 text-xl font-bold">Transaction</Text>
             <TouchableOpacity>
-              <Text className="text-blue-500 text-sm font-medium">
+              <Text className="text-primary-500 text-sm font-medium">
                 View all
               </Text>
             </TouchableOpacity>
@@ -263,7 +229,7 @@ export default function BankingScreen() {
       <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200">
         <View className="flex-row justify-around py-3">
           <TouchableOpacity className="items-center py-2 px-4">
-            <Ionicons name="home" size={24} color="#3B82F6" />
+            <Ionicons name="home" size={24} color="#3b82f6" />
           </TouchableOpacity>
 
           <TouchableOpacity className="items-center py-2 px-4">
@@ -275,7 +241,7 @@ export default function BankingScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity className="items-center py-2 px-4">
-            <Ionicons name="settings-outline" size={24} color="#9CA3AF" />
+            <Ionicons name="person-outline" size={24} color="#9CA3AF" />
           </TouchableOpacity>
         </View>
       </View>

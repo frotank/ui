@@ -66,7 +66,7 @@ export default function CardManagementScreen() {
                 <Text className="text-gray-700 text-sm">Exp 05/24</Text>
               </View>
               <View className="bg-white rounded-lg px-3 py-2">
-                <Text className="text-blue-600 font-bold text-lg">VISA</Text>
+                <Text className="text-primary-600 font-bold text-lg">VISA</Text>
               </View>
             </View>
           </View>
@@ -97,14 +97,14 @@ export default function CardManagementScreen() {
                 <Text className="text-white text-sm">Exp 05/24</Text>
               </View>
               <View className="bg-white rounded-lg px-3 py-2">
-                <Text className="text-blue-600 font-bold text-lg">VISA</Text>
+                <Text className="text-primary-600 font-bold text-lg">VISA</Text>
               </View>
             </View>
           </View>
         </View>
 
         {/* Add New Card Button */}
-        <TouchableOpacity className="bg-cyan-400 rounded-2xl py-4 items-center mb-6">
+        <TouchableOpacity className="bg-primary-500 rounded-2xl py-4 items-center mb-6">
           <Text className="text-white text-lg font-semibold">Add New Card</Text>
         </TouchableOpacity>
       </View>
