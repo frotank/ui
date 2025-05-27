@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StatusBar,
-  Dimensions,
-  statusbars,
-} from "react-native";
+import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
 
@@ -15,8 +8,6 @@ const { width, height } = Dimensions.get("window");
 export default function ProfitPilotOnboardingScreen() {
   return (
     <SafeAreaView className="flex-1">
-      <StatusBar style="off" backgroundColor="black" />
-
       {/* Background with light blue gradient */}
       <View className="flex-1" style={{ backgroundColor: "#ffffff" }}>
         {/* Header with ProfitPilot branding */}

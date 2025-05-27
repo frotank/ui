@@ -11,15 +11,53 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
+        // Inter for headings and titles (replacing Cirka)
+        heading: ["Inter_700Bold", "Inter_600SemiBold"],
+        title: ["Inter_700Bold", "Inter_600SemiBold"],
+        display: ["Inter_700Bold", "Inter_600SemiBold"],
+
+        // Poppins for body text and general content (replacing Gilroy)
+        body: ["Poppins_400Regular", "Poppins_500Medium"],
+        sans: [
+          "Poppins_400Regular",
+          "Poppins_500Medium",
+          "Poppins_600SemiBold",
+          "Poppins_700Bold",
+        ],
+        gilroy: [
+          "Poppins_400Regular",
+          "Poppins_500Medium",
+          "Poppins_600SemiBold",
+          "Poppins_700Bold",
+        ],
+
+        // Inter alternative mapping
         inter: [
           "Inter_400Regular",
           "Inter_500Medium",
           "Inter_600SemiBold",
           "Inter_700Bold",
         ],
-        display: ["Inter_600SemiBold", "Inter_700Bold"],
-        body: ["Inter_400Regular", "Inter_500Medium"],
-        heading: ["Inter_600SemiBold", "Inter_700Bold"],
+
+        // Poppins alternative mapping
+        poppins: [
+          "Poppins_400Regular",
+          "Poppins_500Medium",
+          "Poppins_600SemiBold",
+          "Poppins_700Bold",
+        ],
+
+        // Overpass Mono for monospace text
+        mono: [
+          "OverpassMono_400Regular",
+          "OverpassMono_600SemiBold",
+          "OverpassMono_700Bold",
+        ],
+        overpass: [
+          "OverpassMono_400Regular",
+          "OverpassMono_600SemiBold",
+          "OverpassMono_700Bold",
+        ],
       },
       colors: {
         primary: {
@@ -45,6 +83,16 @@ module.exports = {
           700: "#0369a1", // Dark trust blue
           800: "#075985", // Darker trust blue
           900: "#0c4a6e", // Very dark trust blue
+        },
+        // Modern finance app colors inspired by Dribbble reference
+        finance: {
+          light: "#ACD5E8", // Light blue
+          medium: "#8CB2C7", // Medium blue-gray
+          soft: "#CAE6EF", // Soft light blue
+          primary: "#719BB2", // Primary blue-gray
+          dark: "#0B0D0E", // Near black
+          accent: "#52A6F5", // Bright blue accent
+          muted: "#5F7775", // Muted gray-green
         },
       },
     },

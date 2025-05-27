@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StatusBar,
-  Image,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -16,6 +9,11 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
+
+// Import reusable components
+import Card from "../components/Card";
+import SectionHeader from "../components/SectionHeader";
+import BottomNavigation from "../components/BottomNavigation";
 
 export default function ProfileScreen({ navigation }) {
   const [activeTab, setActiveTab] = useState("personal");
@@ -34,18 +32,9 @@ export default function ProfileScreen({ navigation }) {
   const renderPersonalInfo = () => (
     <View className="px-6 py-6">
       {/* Profile Header */}
-      <View
-        className="bg-white rounded-3xl p-6 mb-6"
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
-        }}
-      >
-        <View className="items-center mb-6">
-          <View className="w-24 h-24 rounded-full overflow-hidden mb-4">
+      <Card padding="p-6" margin="mb-8">
+        <View className="items-center mb-8">
+          <View className="w-28 h-28 rounded-full overflow-hidden mb-6">
             <Image
               source={{
                 uri: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
@@ -54,7 +43,7 @@ export default function ProfileScreen({ navigation }) {
             />
           </View>
           <Text
-            className="text-gray-900 text-2xl mb-1"
+            className="text-gray-900 text-2xl mb-2"
             style={{ fontFamily: "Inter_700Bold" }}
           >
             John Doe
@@ -67,7 +56,7 @@ export default function ProfileScreen({ navigation }) {
           </Text>
         </View>
 
-        <TouchableOpacity className="bg-gray-900 rounded-2xl py-3">
+        <TouchableOpacity className="bg-gray-900 rounded-2xl py-4">
           <Text
             className="text-white text-center text-base"
             style={{ fontFamily: "Inter_600SemiBold" }}
@@ -75,28 +64,18 @@ export default function ProfileScreen({ navigation }) {
             Edit Profile
           </Text>
         </TouchableOpacity>
-      </View>
+      </Card>
 
       {/* Personal Information */}
-      <View
-        className="bg-white rounded-3xl p-6 mb-6"
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
-        }}
-      >
-        <Text
-          className="text-gray-900 text-xl mb-6"
-          style={{ fontFamily: "Inter_700Bold" }}
-        >
-          Personal Information
-        </Text>
+      <Card padding="p-6" margin="mb-8">
+        <SectionHeader
+          title="Personal Information"
+          marginBottom="mb-6"
+          marginTop="mt-0"
+        />
 
-        <View className="space-y-4">
-          <View className="flex-row items-center justify-between py-3 border-b border-gray-100">
+        <View>
+          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <Text
               className="text-gray-500 text-base"
               style={{ fontFamily: "Inter_500Medium" }}
@@ -111,7 +90,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
 
-          <View className="flex-row items-center justify-between py-3 border-b border-gray-100">
+          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <Text
               className="text-gray-500 text-base"
               style={{ fontFamily: "Inter_500Medium" }}
@@ -126,7 +105,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
 
-          <View className="flex-row items-center justify-between py-3 border-b border-gray-100">
+          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <Text
               className="text-gray-500 text-base"
               style={{ fontFamily: "Inter_500Medium" }}
@@ -141,7 +120,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
 
-          <View className="flex-row items-center justify-between py-3">
+          <View className="flex-row items-center justify-between py-4">
             <Text
               className="text-gray-500 text-base"
               style={{ fontFamily: "Inter_500Medium" }}
@@ -149,14 +128,14 @@ export default function ProfileScreen({ navigation }) {
               Address
             </Text>
             <Text
-              className="text-gray-900 text-base text-right"
+              className="text-gray-900 text-base text-right flex-1 ml-4"
               style={{ fontFamily: "Inter_600SemiBold" }}
             >
               123 Main St, New York, NY 10001
             </Text>
           </View>
         </View>
-      </View>
+      </Card>
     </View>
   );
 
@@ -520,24 +499,27 @@ export default function ProfileScreen({ navigation }) {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <StatusBar style="dark" />
-
       {/* Header */}
       <View className="px-6 py-6 bg-white border-b border-gray-100">
         <View className="flex-row items-center justify-between">
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            className="w-12 h-12 rounded-2xl bg-gray-50 items-center justify-center"
-          >
-            <Ionicons name="chevron-back" size={20} color="#374151" />
+          <View className="flex-1">
+            <Text
+              className="text-gray-500 text-base mb-2"
+              style={{ fontFamily: "Inter_500Medium" }}
+            >
+              Welcome back,
+            </Text>
+            <Text
+              className="text-gray-900 text-2xl"
+              style={{ fontFamily: "Inter_700Bold" }}
+            >
+              Profile
+            </Text>
+          </View>
+
+          <TouchableOpacity className="bg-blue-50 rounded-2xl p-4">
+            <Ionicons name="settings-outline" size={24} color="#2563eb" />
           </TouchableOpacity>
-          <Text
-            className="text-gray-900 text-xl"
-            style={{ fontFamily: "Inter_700Bold" }}
-          >
-            Profile
-          </Text>
-          <View className="w-12" />
         </View>
       </View>
 
@@ -643,78 +625,18 @@ export default function ProfileScreen({ navigation }) {
       </View>
 
       {/* Tab Content */}
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
         {activeTab === "personal" && renderPersonalInfo()}
         {activeTab === "banking" && renderBankCards()}
         {activeTab === "support" && renderHelpSupport()}
-
-        <View className="h-32" />
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View
-        className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-100"
-        style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: -4 },
-          shadowOpacity: 0.05,
-          shadowRadius: 16,
-          elevation: 16,
-        }}
-      >
-        <View className="flex-row justify-around py-6 px-8">
-          <TouchableOpacity
-            className="items-center"
-            onPress={() => navigation.navigate("Home")}
-          >
-            <View className="w-14 h-14 bg-gray-100 rounded-2xl items-center justify-center mb-2">
-              <Ionicons name="home-outline" size={24} color="#6B7280" />
-            </View>
-            <Text
-              className="text-gray-400 text-xs"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Home
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center">
-            <View className="w-14 h-14 bg-gray-100 rounded-2xl items-center justify-center mb-2">
-              <Ionicons name="person-outline" size={24} color="#6B7280" />
-            </View>
-            <Text
-              className="text-gray-400 text-xs"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Account
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center">
-            <View className="w-14 h-14 bg-gray-100 rounded-2xl items-center justify-center mb-2">
-              <Ionicons name="analytics-outline" size={24} color="#6B7280" />
-            </View>
-            <Text
-              className="text-gray-400 text-xs"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Analytics
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center">
-            <View className="w-14 h-14 bg-gray-900 rounded-2xl items-center justify-center mb-2">
-              <Ionicons name="person" size={24} color="white" />
-            </View>
-            <Text
-              className="text-gray-900 text-xs"
-              style={{ fontFamily: "Inter_700Bold" }}
-            >
-              Profile
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <BottomNavigation navigation={navigation} activeTab="Profile" />
     </SafeAreaView>
   );
 }

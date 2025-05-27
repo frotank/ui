@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  StatusBar,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -40,8 +33,6 @@ export default function BankingScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <StatusBar style="dark" />
-
       {/* Header */}
       <View className="flex-row items-center justify-between px-6 py-4">
         <View className="flex-row items-center">
