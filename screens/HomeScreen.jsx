@@ -7,6 +7,7 @@ import {
   Image,
   StatusBar,
   Dimensions,
+  Animated,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -115,6 +116,192 @@ export default function HomeScreen({ navigation }) {
     },
   ];
 
+  const HorizontalProgressBars = ({ data }) => {
+    const maxAmount = Math.max(...data.map((item) => item.amount));
+    const animatedValues = React.useRef(
+      data.map(() => new Animated.Value(0))
+    ).current;
+
+    React.useEffect(() => {
+      // Animate bars on mount and data change
+      animatedValues.forEach((animValue, index) => {
+        const percentage = (data[index].amount / maxAmount) * 100;
+        Animated.timing(animValue, {
+          toValue: percentage,
+          duration: 1000,
+          delay: index * 150,
+          useNativeDriver: false,
+        }).start();
+      });
+    }, [data, maxAmount]);
+
+    return (
+      <View className="space-y-6">
+        {data.map((item, index) => {
+          const percentage = (item.amount / maxAmount) * 100;
+
+          return (
+            <TouchableOpacity
+              key={index}
+              className="bg-white/80 backdrop-blur-md rounded-2xl p-5 border border-white/30"
+              style={{
+                shadowColor: item.color,
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.15,
+                shadowRadius: 12,
+                elevation: 6,
+              }}
+              activeOpacity={0.9}
+            >
+              {/* Category Header */}
+              <View className="flex-row items-center justify-between mb-4">
+                <View className="flex-row items-center flex-1">
+                  <View
+                    className="w-12 h-12 rounded-xl items-center justify-center mr-4"
+                    style={{
+                      backgroundColor: `${item.color}20`,
+                      borderWidth: 2,
+                      borderColor: `${item.color}40`,
+                    }}
+                  >
+                    <Text className="text-2xl">{item.icon}</Text>
+                  </View>
+                  <View className="flex-1">
+                    <Text
+                      className="text-slate-900 text-lg mb-1"
+                      style={{ fontFamily: "Inter_700Bold" }}
+                    >
+                      {item.category}
+                    </Text>
+                    <Text
+                      className="text-slate-500 text-sm"
+                      style={{ fontFamily: "Inter_500Medium" }}
+                    >
+                      {Math.round(percentage)}% of total missed
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Amount */}
+                <View className="items-end">
+                  <Text
+                    className="text-slate-900 text-xl mb-1"
+                    style={{ fontFamily: "Inter_700Bold" }}
+                  >
+                    ₹{item.amount}
+                  </Text>
+                  <Text
+                    className="text-slate-500 text-xs"
+                    style={{ fontFamily: "Inter_500Medium" }}
+                  >
+                    missed
+                  </Text>
+                </View>
+              </View>
+
+              {/* Progress Bar */}
+              <View className="mb-2">
+                <View
+                  className="bg-slate-200 rounded-full h-3 overflow-hidden"
+                  style={{
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }}
+                >
+                  <Animated.View
+                    className="h-full rounded-full"
+                    style={{
+                      backgroundColor: item.color,
+                      width: animatedValues[index].interpolate({
+                        inputRange: [0, 100],
+                        outputRange: ["0%", "100%"],
+                        extrapolate: "clamp",
+                      }),
+                      shadowColor: item.color,
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.3,
+                      shadowRadius: 4,
+                      elevation: 3,
+                    }}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+
+        {/* Summary Card */}
+        <View className="bg-gradient-to-r from-slate-50 to-blue-50 rounded-2xl p-5 border border-blue-100">
+          <View className="flex-row items-center justify-center">
+            <View className="bg-red-100 rounded-full p-3 mr-4">
+              <Text className="text-2xl">💸</Text>
+            </View>
+            <View className="flex-1 text-center">
+              <Text
+                className="text-slate-600 text-sm mb-1"
+                style={{ fontFamily: "Inter_500Medium" }}
+              >
+                Total Missed Rewards
+              </Text>
+              <Text
+                className="text-slate-900 text-2xl"
+                style={{ fontFamily: "Inter_700Bold" }}
+              >
+                ₹{data.reduce((sum, item) => sum + item.amount, 0)}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const RewardBreakdownItem = ({ item }) => (
+    <View className="flex-row items-center justify-between bg-white p-4 rounded-2xl mb-3 border border-slate-100">
+      <View className="flex-row items-center flex-1">
+        <View
+          className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+          style={{
+            backgroundColor: `${item.color}15`,
+          }}
+        >
+          <Text className="text-xl">{item.icon}</Text>
+        </View>
+        <View>
+          <Text
+            className="text-slate-900 text-base mb-0.5"
+            style={{ fontFamily: "Inter_600SemiBold" }}
+          >
+            {item.category}
+          </Text>
+          <Text
+            className="text-slate-500 text-sm"
+            style={{ fontFamily: "Inter_500Medium" }}
+          >
+            ₹{item.amount} missed
+          </Text>
+        </View>
+      </View>
+      <View
+        className="h-8 px-3 rounded-lg items-center justify-center"
+        style={{ backgroundColor: `${item.color}15` }}
+      >
+        <Text
+          className="text-sm"
+          style={{
+            fontFamily: "Inter_600SemiBold",
+            color: item.color,
+          }}
+        >
+          {Math.round((item.amount / totalMissed) * 100)}%
+        </Text>
+      </View>
+    </View>
+  );
+
   const PieChart = ({ data, size = 140 }) => {
     let cumulativePercentage = 0;
 
@@ -145,26 +332,16 @@ export default function HomeScreen({ navigation }) {
           })}
         </View>
         <View
-          className="bg-white rounded-full items-center justify-center"
           style={{
             position: "absolute",
             width: size * 0.7,
             height: size * 0.7,
-            shadowColor: "#1e40af",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.1,
-            shadowRadius: 8,
-            elevation: 4,
           }}
+          className="bg-white rounded-full items-center justify-center shadow-lg"
         >
           <Text
             className="text-slate-900 text-2xl"
-            style={{
-              fontFamily: "Inter_700Bold",
-              textShadowColor: "#0001",
-              textShadowOffset: { width: 0, height: 1 },
-              textShadowRadius: 2,
-            }}
+            style={{ fontFamily: "Inter_700Bold" }}
           >
             ₹{totalMissed}
           </Text>
@@ -178,66 +355,6 @@ export default function HomeScreen({ navigation }) {
       </View>
     );
   };
-
-  const RewardBreakdownItem = ({ item }) => (
-    <View
-      className="flex-row items-center justify-between bg-white/90 p-5 rounded-2xl mb-4 border border-blue-100/50"
-      style={{
-        shadowColor: "#1e40af",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
-        elevation: 2,
-      }}
-    >
-      <View className="flex-row items-center flex-1">
-        <View
-          className="w-12 h-12 rounded-xl items-center justify-center mr-4"
-          style={{
-            backgroundColor: `${item.color}20`,
-            shadowColor: item.color,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 2,
-          }}
-        >
-          <Text className="text-2xl">{item.icon}</Text>
-        </View>
-        <View>
-          <Text
-            className="text-slate-900 text-lg mb-1"
-            style={{
-              fontFamily: "Inter_600SemiBold",
-              letterSpacing: -0.3,
-            }}
-          >
-            {item.category}
-          </Text>
-          <Text
-            className="text-slate-500 text-sm"
-            style={{ fontFamily: "Inter_500Medium" }}
-          >
-            ₹{item.amount} missed
-          </Text>
-        </View>
-      </View>
-      <View
-        className="h-10 px-4 rounded-full items-center justify-center"
-        style={{ backgroundColor: `${item.color}15` }}
-      >
-        <Text
-          className="text-sm font-semibold"
-          style={{
-            fontFamily: "Inter_600SemiBold",
-            color: item.color,
-          }}
-        >
-          {Math.round((item.amount / totalMissed) * 100)}%
-        </Text>
-      </View>
-    </View>
-  );
 
   return (
     <SafeAreaView className="flex-1 bg-slate-50">
@@ -663,15 +780,8 @@ export default function HomeScreen({ navigation }) {
               </Svg>
             </View>
             {/* Enhanced card content */}
-            <View className="p-7" style={{ position: "relative", zIndex: 1 }}>
-              <View className="items-center mb-8">
-                <PieChart data={missedRewardsData} />
-              </View>
-              <View>
-                {missedRewardsData.map((item, index) => (
-                  <RewardBreakdownItem key={index} item={item} />
-                ))}
-              </View>
+            <View className="p-6" style={{ position: "relative", zIndex: 1 }}>
+              <HorizontalProgressBars data={missedRewardsData} />
             </View>
           </View>
         </View>
