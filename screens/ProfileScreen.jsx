@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import {
   useFonts,
   Inter_400Regular,
@@ -32,9 +33,18 @@ export default function ProfileScreen({ navigation }) {
   const renderPersonalInfo = () => (
     <View className="px-6 py-6">
       {/* Profile Header */}
-      <Card padding="p-6" margin="mb-8">
+      <View
+        className="bg-white rounded-3xl p-6 mb-8"
+        style={{
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
+        }}
+      >
         <View className="items-center mb-8">
-          <View className="w-28 h-28 rounded-full overflow-hidden mb-6">
+          <View className="w-28 h-28 rounded-full overflow-hidden mb-6 border-4 border-blue-100">
             <Image
               source={{
                 uri: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
@@ -43,20 +53,20 @@ export default function ProfileScreen({ navigation }) {
             />
           </View>
           <Text
-            className="text-gray-900 text-2xl mb-2"
+            className="text-blue-900 text-2xl mb-2"
             style={{ fontFamily: "Inter_700Bold" }}
           >
             John Doe
           </Text>
           <Text
-            className="text-gray-500 text-base"
+            className="text-blue-600 text-base"
             style={{ fontFamily: "Inter_500Medium" }}
           >
             Premium Member
           </Text>
         </View>
 
-        <TouchableOpacity className="bg-gray-900 rounded-2xl py-4">
+        <TouchableOpacity className="bg-blue-600 rounded-2xl py-4">
           <Text
             className="text-white text-center text-base"
             style={{ fontFamily: "Inter_600SemiBold" }}
@@ -64,78 +74,135 @@ export default function ProfileScreen({ navigation }) {
             Edit Profile
           </Text>
         </TouchableOpacity>
-      </Card>
+      </View>
 
       {/* Personal Information */}
-      <Card padding="p-6" margin="mb-8">
-        <SectionHeader
-          title="Personal Information"
-          marginBottom="mb-6"
-          marginTop="mt-0"
-        />
+      <View
+        className="bg-white rounded-3xl p-6 mb-8"
+        style={{
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
+        }}
+      >
+        <Text
+          className="text-blue-900 text-xl mb-6"
+          style={{
+            fontFamily: "Inter_700Bold",
+            letterSpacing: -0.5,
+          }}
+        >
+          Personal Information
+        </Text>
 
-        <View>
-          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
-            <Text
-              className="text-gray-500 text-base"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Email
-            </Text>
-            <Text
-              className="text-gray-900 text-base"
-              style={{ fontFamily: "Inter_600SemiBold" }}
-            >
-              john.doe@email.com
-            </Text>
+        <View className="space-y-1">
+          {/* Email */}
+          <View className="bg-blue-50 rounded-2xl p-4 border border-blue-100">
+            <View className="flex-row items-center">
+              <View className="w-10 h-10 bg-blue-100 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="mail" size={20} color="#3b82f6" />
+              </View>
+              <View className="flex-1">
+                <Text
+                  className="text-blue-600 text-sm mb-1"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Email Address
+                </Text>
+                <Text
+                  className="text-blue-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  john.doe@email.com
+                </Text>
+              </View>
+              <TouchableOpacity className="w-8 h-8 bg-blue-100 rounded-lg items-center justify-center">
+                <Ionicons name="pencil" size={16} color="#3b82f6" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
-            <Text
-              className="text-gray-500 text-base"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Phone
-            </Text>
-            <Text
-              className="text-gray-900 text-base"
-              style={{ fontFamily: "Inter_600SemiBold" }}
-            >
-              +1 (555) 123-4567
-            </Text>
+          {/* Phone */}
+          <View className="bg-green-50 rounded-2xl p-4 border border-green-100">
+            <View className="flex-row items-center">
+              <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="call" size={20} color="#10b981" />
+              </View>
+              <View className="flex-1">
+                <Text
+                  className="text-green-600 text-sm mb-1"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Phone Number
+                </Text>
+                <Text
+                  className="text-green-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  +1 (555) 123-4567
+                </Text>
+              </View>
+              <TouchableOpacity className="w-8 h-8 bg-green-100 rounded-lg items-center justify-center">
+                <Ionicons name="pencil" size={16} color="#10b981" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
-            <Text
-              className="text-gray-500 text-base"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Date of Birth
-            </Text>
-            <Text
-              className="text-gray-900 text-base"
-              style={{ fontFamily: "Inter_600SemiBold" }}
-            >
-              January 15, 1990
-            </Text>
+          {/* Date of Birth */}
+          <View className="bg-purple-50 rounded-2xl p-4 border border-purple-100">
+            <View className="flex-row items-center">
+              <View className="w-10 h-10 bg-purple-100 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="calendar" size={20} color="#8b5cf6" />
+              </View>
+              <View className="flex-1">
+                <Text
+                  className="text-purple-600 text-sm mb-1"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Date of Birth
+                </Text>
+                <Text
+                  className="text-purple-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  January 15, 1990
+                </Text>
+              </View>
+              <TouchableOpacity className="w-8 h-8 bg-purple-100 rounded-lg items-center justify-center">
+                <Ionicons name="pencil" size={16} color="#8b5cf6" />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View className="flex-row items-center justify-between py-4">
-            <Text
-              className="text-gray-500 text-base"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Address
-            </Text>
-            <Text
-              className="text-gray-900 text-base text-right flex-1 ml-4"
-              style={{ fontFamily: "Inter_600SemiBold" }}
-            >
-              123 Main St, New York, NY 10001
-            </Text>
+          {/* Address */}
+          <View className="bg-orange-50 rounded-2xl p-4 border border-orange-100">
+            <View className="flex-row items-start">
+              <View className="w-10 h-10 bg-orange-100 rounded-xl items-center justify-center mr-4 mt-1">
+                <Ionicons name="location" size={20} color="#f97316" />
+              </View>
+              <View className="flex-1">
+                <Text
+                  className="text-orange-600 text-sm mb-1"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Home Address
+                </Text>
+                <Text
+                  className="text-orange-900 text-base leading-6"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  123 Main St, New York, NY 10001
+                </Text>
+              </View>
+              <TouchableOpacity className="w-8 h-8 bg-orange-100 rounded-lg items-center justify-center mt-1">
+                <Ionicons name="pencil" size={16} color="#f97316" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </Card>
+      </View>
     </View>
   );
 
@@ -226,82 +293,221 @@ export default function ProfileScreen({ navigation }) {
       <View
         className="bg-white rounded-3xl p-6 mb-6"
         style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
         }}
       >
         <Text
-          className="text-gray-900 text-xl mb-6"
-          style={{ fontFamily: "Inter_700Bold" }}
+          className="text-blue-900 text-xl mb-6"
+          style={{
+            fontFamily: "Inter_700Bold",
+            letterSpacing: -0.5,
+          }}
         >
           Your Cards
         </Text>
 
-        <View className="space-y-4">
-          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
-            <View className="flex-row items-center">
-              <View className="w-12 h-12 bg-gray-900 rounded-2xl items-center justify-center mr-4">
-                <Ionicons name="card" size={24} color="white" />
-              </View>
-              <View>
-                <Text
-                  className="text-gray-900 text-base mb-1"
-                  style={{ fontFamily: "Inter_600SemiBold" }}
-                >
-                  Visa Platinum
-                </Text>
-                <Text
-                  className="text-gray-500 text-sm"
-                  style={{ fontFamily: "Inter_400Regular" }}
-                >
-                  ••••1234 • $5,234.50
-                </Text>
-              </View>
-            </View>
-            <TouchableOpacity>
-              <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-            </TouchableOpacity>
-          </View>
+        <View className="space-y-6">
+          {/* Visa Platinum Card */}
+          <TouchableOpacity>
+            <View
+              className="rounded-3xl overflow-hidden mx-2 mb-4"
+              style={{
+                height: 200,
+                width: "100%",
+                shadowColor: "#1e40af",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.3,
+                shadowRadius: 16,
+                elevation: 12,
+              }}
+            >
+              <LinearGradient
+                colors={["#1e40af", "#2563eb", "#3b82f6"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ flex: 1, padding: 24, position: "relative" }}
+              >
+                {/* Card Header */}
+                <View className="flex-row items-start justify-between mb-4">
+                  <View>
+                    <Text
+                      className="text-white text-lg tracking-wider"
+                      style={{
+                        fontFamily: "Inter_700Bold",
+                        textShadowColor: "#00000030",
+                        textShadowOffset: { width: 0, height: 1 },
+                        textShadowRadius: 2,
+                      }}
+                    >
+                      VISA PLATINUM
+                    </Text>
+                  </View>
+                  <View className="bg-white/25 rounded-lg px-3 py-2">
+                    <Text
+                      className="text-white text-xs"
+                      style={{ fontFamily: "Inter_600SemiBold" }}
+                    >
+                      ACTIVE
+                    </Text>
+                  </View>
+                </View>
 
-          <View className="flex-row items-center justify-between py-4">
-            <View className="flex-row items-center">
-              <View className="w-12 h-12 bg-green-100 rounded-2xl items-center justify-center mr-4">
-                <Ionicons name="card" size={24} color="#059669" />
-              </View>
-              <View>
-                <Text
-                  className="text-gray-900 text-base mb-1"
-                  style={{ fontFamily: "Inter_600SemiBold" }}
-                >
-                  Mastercard Gold
-                </Text>
-                <Text
-                  className="text-gray-500 text-sm"
-                  style={{ fontFamily: "Inter_400Regular" }}
-                >
-                  ••••5678 • $3,421.75
-                </Text>
-              </View>
+                {/* Card Number and Balance */}
+                <View className="flex-1 justify-center">
+                  <Text
+                    className="text-white/80 text-sm mb-2"
+                    style={{ fontFamily: "Inter_500Medium" }}
+                  >
+                    Card Number
+                  </Text>
+                  <Text
+                    className="text-white text-2xl mb-4"
+                    style={{
+                      fontFamily: "Inter_600SemiBold",
+                      letterSpacing: 3,
+                    }}
+                  >
+                    •••• •••• •••• 1234
+                  </Text>
+                </View>
+
+                {/* Card Footer */}
+                <View className="flex-row items-end justify-between">
+                  <View>
+                    <Text
+                      className="text-white/80 text-sm mb-1"
+                      style={{ fontFamily: "Inter_500Medium" }}
+                    >
+                      Current Balance
+                    </Text>
+                    <Text
+                      className="text-white text-2xl"
+                      style={{
+                        fontFamily: "Inter_700Bold",
+                        textShadowColor: "#00000030",
+                        textShadowOffset: { width: 0, height: 1 },
+                        textShadowRadius: 2,
+                      }}
+                    >
+                      $5,234.50
+                    </Text>
+                  </View>
+                  <View>
+                    <Text
+                      className="text-white text-sm"
+                      style={{ fontFamily: "Inter_700Bold" }}
+                    >
+                      ZASHIT
+                    </Text>
+                  </View>
+                </View>
+              </LinearGradient>
             </View>
-            <TouchableOpacity>
-              <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
+
+          {/* Mastercard Gold Card */}
+          <TouchableOpacity>
+            <View
+              className="rounded-3xl overflow-hidden mx-2"
+              style={{
+                height: 200,
+                width: "100%",
+                shadowColor: "#f59e0b",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.3,
+                shadowRadius: 16,
+                elevation: 12,
+              }}
+            >
+              <LinearGradient
+                colors={["#f59e0b", "#f97316", "#ea580c"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{ flex: 1, padding: 24, position: "relative" }}
+              >
+                {/* Card Header */}
+                <View className="flex-row items-start justify-between mb-4">
+                  <View>
+                    <Text
+                      className="text-white text-lg tracking-wider"
+                      style={{
+                        fontFamily: "Inter_700Bold",
+                        textShadowColor: "#00000030",
+                        textShadowOffset: { width: 0, height: 1 },
+                        textShadowRadius: 2,
+                      }}
+                    >
+                      MASTERCARD GOLD
+                    </Text>
+                  </View>
+                  <View className="bg-white/25 rounded-lg px-3 py-2">
+                    <Text
+                      className="text-white text-xs"
+                      style={{ fontFamily: "Inter_600SemiBold" }}
+                    >
+                      ACTIVE
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Card Number and Balance */}
+                <View className="flex-1 justify-center">
+                  <Text
+                    className="text-white/80 text-sm mb-2"
+                    style={{ fontFamily: "Inter_500Medium" }}
+                  >
+                    Card Number
+                  </Text>
+                  <Text
+                    className="text-white text-2xl mb-4"
+                    style={{
+                      fontFamily: "Inter_600SemiBold",
+                      letterSpacing: 3,
+                    }}
+                  >
+                    •••• •••• •••• 5678
+                  </Text>
+                </View>
+
+                {/* Card Footer */}
+                <View className="flex-row items-end justify-between">
+                  <View>
+                    <Text
+                      className="text-white/80 text-sm mb-1"
+                      style={{ fontFamily: "Inter_500Medium" }}
+                    >
+                      Current Balance
+                    </Text>
+                    <Text
+                      className="text-white text-2xl"
+                      style={{
+                        fontFamily: "Inter_700Bold",
+                        textShadowColor: "#00000030",
+                        textShadowOffset: { width: 0, height: 1 },
+                        textShadowRadius: 2,
+                      }}
+                    >
+                      $3,421.75
+                    </Text>
+                  </View>
+                  <View>
+                    <Text
+                      className="text-white text-sm"
+                      style={{ fontFamily: "Inter_700Bold" }}
+                    >
+                      ZASHIT
+                    </Text>
+                  </View>
+                </View>
+              </LinearGradient>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
-
-      {/* Add New Card */}
-      <TouchableOpacity className="bg-gray-900 rounded-2xl py-4 mx-6">
-        <Text
-          className="text-white text-center text-base"
-          style={{ fontFamily: "Inter_600SemiBold" }}
-        >
-          Add New Card
-        </Text>
-      </TouchableOpacity>
     </View>
   );
 
