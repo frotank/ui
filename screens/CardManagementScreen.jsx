@@ -366,7 +366,7 @@ export default function CardManagementScreen({ navigation }) {
             </Text>
 
             <View className="space-y-4">
-              <View className="flex-row items-center">
+              <View className="flex-row items-center mb-4">
                 <View className="w-12 h-12 bg-blue-100 rounded-xl items-center justify-center mr-4">
                   <Ionicons name="shield-checkmark" size={24} color="#3b82f6" />
                 </View>
@@ -386,7 +386,7 @@ export default function CardManagementScreen({ navigation }) {
                 </View>
               </View>
 
-              <View className="flex-row items-center">
+              <View className="flex-row items-center mb-4">
                 <View className="w-12 h-12 bg-green-100 rounded-xl items-center justify-center mr-4">
                   <Ionicons name="gift" size={24} color="#10b981" />
                 </View>

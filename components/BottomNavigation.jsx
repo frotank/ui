@@ -33,12 +33,12 @@ export default function BottomNavigation({
             >
               <View
                 className={`w-12 h-12 rounded-2xl items-center justify-center mb-2 ${
-                  isActive ? "bg-indigo-600" : "bg-gray-50"
+                  isActive ? "bg-blue-600" : "bg-gray-50"
                 }`}
                 style={
                   isActive
                     ? {
-                        shadowColor: "#6366f1",
+                        shadowColor: "#2563eb",
                         shadowOffset: { width: 0, height: 4 },
                         shadowOpacity: 0.25,
                         shadowRadius: 12,
@@ -55,7 +55,7 @@ export default function BottomNavigation({
               </View>
               <Text
                 className={`text-xs ${
-                  isActive ? "text-indigo-600" : "text-gray-500"
+                  isActive ? "text-blue-600" : "text-gray-500"
                 }`}
                 style={{
                   fontFamily: isActive

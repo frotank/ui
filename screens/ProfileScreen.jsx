@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Modal,
+  TextInput,
+  Alert,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,6 +27,18 @@ import BottomNavigation from "../components/BottomNavigation";
 
 export default function ProfileScreen({ navigation }) {
   const [activeTab, setActiveTab] = useState("personal");
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingField, setEditingField] = useState(null);
+  const [tempValue, setTempValue] = useState("");
+
+  // Personal information state
+  const [personalInfo, setPersonalInfo] = useState({
+    name: "John Doe",
+    email: "john.doe@email.com",
+    phone: "+1 (555) 123-4567",
+    dateOfBirth: "January 15, 1990",
+    address: "123 Main St, New York, NY 10001",
+  });
 
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -29,6 +50,40 @@ export default function ProfileScreen({ navigation }) {
   if (!fontsLoaded) {
     return null;
   }
+
+  const handleEditField = (field, currentValue) => {
+    setEditingField(field);
+    setTempValue(currentValue);
+    setEditModalVisible(true);
+  };
+
+  const handleSaveField = () => {
+    if (!tempValue.trim()) {
+      Alert.alert("Error", "Field cannot be empty");
+      return;
+    }
+
+    setPersonalInfo((prev) => ({
+      ...prev,
+      [editingField]: tempValue,
+    }));
+
+    setEditModalVisible(false);
+    setEditingField(null);
+    setTempValue("");
+    Alert.alert("Success", "Information updated successfully!");
+  };
+
+  const getFieldLabel = (field) => {
+    const labels = {
+      name: "Full Name",
+      email: "Email Address",
+      phone: "Phone Number",
+      dateOfBirth: "Date of Birth",
+      address: "Home Address",
+    };
+    return labels[field] || field;
+  };
 
   const renderPersonalInfo = () => (
     <View className="px-6 py-6">
@@ -56,7 +111,7 @@ export default function ProfileScreen({ navigation }) {
             className="text-blue-900 text-2xl mb-2"
             style={{ fontFamily: "Inter_700Bold" }}
           >
-            John Doe
+            {personalInfo.name}
           </Text>
           <Text
             className="text-blue-600 text-base"
@@ -99,7 +154,7 @@ export default function ProfileScreen({ navigation }) {
 
         <View className="space-y-1">
           {/* Email */}
-          <View className="bg-blue-50 rounded-2xl p-4 border border-blue-100">
+          <View className="bg-blue-50 rounded-2xl p-4 border border-blue-100 mb-4">
             <View className="flex-row items-center">
               <View className="w-10 h-10 bg-blue-100 rounded-xl items-center justify-center mr-4">
                 <Ionicons name="mail" size={20} color="#3b82f6" />
@@ -109,23 +164,20 @@ export default function ProfileScreen({ navigation }) {
                   className="text-blue-600 text-sm mb-1"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Email Address
+                  {getFieldLabel("email")}
                 </Text>
                 <Text
                   className="text-blue-900 text-base"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  john.doe@email.com
+                  {personalInfo.email}
                 </Text>
               </View>
-              <TouchableOpacity className="w-8 h-8 bg-blue-100 rounded-lg items-center justify-center">
-                <Ionicons name="pencil" size={16} color="#3b82f6" />
-              </TouchableOpacity>
             </View>
           </View>
 
           {/* Phone */}
-          <View className="bg-green-50 rounded-2xl p-4 border border-green-100">
+          <View className="bg-green-50 rounded-2xl p-4 border border-green-100 mb-4">
             <View className="flex-row items-center">
               <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center mr-4">
                 <Ionicons name="call" size={20} color="#10b981" />
@@ -135,23 +187,20 @@ export default function ProfileScreen({ navigation }) {
                   className="text-green-600 text-sm mb-1"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Phone Number
+                  {getFieldLabel("phone")}
                 </Text>
                 <Text
                   className="text-green-900 text-base"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  +1 (555) 123-4567
+                  {personalInfo.phone}
                 </Text>
               </View>
-              <TouchableOpacity className="w-8 h-8 bg-green-100 rounded-lg items-center justify-center">
-                <Ionicons name="pencil" size={16} color="#10b981" />
-              </TouchableOpacity>
             </View>
           </View>
 
           {/* Date of Birth */}
-          <View className="bg-purple-50 rounded-2xl p-4 border border-purple-100">
+          <View className="bg-purple-50 rounded-2xl p-4 border border-purple-100 mb-4">
             <View className="flex-row items-center">
               <View className="w-10 h-10 bg-purple-100 rounded-xl items-center justify-center mr-4">
                 <Ionicons name="calendar" size={20} color="#8b5cf6" />
@@ -161,18 +210,15 @@ export default function ProfileScreen({ navigation }) {
                   className="text-purple-600 text-sm mb-1"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Date of Birth
+                  {getFieldLabel("dateOfBirth")}
                 </Text>
                 <Text
                   className="text-purple-900 text-base"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  January 15, 1990
+                  {personalInfo.dateOfBirth}
                 </Text>
               </View>
-              <TouchableOpacity className="w-8 h-8 bg-purple-100 rounded-lg items-center justify-center">
-                <Ionicons name="pencil" size={16} color="#8b5cf6" />
-              </TouchableOpacity>
             </View>
           </View>
 
@@ -187,18 +233,15 @@ export default function ProfileScreen({ navigation }) {
                   className="text-orange-600 text-sm mb-1"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Home Address
+                  {getFieldLabel("address")}
                 </Text>
                 <Text
                   className="text-orange-900 text-base leading-6"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  123 Main St, New York, NY 10001
+                  {personalInfo.address}
                 </Text>
               </View>
-              <TouchableOpacity className="w-8 h-8 bg-orange-100 rounded-lg items-center justify-center mt-1">
-                <Ionicons name="pencil" size={16} color="#f97316" />
-              </TouchableOpacity>
             </View>
           </View>
         </View>
