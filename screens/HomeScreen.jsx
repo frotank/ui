@@ -44,10 +44,34 @@ export default function HomeScreen({ navigation }) {
 
   // Mock data for missed rewards breakdown
   const missedRewardsData = [
-    { category: "Dining", amount: 450, color: "#2563eb", icon: "🍽️" },
-    { category: "Travel", amount: 380, color: "#1d4ed8", icon: "✈️" },
-    { category: "Shopping", amount: 250, color: "#3b82f6", icon: "🛍️" },
-    { category: "Fuel", amount: 120, color: "#60a5fa", icon: "⛽" },
+    {
+      category: "Dining",
+      amount: 450,
+      color: "#2563eb",
+      icon: "🍽️",
+      svgIcon: "restaurant",
+    },
+    {
+      category: "Travel",
+      amount: 380,
+      color: "#1d4ed8",
+      icon: "✈️",
+      svgIcon: "airplane",
+    },
+    {
+      category: "Shopping",
+      amount: 250,
+      color: "#3b82f6",
+      icon: "🛍️",
+      svgIcon: "bag",
+    },
+    {
+      category: "Fuel",
+      amount: 120,
+      color: "#60a5fa",
+      icon: "⛽",
+      svgIcon: "car",
+    },
   ];
 
   const totalMissed = missedRewardsData.reduce(
@@ -55,8 +79,8 @@ export default function HomeScreen({ navigation }) {
     0
   );
 
-  // Recent transactions with optimization status
-  const recentTransactions = [
+  // Frequent transactions with optimization status
+  const frequentTransactions = [
     {
       id: 1,
       merchant: "Zomato",
@@ -67,7 +91,6 @@ export default function HomeScreen({ navigation }) {
       betterCard: "HDFC Swiggy Card",
       missedReward: "₹85",
       icon: "🍔",
-      date: "Today, 2:30 PM",
     },
     {
       id: 2,
@@ -78,7 +101,6 @@ export default function HomeScreen({ navigation }) {
       isOptimal: true,
       earnedReward: "₹120",
       icon: "📦",
-      date: "Today, 11:15 AM",
     },
     {
       id: 3,
@@ -90,7 +112,6 @@ export default function HomeScreen({ navigation }) {
       betterCard: "BPCL SBI Card",
       missedReward: "₹150",
       icon: "⛽",
-      date: "Yesterday, 6:45 PM",
     },
   ];
 
@@ -116,33 +137,8 @@ export default function HomeScreen({ navigation }) {
     },
   ];
 
-  const CreditCardStyleCards = ({ data }) => {
-    const scrollViewRef = React.useRef(null);
-    const [activeIndex, setActiveIndex] = React.useState(0);
-    const cardWidth = width - 40; // Full width minus 20px padding on each side
-    const cardSpacing = 20;
+  const LoaderStyleBreakdown = ({ data }) => {
     const totalMissed = data.reduce((sum, item) => sum + item.amount, 0);
-
-    const handleScroll = (event) => {
-      const scrollPosition = event.nativeEvent.contentOffset.x;
-      const index = Math.round(scrollPosition / (cardWidth + cardSpacing));
-      setActiveIndex(index);
-    };
-
-    const scrollToCard = (index) => {
-      scrollViewRef.current?.scrollTo({
-        x: index * (cardWidth + cardSpacing),
-        animated: true,
-      });
-    };
-
-    // Credit card gradients for each category - Updated with premium colors
-    const cardGradients = {
-      Dining: ["#3b82f6", "#1d4ed8", "#1e40af"], // Blue gradient theme
-      Travel: ["#8b5cf6", "#7c3aed", "#6366f1"], // Purple gradient
-      Shopping: ["#06b6d4", "#0891b2", "#0e7490"], // Cyan gradient
-      Fuel: ["#10b981", "#059669", "#047857"], // Emerald gradient
-    };
 
     return (
       <View>
@@ -150,7 +146,21 @@ export default function HomeScreen({ navigation }) {
         <View className="bg-gradient-to-r from-red-50 to-rose-50 rounded-2xl p-6 mb-6 border border-red-100">
           <View className="items-center">
             <View className="bg-red-100 rounded-full p-6 mb-4">
-              <Text className="text-5xl">💸</Text>
+              <Svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <Path
+                  d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
+                  stroke="#ef4444"
+                  strokeWidth="2"
+                  fill="#fecaca"
+                />
+                <Path
+                  d="M9 12l2 2 4-4"
+                  stroke="#dc2626"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </Svg>
             </View>
             <Text
               className="text-red-600 text-sm mb-2"
@@ -159,510 +169,68 @@ export default function HomeScreen({ navigation }) {
               Total Missed Rewards
             </Text>
             <Text
-              className="text-red-900 text-3xl mb-2"
+              className="text-red-900 text-3xl"
               style={{ fontFamily: "Inter_700Bold" }}
             >
               ₹{totalMissed}
             </Text>
-            <Text
-              className="text-red-500 text-sm text-center"
-              style={{ fontFamily: "Inter_400Regular" }}
-            >
-              Swipe through your missed reward cards
-            </Text>
           </View>
         </View>
 
-        {/* Credit Card Style Cards */}
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal
-          pagingEnabled={true}
-          showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        >
+        {/* Simplified Progress Bars */}
+        <View className="space-y-8">
           {data.map((item, index) => {
-            const isActive = index === activeIndex;
             const percentage = (item.amount / totalMissed) * 100;
-            const gradientColors = cardGradients[item.category] || [
-              "#3b82f6",
-              "#1d4ed8",
-              "#1e40af",
-            ];
+            const gradientColors = {
+              Dining: "#3b82f6",
+              Travel: "#8b5cf6",
+              Shopping: "#06b6d4",
+              Fuel: "#10b981",
+            };
+            const color = gradientColors[item.category] || "#3b82f6";
 
             return (
               <View
                 key={index}
+                className="bg-white rounded-xl p-5 border border-gray-100 mb-4"
                 style={{
-                  width: width,
-                  paddingHorizontal: 20,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.05,
+                  shadowRadius: 8,
+                  elevation: 3,
                 }}
               >
-                <View
-                  className="rounded-3xl overflow-hidden"
-                  style={{
-                    height: 200,
-                    transform: [{ scale: isActive ? 1.02 : 0.98 }],
-                    shadowColor: gradientColors[0],
-                    shadowOffset: { width: 0, height: 12 },
-                    shadowOpacity: isActive ? 0.4 : 0.3,
-                    shadowRadius: 20,
-                    elevation: isActive ? 15 : 10,
-                  }}
-                >
-                  <LinearGradient
-                    colors={gradientColors}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={{ flex: 1, padding: 20, position: "relative" }}
+                {/* Simple Header */}
+                <View className="flex-row items-center justify-between mb-3">
+                  <Text
+                    className="text-gray-900 text-lg"
+                    style={{ fontFamily: "Inter_600SemiBold" }}
                   >
-                    {/* Card Background Designs */}
-                    <View
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        opacity: 0.35,
-                      }}
-                    >
-                      <Svg width="100%" height="100%" viewBox="0 0 400 200">
-                        {/* Premium credit card inspired designs */}
-                        {item.category === "Dining" && (
-                          <>
-                            {/* Large flowing curve like purple-orange card */}
-                            <Path
-                              d="M0,0 Q200,120 400,0 L400,80 Q200,200 0,80 Z"
-                              fill="#fff"
-                              opacity="0.25"
-                            />
-                            <Path
-                              d="M0,40 Q150,160 400,40 L400,120 Q250,240 0,120 Z"
-                              fill="#fff"
-                              opacity="0.20"
-                            />
-                            {/* Overlapping circles like the reference */}
-                            <Circle
-                              cx="350"
-                              cy="50"
-                              r="40"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                            <Circle
-                              cx="370"
-                              cy="70"
-                              r="30"
-                              fill="#fff"
-                              opacity="0.22"
-                            />
-                            <Circle
-                              cx="320"
-                              cy="80"
-                              r="25"
-                              fill="#fff"
-                              opacity="0.15"
-                            />
-                            {/* Small decorative circles */}
-                            <Circle
-                              cx="80"
-                              cy="150"
-                              r="12"
-                              fill="#fff"
-                              opacity="0.20"
-                            />
-                            <Circle
-                              cx="100"
-                              cy="170"
-                              r="8"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                            <Circle
-                              cx="60"
-                              cy="130"
-                              r="6"
-                              fill="#fff"
-                              opacity="0.24"
-                            />
-                            {/* Curved flowing lines */}
-                            <Path
-                              d="M0,120 Q100,80 200,120 Q300,160 400,120"
-                              stroke="#fff"
-                              strokeWidth="3"
-                              fill="none"
-                              opacity="0.20"
-                            />
-                            <Path
-                              d="M0,160 Q150,120 300,160 Q350,180 400,160"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              fill="none"
-                              opacity="0.16"
-                            />
-                          </>
-                        )}
+                    {item.category}
+                  </Text>
+                  <Text
+                    className="text-gray-900 text-lg"
+                    style={{ fontFamily: "Inter_700Bold" }}
+                  >
+                    ₹{item.amount}
+                  </Text>
+                </View>
 
-                        {item.category === "Travel" && (
-                          <>
-                            {/* Diagonal sweep like dark-teal cards */}
-                            <Path
-                              d="M0,0 L400,0 L400,60 Q200,120 0,60 Z"
-                              fill="#fff"
-                              opacity="0.22"
-                            />
-                            <Path
-                              d="M0,200 L400,200 L400,140 Q200,80 0,140 Z"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                            {/* Geometric angular patterns */}
-                            <Path
-                              d="M300,30 L350,30 L370,60 L320,60 Z"
-                              fill="#fff"
-                              opacity="0.16"
-                            />
-                            <Path
-                              d="M120,120 L170,120 L190,150 L140,150 Z"
-                              fill="#fff"
-                              opacity="0.20"
-                            />
-                            <Path
-                              d="M250,100 L280,100 L290,120 L260,120 Z"
-                              fill="#fff"
-                              opacity="0.14"
-                            />
-                            {/* Circuit-like lines */}
-                            <Path
-                              d="M0,100 L80,100 L80,140 L160,140 L160,180 L240,180"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              fill="none"
-                              opacity="0.18"
-                            />
-                            <Path
-                              d="M400,80 L320,80 L320,120 L240,120 L240,160 L160,160"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              fill="none"
-                              opacity="0.15"
-                            />
-                            {/* Corner circles */}
-                            <Circle
-                              cx="380"
-                              cy="180"
-                              r="20"
-                              fill="#fff"
-                              opacity="0.12"
-                            />
-                            <Circle
-                              cx="20"
-                              cy="20"
-                              r="15"
-                              fill="#fff"
-                              opacity="0.16"
-                            />
-                          </>
-                        )}
-
-                        {item.category === "Shopping" && (
-                          <>
-                            {/* Smooth gradient waves like cyan-teal card */}
-                            <Path
-                              d="M0,0 Q100,40 200,0 Q300,40 400,0 L400,100 Q300,60 200,100 Q100,60 0,100 Z"
-                              fill="#fff"
-                              opacity="0.22"
-                            />
-                            <Path
-                              d="M0,200 Q100,160 200,200 Q300,160 400,200 L400,100 Q300,140 200,100 Q100,140 0,100 Z"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                            {/* Overlapping rounded rectangles */}
-                            <Path
-                              d="M80,60 h120 v60 h-120 z"
-                              fill="#fff"
-                              opacity="0.14"
-                              rx="15"
-                            />
-                            <Path
-                              d="M200,80 h120 v60 h-120 z"
-                              fill="#fff"
-                              opacity="0.18"
-                              rx="15"
-                            />
-                            <Path
-                              d="M140,100 h120 v60 h-120 z"
-                              fill="#fff"
-                              opacity="0.16"
-                              rx="15"
-                            />
-                            {/* Flowing connection lines */}
-                            <Path
-                              d="M50,50 Q150,100 250,50 Q350,100 450,50"
-                              stroke="#fff"
-                              strokeWidth="2.5"
-                              fill="none"
-                              opacity="0.20"
-                            />
-                            <Path
-                              d="M0,150 Q100,100 200,150 Q300,100 400,150"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              fill="none"
-                              opacity="0.16"
-                            />
-                            {/* Corner accent circles */}
-                            <Circle
-                              cx="30"
-                              cy="170"
-                              r="18"
-                              fill="#fff"
-                              opacity="0.14"
-                            />
-                            <Circle
-                              cx="370"
-                              cy="30"
-                              r="22"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                          </>
-                        )}
-
-                        {item.category === "Fuel" && (
-                          <>
-                            {/* Large sweeping curves like green card */}
-                            <Path
-                              d="M0,50 Q200,0 400,50 Q400,100 400,150 Q200,200 0,150 Q0,100 0,50 Z"
-                              fill="#fff"
-                              opacity="0.20"
-                            />
-                            <Path
-                              d="M0,100 Q150,50 300,100 Q400,125 400,200 L0,200 Q0,125 0,100 Z"
-                              fill="#fff"
-                              opacity="0.16"
-                            />
-                            {/* Organic bubble clusters */}
-                            <Circle
-                              cx="120"
-                              cy="70"
-                              r="25"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                            <Circle
-                              cx="140"
-                              cy="90"
-                              r="18"
-                              fill="#fff"
-                              opacity="0.22"
-                            />
-                            <Circle
-                              cx="100"
-                              cy="100"
-                              r="15"
-                              fill="#fff"
-                              opacity="0.14"
-                            />
-                            <Circle
-                              cx="160"
-                              cy="110"
-                              r="12"
-                              fill="#fff"
-                              opacity="0.20"
-                            />
-                            {/* Energy flow lines */}
-                            <Path
-                              d="M250,40 Q300,60 350,40 Q380,60 400,40"
-                              stroke="#fff"
-                              strokeWidth="3"
-                              fill="none"
-                              opacity="0.18"
-                              strokeLinecap="round"
-                            />
-                            <Path
-                              d="M200,160 Q250,140 300,160 Q350,140 400,160"
-                              stroke="#fff"
-                              strokeWidth="2.5"
-                              fill="none"
-                              opacity="0.16"
-                              strokeLinecap="round"
-                            />
-                            <Path
-                              d="M0,80 Q50,100 100,80 Q150,100 200,80"
-                              stroke="#fff"
-                              strokeWidth="2"
-                              fill="none"
-                              opacity="0.14"
-                              strokeLinecap="round"
-                            />
-                            {/* Abstract leaf shapes */}
-                            <Path
-                              d="M300,120 Q320,100 340,120 Q345,140 340,160 Q320,180 300,160 Q295,140 300,120 Z"
-                              fill="#fff"
-                              opacity="0.16"
-                            />
-                            <Path
-                              d="M60,140 Q75,125 90,140 Q92,155 90,170 Q75,185 60,170 Q58,155 60,140 Z"
-                              fill="#fff"
-                              opacity="0.18"
-                            />
-                          </>
-                        )}
-                      </Svg>
-                    </View>
-
-                    {/* Card Header - Category Name */}
-                    <View
-                      className="flex-row items-start justify-between mb-4"
-                      style={{ zIndex: 1 }}
-                    >
-                      <View>
-                        <Text
-                          className="text-white text-lg tracking-wider"
-                          style={{
-                            fontFamily: "Inter_700Bold",
-                            textShadowColor: "#00000030",
-                            textShadowOffset: { width: 0, height: 1 },
-                            textShadowRadius: 2,
-                          }}
-                        >
-                          {item.category.toUpperCase()}
-                        </Text>
-                        <Text
-                          className="text-2xl mt-1"
-                          style={{
-                            textShadowColor: "#00000020",
-                            textShadowOffset: { width: 0, height: 1 },
-                            textShadowRadius: 2,
-                          }}
-                        >
-                          {item.icon}
-                        </Text>
-                      </View>
-                      <View className="bg-white/25 backdrop-blur-md rounded-lg px-3 py-1 border border-white/20">
-                        <Text
-                          className="text-white text-xs"
-                          style={{
-                            fontFamily: "Inter_600SemiBold",
-                            textShadowColor: "#00000020",
-                            textShadowOffset: { width: 0, height: 0.5 },
-                            textShadowRadius: 1,
-                          }}
-                        >
-                          MISSED
-                        </Text>
-                      </View>
-                    </View>
-
-                    {/* Main Amount - Like Card Balance */}
-                    <View
-                      className="flex-1 justify-center"
-                      style={{ zIndex: 1 }}
-                    >
-                      <Text
-                        className="text-white/80 text-sm mb-1"
-                        style={{
-                          fontFamily: "Inter_500Medium",
-                          textShadowColor: "#00000020",
-                          textShadowOffset: { width: 0, height: 0.5 },
-                          textShadowRadius: 1,
-                        }}
-                      >
-                        Missed this month
-                      </Text>
-                      <Text
-                        className="text-white text-4xl"
-                        style={{
-                          fontFamily: "Inter_700Bold",
-                          letterSpacing: -1,
-                          textShadowColor: "#00000030",
-                          textShadowOffset: { width: 0, height: 2 },
-                          textShadowRadius: 4,
-                        }}
-                      >
-                        ₹{item.amount}
-                      </Text>
-                    </View>
-
-                    {/* Card Footer - Like Card Number */}
-                    <View
-                      className="flex-row items-end justify-between"
-                      style={{ zIndex: 1 }}
-                    >
-                      <View>
-                        <Text
-                          className="text-white/70 text-xs mb-1"
-                          style={{
-                            fontFamily: "Inter_500Medium",
-                            textShadowColor: "#00000015",
-                            textShadowOffset: { width: 0, height: 0.5 },
-                            textShadowRadius: 1,
-                          }}
-                        >
-                          Share of total
-                        </Text>
-                        <Text
-                          className="text-white text-base tracking-wider"
-                          style={{
-                            fontFamily: "Inter_600SemiBold",
-                            textShadowColor: "#00000025",
-                            textShadowOffset: { width: 0, height: 1 },
-                            textShadowRadius: 2,
-                          }}
-                        >
-                          {Math.round(percentage)}% ●●●● ●●●●
-                        </Text>
-                      </View>
-                      <View className="items-end">
-                        <Text
-                          className="text-white/70 text-xs"
-                          style={{
-                            fontFamily: "Inter_500Medium",
-                            textShadowColor: "#00000015",
-                            textShadowOffset: { width: 0, height: 0.5 },
-                            textShadowRadius: 1,
-                          }}
-                        >
-                          REWARDS
-                        </Text>
-                        <Text
-                          className="text-white text-sm"
-                          style={{
-                            fontFamily: "Inter_700Bold",
-                            textShadowColor: "#00000025",
-                            textShadowOffset: { width: 0, height: 1 },
-                            textShadowRadius: 2,
-                          }}
-                        >
-                          ZASHIT
-                        </Text>
-                      </View>
-                    </View>
-                  </LinearGradient>
+                {/* Simple Progress Bar */}
+                <View className="bg-gray-100 rounded-full h-2 overflow-hidden">
+                  <View
+                    style={{
+                      width: `${percentage}%`,
+                      height: "100%",
+                      borderRadius: 4,
+                      backgroundColor: color,
+                    }}
+                  />
                 </View>
               </View>
             );
           })}
-        </ScrollView>
-
-        {/* Card Indicators */}
-        <View className="flex-row justify-center mt-6">
-          {data.map((_, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => scrollToCard(index)}
-              className={`w-2 h-2 rounded-full mx-3 ${
-                index === activeIndex ? "bg-blue-500" : "bg-slate-300"
-              }`}
-              style={{
-                transform: [{ scale: index === activeIndex ? 1.2 : 1 }],
-              }}
-            />
-          ))}
         </View>
       </View>
     );
@@ -754,655 +322,818 @@ export default function HomeScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 120 }}
       >
-        {/* Header with Branding, Greeting, and Notification */}
-        <View
-          className="px-0 pt-0 pb-12"
-          style={{
-            backgroundColor: "transparent",
-            borderBottomLeftRadius: 32,
-            borderBottomRightRadius: 32,
-            overflow: "hidden",
-          }}
-        >
-          {/* Enhanced Blue Gradient Background with Geometric Shapes */}
-          <View
+        {/* Premium Header with Light Blue Theme */}
+        <View style={{ position: "relative", overflow: "hidden" }}>
+          <LinearGradient
+            colors={["#dbeafe", "#bfdbfe", "#93c5fd"]} // Light blue gradient matching app theme
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={{
-              position: "absolute",
-              width: "100%",
-              height: 200,
-              zIndex: 0,
+              paddingTop: StatusBar.currentHeight || 44,
+              paddingBottom: 50,
+              borderBottomLeftRadius: 32,
+              borderBottomRightRadius: 32,
+              minHeight: 260,
             }}
           >
-            <LinearGradient
-              colors={["#dbeafe", "#bfdbfe", "#93c5fd"]} // soft blue gradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ width: "100%", height: 200 }}
-            >
-              {/* Enhanced geometric background shapes */}
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: 200,
-                  opacity: 0.12,
-                }}
-              >
-                <Svg width="100%" height={200} viewBox="0 0 400 200">
-                  {/* Primary wave */}
-                  <Path
-                    d="M0,80 Q100,30 200,80 T400,80"
-                    stroke="#1d4ed8"
-                    strokeWidth="3"
-                    fill="none"
-                  />
-                  {/* Secondary wave */}
-                  <Path
-                    d="M0,120 Q150,70 300,120 T600,120"
-                    stroke="#2563eb"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                  {/* Floating rectangles */}
-                  <Path d="M50 40 h80 v6 h-80z" fill="#3b82f6" opacity="0.15" />
-                  <Path
-                    d="M280 140 h60 v4 h-60z"
-                    fill="#1e40af"
-                    opacity="0.12"
-                    rx="2"
-                  />
-                  <Path
-                    d="M320 60 h40 v8 h-40z"
-                    fill="#2563eb"
-                    opacity="0.18"
-                    rx="4"
-                  />
-                  {/* Geometric circles */}
-                  <Path
-                    d="M120,45 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0"
-                    fill="#60a5fa"
-                    opacity="0.15"
-                  />
-                  <Path
-                    d="M300,160 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0"
-                    fill="#3b82f6"
-                    opacity="0.12"
-                  />
-                  <Path
-                    d="M80,140 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0"
-                    fill="#1d4ed8"
-                    opacity="0.10"
-                  />
-                  {/* Abstract lines */}
-                  <Path
-                    d="M180 20 L220 35"
-                    stroke="#2563eb"
-                    strokeWidth="1.5"
-                    opacity="0.15"
-                  />
-                  <Path
-                    d="M150 170 L190 155"
-                    stroke="#1e40af"
-                    strokeWidth="1"
-                    opacity="0.12"
-                  />
-                </Svg>
-              </View>
-            </LinearGradient>
-          </View>
-
-          {/* Enhanced Top Row: Logo and Notification */}
-          <View
-            className="flex-row items-center justify-between px-6 pt-10 mb-8"
-            style={{ zIndex: 1 }}
-          >
-            <View className="flex-row items-center flex-1">
-              <Image
-                source={require("../assets/logo.png")}
-                style={{
-                  width: 54,
-                  height: 38,
-                  resizeMode: "contain",
-                  marginRight: 12,
-                }}
-              />
-              <Text
-                className="text-blue-900 text-2xl"
-                style={{
-                  fontFamily: "Inter_700Bold",
-                  letterSpacing: -0.5,
-                  textShadowColor: "rgba(59, 130, 246, 0.1)",
-                  textShadowOffset: { width: 0, height: 2 },
-                  textShadowRadius: 4,
-                }}
-              >
-                ZashIt
-              </Text>
-            </View>
-            <TouchableOpacity
-              className="bg-white/90 backdrop-blur-md rounded-full p-4 border border-blue-100"
-              style={{
-                shadowColor: "#3b82f6",
-                shadowOffset: { width: 0, height: 6 },
-                shadowOpacity: 0.15,
-                shadowRadius: 16,
-                elevation: 8,
-              }}
-            >
-              <Ionicons
-                name="notifications-outline"
-                size={24}
-                color="#1d4ed8"
-              />
-            </TouchableOpacity>
-          </View>
-
-          {/* Enhanced Greeting */}
-          <View className="px-6 mb-10" style={{ zIndex: 1 }}>
-            <Text
-              className="text-blue-700 text-base mb-2"
-              style={{
-                fontFamily: "Inter_500Medium",
-                opacity: 0.8,
-                letterSpacing: 0.2,
-              }}
-            >
-              Good morning,
-            </Text>
-            <Text
-              className="text-blue-900 text-3xl"
-              style={{
-                fontFamily: "Inter_700Bold",
-                letterSpacing: -0.8,
-                textShadowColor: "rgba(29, 78, 216, 0.1)",
-                textShadowOffset: { width: 0, height: 2 },
-                textShadowRadius: 6,
-              }}
-            >
-              Devansh
-            </Text>
-          </View>
-
-          {/* Enhanced Rewards Alert with Blue Theme */}
-          <View className="px-6" style={{ zIndex: 1 }}>
-            <LinearGradient
-              colors={["#1e40af", "#2563eb", "#3b82f6"]} // rich blue gradient
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              className="rounded-3xl p-6"
-              style={{
-                shadowColor: "#1e40af",
-                shadowOffset: { width: 0, height: 12 },
-                shadowOpacity: 0.25,
-                shadowRadius: 24,
-                elevation: 16,
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* Subtle geometric overlay */}
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: 80,
-                  opacity: 0.08,
-                }}
-              >
-                <Svg width="100%" height={80} viewBox="0 0 400 80">
-                  <Path
-                    d="M0,50 Q100,20 200,40 Q300,60 400,30"
-                    stroke="#ffffff"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                  <Path
-                    d="M320 40 h40 v6 h-40z"
-                    fill="#ffffff"
-                    opacity="0.12"
-                    rx="3"
-                  />
-                  <Path
-                    d="M80,25 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0"
-                    fill="#ffffff"
-                    opacity="0.08"
-                  />
-                </Svg>
-              </View>
-              <View style={{ position: "relative", zIndex: 1 }}>
-                <View className="flex-row items-center mb-5">
-                  <View className="bg-white/20 backdrop-blur-md rounded-2xl p-3 mr-4">
-                    <Text className="text-3xl">💫</Text>
-                  </View>
-                  <View className="flex-1">
-                    <Text
-                      className="text-white text-xl leading-6 mb-1"
-                      style={{
-                        fontFamily: "Inter_700Bold",
-                        letterSpacing: -0.5,
-                      }}
-                    >
-                      ₹{totalMissed} rewards missed
-                    </Text>
-                    <Text
-                      className="text-white/90 text-sm leading-5"
-                      style={{
-                        fontFamily: "Inter_500Medium",
-                        letterSpacing: 0.2,
-                      }}
-                    >
-                      last month
-                    </Text>
-                  </View>
-                </View>
-                <Text
-                  className="text-white/95 text-sm leading-6 bg-white/15 backdrop-blur-md p-4 rounded-2xl"
-                  style={{ fontFamily: "Inter_500Medium", letterSpacing: 0.1 }}
-                >
-                  Let's optimize your spending this month for better rewards! 🎯
-                </Text>
-              </View>
-            </LinearGradient>
-          </View>
-        </View>
-
-        {/* Enhanced Missed Rewards Breakdown */}
-        <View className="px-2 pt-10">
-          <Text
-            className="text-blue-900 text-2xl mb-8 px-4"
-            style={{
-              fontFamily: "Inter_700Bold",
-              letterSpacing: -0.5,
-              textShadowColor: "rgba(29, 78, 216, 0.05)",
-              textShadowOffset: { width: 0, height: 1 },
-              textShadowRadius: 2,
-            }}
-          >
-            Missed Rewards Breakdown
-          </Text>
-
-          <View
-            style={{
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: 32,
-              marginBottom: 40,
-              marginHorizontal: 4,
-              shadowColor: "#3b82f6",
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.12,
-              shadowRadius: 20,
-              elevation: 12,
-            }}
-          >
-            {/* Enhanced blue gradient background */}
-            <LinearGradient
-              colors={["#e0e7ff", "#f0fdfa", "#f3e8ff"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                borderRadius: 32,
-              }}
-            />
-            {/* Enhanced geometric pattern overlay */}
+            {/* Light blue-themed background pattern */}
             <View
               style={{
                 position: "absolute",
                 top: 0,
                 left: 0,
                 right: 0,
-                height: 140,
-                opacity: 0.08,
+                bottom: 0,
+                zIndex: 0,
+                opacity: 0.15,
               }}
             >
-              <Svg width="100%" height={140} viewBox="0 0 400 140">
+              <Svg width="100%" height="100%" viewBox="0 0 400 260">
+                {/* Elegant flowing curves */}
                 <Path
-                  d="M0,70 Q100,30 200,70 T400,70"
-                  stroke="#1d4ed8"
-                  strokeWidth="2.5"
+                  d="M-50,130 Q100,70 250,130 T550,130"
+                  stroke="#1e40af"
+                  strokeWidth="2"
                   fill="none"
+                  opacity="0.3"
                 />
                 <Path
-                  d="M0,100 Q100,60 200,100 T400,100"
+                  d="M-50,170 Q150,110 350,170 T650,170"
                   stroke="#2563eb"
                   strokeWidth="1.5"
                   fill="none"
+                  opacity="0.25"
                 />
                 <Path
-                  d="M60 40 h80 v8 h-80z"
+                  d="M-100,200 Q200,140 400,200 T700,200"
+                  stroke="#3b82f6"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.2"
+                />
+
+                {/* Modern geometric shapes */}
+                <Path
+                  d="M50,40 L80,40 L90,70 L60,70 Z"
+                  fill="#1e40af"
+                  opacity="0.15"
+                />
+                <Path
+                  d="M320,30 a15,15 0 1,0 30,0 a15,15 0 1,0 -30,0"
+                  fill="#2563eb"
+                  opacity="0.18"
+                />
+                <Path
+                  d="M120,190 L140,210 L120,230 L100,220 Z"
                   fill="#3b82f6"
                   opacity="0.12"
-                  rx="4"
                 />
                 <Path
-                  d="M280 110 h60 v6 h-60z"
+                  d="M350,180 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0"
                   fill="#1e40af"
-                  opacity="0.10"
-                  rx="3"
+                  opacity="0.2"
+                />
+
+                {/* Additional subtle shapes */}
+                <Path
+                  d="M150,60 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0"
+                  fill="#2563eb"
+                  opacity="0.15"
                 />
                 <Path
-                  d="M150,50 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
-                  fill="#2563eb"
+                  d="M280,90 L300,90 L305,110 L275,110 Z"
+                  fill="#3b82f6"
+                  opacity="0.12"
+                />
+                <Path
+                  d="M70,160 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
+                  fill="#1e40af"
+                  opacity="0.18"
+                />
+
+                {/* Tech grid pattern - enhanced */}
+                <Path
+                  d="M200,20 L200,70"
+                  stroke="#1e40af"
+                  strokeWidth="1.5"
+                  opacity="0.12"
+                />
+                <Path
+                  d="M180,40 L220,40"
+                  stroke="#1e40af"
+                  strokeWidth="1.5"
+                  opacity="0.12"
+                />
+                <Path
+                  d="M280,140 L280,190"
+                  stroke="#2563eb"
+                  strokeWidth="1.5"
+                  opacity="0.15"
+                />
+                <Path
+                  d="M260,160 L300,160"
+                  stroke="#2563eb"
+                  strokeWidth="1.5"
+                  opacity="0.15"
+                />
+
+                {/* Additional grid lines */}
+                <Path
+                  d="M100,80 L100,120"
+                  stroke="#3b82f6"
+                  strokeWidth="1"
+                  opacity="0.1"
+                />
+                <Path
+                  d="M80,100 L120,100"
+                  stroke="#3b82f6"
+                  strokeWidth="1"
+                  opacity="0.1"
+                />
+                <Path
+                  d="M330,60 L330,100"
+                  stroke="#2563eb"
+                  strokeWidth="1"
+                  opacity="0.12"
+                />
+                <Path
+                  d="M310,80 L350,80"
+                  stroke="#2563eb"
+                  strokeWidth="1"
+                  opacity="0.12"
+                />
+
+                {/* Diagonal lines for depth */}
+                <Path
+                  d="M40,50 L80,90"
+                  stroke="#1e40af"
+                  strokeWidth="1"
                   opacity="0.08"
+                />
+                <Path
+                  d="M360,40 L380,60"
+                  stroke="#3b82f6"
+                  strokeWidth="1"
+                  opacity="0.1"
+                />
+                <Path
+                  d="M160,180 L200,220"
+                  stroke="#2563eb"
+                  strokeWidth="1"
+                  opacity="0.09"
+                />
+
+                {/* Scattered dots */}
+                <Path
+                  d="M250,50 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0"
+                  fill="#1e40af"
+                  opacity="0.2"
+                />
+                <Path
+                  d="M180,130 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0"
+                  fill="#2563eb"
+                  opacity="0.15"
+                />
+                <Path
+                  d="M320,120 a2,2 0 1,0 4,0 a2,2 0 1,0 -4,0"
+                  fill="#3b82f6"
+                  opacity="0.18"
                 />
               </Svg>
             </View>
-            {/* Enhanced card content */}
-            <View className="p-2" style={{ position: "relative", zIndex: 1 }}>
-              <CreditCardStyleCards data={missedRewardsData} />
-            </View>
-          </View>
-        </View>
 
-        {/* Enhanced Recent Transactions */}
-        <View className="px-6">
-          <Text
-            className="text-blue-900 text-2xl mb-8"
-            style={{
-              fontFamily: "Inter_700Bold",
-              letterSpacing: -0.5,
-              textShadowColor: "rgba(29, 78, 216, 0.05)",
-              textShadowOffset: { width: 0, height: 1 },
-              textShadowRadius: 2,
-            }}
-          >
-            Recent Transactions
-          </Text>
+            {/* Top Navigation Bar */}
+            <View
+              className="flex-row items-center justify-between px-6 pt-6 mb-10"
+              style={{ zIndex: 2 }}
+            >
+              <View className="flex-row items-center flex-1">
+                <View
+                  className="bg-white/60 backdrop-blur-md rounded-2xl p-3 mr-4"
+                  style={{
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 8,
+                    elevation: 4,
+                    borderWidth: 1,
+                    borderColor: "rgba(30, 64, 175, 0.2)",
+                  }}
+                >
+                  <Image
+                    source={require("../assets/logo.png")}
+                    style={{
+                      width: 32,
+                      height: 24,
+                      resizeMode: "contain",
+                      tintColor: "#1e40af",
+                    }}
+                  />
+                </View>
+                <Text
+                  className="text-blue-900 text-2xl"
+                  style={{
+                    fontFamily: "Inter_700Bold",
+                    letterSpacing: -0.8,
+                    textShadowColor: "rgba(255, 255, 255, 0.8)",
+                    textShadowOffset: { width: 0, height: 1 },
+                    textShadowRadius: 2,
+                  }}
+                >
+                  ZashIt
+                </Text>
+              </View>
 
-          <View className="space-y-6">
-            {recentTransactions.map((transaction) => (
               <TouchableOpacity
-                key={transaction.id}
-                onPress={() =>
-                  navigation.navigate("TransactionDetail", { transaction })
-                }
-                className="bg-white p-5 rounded-2xl border border-blue-50 mb-6"
+                className="bg-white/60 backdrop-blur-md rounded-2xl p-4"
                 style={{
-                  shadowColor: "#3b82f6",
+                  shadowColor: "#1e40af",
                   shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.08,
+                  shadowOpacity: 0.15,
                   shadowRadius: 12,
                   elevation: 6,
+                  borderWidth: 1,
+                  borderColor: "rgba(30, 64, 175, 0.2)",
                 }}
               >
-                <View className="flex-row items-center mb-4">
-                  <View
-                    className="w-16 h-16 rounded-2xl items-center justify-center mr-5"
+                <Ionicons
+                  name="notifications-outline"
+                  size={24}
+                  color="#1e40af"
+                />
+                <View
+                  className="absolute -top-1 -right-1 bg-orange-500 rounded-full w-3 h-3"
+                  style={{
+                    shadowColor: "#f97316",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.6,
+                    shadowRadius: 4,
+                    elevation: 3,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Enhanced Light Blue-themed Greeting Section */}
+            <View className="px-6 mb-8" style={{ zIndex: 2 }}>
+              <View className="flex-row items-center mb-6">
+                <View
+                  className="bg-white/70 backdrop-blur-md rounded-2xl p-4 mr-4"
+                  style={{
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 12,
+                    elevation: 8,
+                    borderWidth: 1,
+                    borderColor: "rgba(30, 64, 175, 0.3)",
+                  }}
+                >
+                  <Text className="text-3xl">🌅</Text>
+                </View>
+                <View className="flex-1">
+                  <Text
+                    className="text-blue-700 text-lg mb-2"
                     style={{
-                      backgroundColor: transaction.isOptimal
-                        ? "#dcfce7"
-                        : "#fef2f2",
-                      shadowColor: transaction.isOptimal
-                        ? "#10b981"
-                        : "#ef4444",
-                      shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.1,
-                      shadowRadius: 4,
-                      elevation: 2,
+                      fontFamily: "Inter_500Medium",
+                      letterSpacing: 0.8,
+                      opacity: 0.9,
+                      textShadowColor: "rgba(255, 255, 255, 0.6)",
+                      textShadowOffset: { width: 0, height: 1 },
+                      textShadowRadius: 2,
                     }}
                   >
-                    <Text className="text-3xl">{transaction.icon}</Text>
-                  </View>
+                    Good morning,
+                  </Text>
+                  <Text
+                    className="text-blue-900 text-4xl"
+                    style={{
+                      fontFamily: "Inter_700Bold",
+                      letterSpacing: -1.2,
+                      textShadowColor: "rgba(255, 255, 255, 0.8)",
+                      textShadowOffset: { width: 0, height: 2 },
+                      textShadowRadius: 4,
+                      lineHeight: 44,
+                    }}
+                  >
+                    Devansh
+                  </Text>
+                </View>
+              </View>
 
-                  <View className="flex-1">
-                    <View className="flex-row items-center justify-between">
+              {/* Missed Rewards Alert in Header - Light Blue Theme */}
+              <View
+                className="bg-white/50 backdrop-blur-md rounded-2xl p-6"
+                style={{
+                  borderWidth: 1,
+                  borderColor: "rgba(30, 64, 175, 0.2)",
+                  shadowColor: "#1e40af",
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 20,
+                  elevation: 12,
+                }}
+              >
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-row items-center flex-1">
+                    <View
+                      className="bg-orange-100 rounded-xl p-3 mr-4"
+                      style={{
+                        shadowColor: "#f97316",
+                        shadowOffset: { width: 0, height: 3 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 6,
+                        elevation: 4,
+                        borderWidth: 1,
+                        borderColor: "rgba(249, 115, 22, 0.3)",
+                      }}
+                    >
+                      <Text className="text-2xl">💸</Text>
+                    </View>
+                    <View className="flex-1">
                       <Text
-                        className="text-slate-900 text-lg mb-1"
+                        className="text-blue-900 text-lg mb-1"
                         style={{
                           fontFamily: "Inter_600SemiBold",
-                          letterSpacing: -0.3,
+                          letterSpacing: 0.3,
+                          textShadowColor: "rgba(255, 255, 255, 0.6)",
+                          textShadowOffset: { width: 0, height: 1 },
+                          textShadowRadius: 2,
                         }}
                       >
-                        {transaction.merchant}
+                        Missed Rewards
                       </Text>
                       <Text
-                        className="text-slate-900 text-lg"
+                        className="text-blue-600 text-sm"
                         style={{
-                          fontFamily: "Inter_700Bold",
-                          letterSpacing: -0.3,
+                          fontFamily: "Inter_400Regular",
+                          letterSpacing: 0.2,
+                          opacity: 0.8,
                         }}
                       >
-                        {transaction.amount}
+                        last month
                       </Text>
                     </View>
-
-                    <View className="flex-row items-center justify-between">
+                  </View>
+                  <View className="items-end">
+                    <Text
+                      className="text-blue-900 text-4xl mb-2"
+                      style={{
+                        fontFamily: "Inter_700Bold",
+                        letterSpacing: -1,
+                        textShadowColor: "rgba(255, 255, 255, 0.8)",
+                        textShadowOffset: { width: 0, height: 2 },
+                        textShadowRadius: 4,
+                      }}
+                    >
+                      ₹{totalMissed}
+                    </Text>
+                    <View
+                      className="bg-orange-200 rounded-lg px-4 py-2"
+                      style={{
+                        borderWidth: 1,
+                        borderColor: "rgba(249, 115, 22, 0.4)",
+                        shadowColor: "#f97316",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 4,
+                        elevation: 3,
+                      }}
+                    >
                       <Text
-                        className="text-slate-500 text-sm"
-                        style={{ fontFamily: "Inter_500Medium" }}
+                        className="text-orange-700 text-sm"
+                        style={{
+                          fontFamily: "Inter_600SemiBold",
+                          letterSpacing: 0.3,
+                        }}
                       >
-                        {transaction.date}
-                      </Text>
-                      <Text
-                        className="text-slate-500 text-sm"
-                        style={{ fontFamily: "Inter_500Medium" }}
-                      >
-                        {transaction.cardUsed}
+                        OPTIMIZE
                       </Text>
                     </View>
                   </View>
                 </View>
+              </View>
+            </View>
+          </LinearGradient>
 
-                {/* Enhanced Reward Status */}
-                <View
-                  className="p-4 rounded-2xl"
+          {/* Light blue-themed transition effect */}
+          <LinearGradient
+            colors={["rgba(147, 197, 253, 0.6)", "transparent"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={{
+              position: "absolute",
+              bottom: -20,
+              left: 0,
+              right: 0,
+              height: 40,
+              zIndex: 1,
+            }}
+          />
+        </View>
+
+        {/* Content with Better Spacing */}
+        <View style={{ marginTop: -20, paddingTop: 20 }}>
+          {/* Enhanced Missed Rewards Breakdown */}
+          <View className="px-2 pt-10">
+            <Text
+              className="text-blue-900 text-2xl mb-8 px-4"
+              style={{
+                fontFamily: "Inter_700Bold",
+                letterSpacing: -0.5,
+                textShadowColor: "rgba(29, 78, 216, 0.05)",
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 2,
+              }}
+            >
+              Missed Rewards Breakdown
+            </Text>
+
+            <View
+              style={{
+                position: "relative",
+                overflow: "hidden",
+                borderRadius: 32,
+                marginBottom: 40,
+                marginHorizontal: 4,
+                shadowColor: "#3b82f6",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.12,
+                shadowRadius: 20,
+                elevation: 12,
+              }}
+            >
+              {/* Enhanced blue gradient background */}
+              <LinearGradient
+                colors={["#e0e7ff", "#f0fdfa", "#f3e8ff"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  borderRadius: 32,
+                }}
+              />
+              {/* Enhanced geometric pattern overlay */}
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: 140,
+                  opacity: 0.08,
+                }}
+              >
+                <Svg width="100%" height={140} viewBox="0 0 400 140">
+                  <Path
+                    d="M0,70 Q100,30 200,70 T400,70"
+                    stroke="#1d4ed8"
+                    strokeWidth="2.5"
+                    fill="none"
+                  />
+                  <Path
+                    d="M0,100 Q100,60 200,100 T400,100"
+                    stroke="#2563eb"
+                    strokeWidth="1.5"
+                    fill="none"
+                  />
+                  <Path
+                    d="M60 40 h80 v8 h-80z"
+                    fill="#3b82f6"
+                    opacity="0.12"
+                    rx="4"
+                  />
+                  <Path
+                    d="M280 110 h60 v6 h-60z"
+                    fill="#1e40af"
+                    opacity="0.10"
+                    rx="3"
+                  />
+                  <Path
+                    d="M150,50 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
+                    fill="#2563eb"
+                    opacity="0.08"
+                  />
+                </Svg>
+              </View>
+              {/* Enhanced card content */}
+              <View className="p-2" style={{ position: "relative", zIndex: 1 }}>
+                <LoaderStyleBreakdown data={missedRewardsData} />
+              </View>
+            </View>
+          </View>
+
+          {/* Enhanced Recent Transactions */}
+          <View className="px-6 pt-6">
+            <Text
+              className="text-blue-900 text-2xl mb-8"
+              style={{
+                fontFamily: "Inter_700Bold",
+                letterSpacing: -0.5,
+                textShadowColor: "rgba(29, 78, 216, 0.05)",
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 2,
+              }}
+            >
+              Frequent Transactions
+            </Text>
+
+            <View className="space-y-8">
+              {frequentTransactions.map((transaction) => (
+                <TouchableOpacity
+                  key={transaction.id}
+                  onPress={() =>
+                    navigation.navigate("TransactionDetail", { transaction })
+                  }
+                  className="bg-white p-6 rounded-2xl border border-blue-50"
                   style={{
-                    backgroundColor: transaction.isOptimal
-                      ? "#f0fdf4"
-                      : "#fef2f2",
-                    borderWidth: 1,
-                    borderColor: transaction.isOptimal ? "#bbf7d0" : "#fecaca",
+                    shadowColor: "#3b82f6",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.08,
+                    shadowRadius: 12,
+                    elevation: 6,
+                    marginBottom: 12,
                   }}
                 >
-                  {transaction.isOptimal ? (
-                    <View className="flex-row items-center">
-                      <View
-                        className="rounded-full p-2 mr-3"
-                        style={{
-                          backgroundColor: "#10b981",
-                          shadowColor: "#10b981",
-                          shadowOffset: { width: 0, height: 2 },
-                          shadowOpacity: 0.2,
-                          shadowRadius: 4,
-                          elevation: 2,
-                        }}
-                      >
-                        <Ionicons name="checkmark" size={14} color="white" />
-                      </View>
-                      <Text
-                        className="text-green-700 text-base flex-1"
-                        style={{
-                          fontFamily: "Inter_600SemiBold",
-                          letterSpacing: -0.2,
-                        }}
-                      >
-                        Earned {transaction.earnedReward} in rewards
-                      </Text>
+                  <View className="flex-row items-center mb-5">
+                    <View
+                      className="w-16 h-16 rounded-2xl items-center justify-center mr-5"
+                      style={{
+                        backgroundColor: transaction.isOptimal
+                          ? "#dcfce7"
+                          : "#fef2f2",
+                        shadowColor: transaction.isOptimal
+                          ? "#10b981"
+                          : "#ef4444",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.1,
+                        shadowRadius: 4,
+                        elevation: 2,
+                      }}
+                    >
+                      <Text className="text-3xl">{transaction.icon}</Text>
                     </View>
-                  ) : (
-                    <View className="flex-row items-center">
-                      <View
-                        className="rounded-full p-2 mr-3"
-                        style={{
-                          backgroundColor: "#ef4444",
-                          shadowColor: "#ef4444",
-                          shadowOffset: { width: 0, height: 2 },
-                          shadowOpacity: 0.2,
-                          shadowRadius: 4,
-                          elevation: 2,
-                        }}
-                      >
-                        <Ionicons name="alert" size={14} color="white" />
-                      </View>
-                      <View className="flex-1">
+
+                    <View className="flex-1">
+                      <View className="flex-row items-center justify-between">
                         <Text
-                          className="text-red-700 text-base mb-1"
+                          className="text-slate-900 text-xl mb-2"
+                          style={{
+                            fontFamily: "Inter_600SemiBold",
+                            letterSpacing: -0.3,
+                          }}
+                        >
+                          {transaction.merchant}
+                        </Text>
+                        <Text
+                          className="text-slate-900 text-xl"
+                          style={{
+                            fontFamily: "Inter_700Bold",
+                            letterSpacing: -0.3,
+                          }}
+                        >
+                          {transaction.amount}
+                        </Text>
+                      </View>
+
+                      <View className="flex-row items-center justify-end">
+                        <Text
+                          className="text-slate-500 text-base"
+                          style={{ fontFamily: "Inter_500Medium" }}
+                        >
+                          {transaction.cardUsed}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+
+                  {/* Enhanced Reward Status */}
+                  <View
+                    className="p-5 rounded-2xl"
+                    style={{
+                      backgroundColor: transaction.isOptimal
+                        ? "#f0fdf4"
+                        : "#fef2f2",
+                      borderWidth: 1,
+                      borderColor: transaction.isOptimal
+                        ? "#bbf7d0"
+                        : "#fecaca",
+                    }}
+                  >
+                    {transaction.isOptimal ? (
+                      <View className="flex-row items-center">
+                        <View
+                          className="rounded-full p-3 mr-4"
+                          style={{
+                            backgroundColor: "#10b981",
+                            shadowColor: "#10b981",
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.2,
+                            shadowRadius: 4,
+                            elevation: 2,
+                          }}
+                        >
+                          <Ionicons name="checkmark" size={16} color="white" />
+                        </View>
+                        <Text
+                          className="text-green-700 text-lg flex-1"
                           style={{
                             fontFamily: "Inter_600SemiBold",
                             letterSpacing: -0.2,
                           }}
                         >
-                          Missed {transaction.missedReward} in rewards
-                        </Text>
-                        <Text
-                          className="text-red-600/80 text-sm"
-                          style={{ fontFamily: "Inter_500Medium" }}
-                        >
-                          Use {transaction.betterCard} next time
+                          Earned {transaction.earnedReward} in rewards
                         </Text>
                       </View>
-                    </View>
-                  )}
-                </View>
-              </TouchableOpacity>
-            ))}
+                    ) : (
+                      <View className="flex-row items-center">
+                        <View
+                          className="rounded-full p-3 mr-4"
+                          style={{
+                            backgroundColor: "#ef4444",
+                            shadowColor: "#ef4444",
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.2,
+                            shadowRadius: 4,
+                            elevation: 2,
+                          }}
+                        >
+                          <Ionicons name="alert" size={16} color="white" />
+                        </View>
+                        <View className="flex-1">
+                          <Text
+                            className="text-red-700 text-lg mb-2"
+                            style={{
+                              fontFamily: "Inter_600SemiBold",
+                              letterSpacing: -0.2,
+                            }}
+                          >
+                            Missed {transaction.missedReward} in rewards
+                          </Text>
+                          <Text
+                            className="text-red-600/80 text-base"
+                            style={{ fontFamily: "Inter_500Medium" }}
+                          >
+                            Use {transaction.betterCard} next time
+                          </Text>
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
 
-        {/* Enhanced Recommended Cards */}
-        <View className="px-6 pt-10 pb-6">
-          <Text
-            className="text-blue-900 text-2xl mb-8"
-            style={{
-              fontFamily: "Inter_700Bold",
-              letterSpacing: -0.5,
-              textShadowColor: "rgba(29, 78, 216, 0.05)",
-              textShadowOffset: { width: 0, height: 1 },
-              textShadowRadius: 2,
-            }}
-          >
-            Recommended for You
-          </Text>
+          {/* Enhanced Recommended Cards */}
+          <View className="px-6 pt-12 pb-8">
+            <Text
+              className="text-blue-900 text-2xl mb-10"
+              style={{
+                fontFamily: "Inter_700Bold",
+                letterSpacing: -0.5,
+                textShadowColor: "rgba(29, 78, 216, 0.05)",
+                textShadowOffset: { width: 0, height: 1 },
+                textShadowRadius: 2,
+              }}
+            >
+              Recommended for You
+            </Text>
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="mx-[-24px] px-6"
-          >
-            {recommendedCards.map((card, index) => (
-              <TouchableOpacity
-                key={card.id}
-                className="mr-5 w-[300px]"
-                onPress={() => navigation.navigate("CardDetail", { card })}
-              >
-                <View
-                  className="bg-white p-6 rounded-3xl border border-blue-50"
-                  style={{
-                    shadowColor: "#3b82f6",
-                    shadowOffset: { width: 0, height: 8 },
-                    shadowOpacity: 0.12,
-                    shadowRadius: 20,
-                    elevation: 10,
-                  }}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="mx-[-24px]"
+              contentContainerStyle={{
+                paddingHorizontal: 24,
+                paddingRight: 48,
+              }}
+            >
+              {recommendedCards.map((card, index) => (
+                <TouchableOpacity
+                  key={card.id}
+                  className="mr-6"
+                  style={{ width: width * 0.85 }}
+                  onPress={() => navigation.navigate("CardDetail", { card })}
                 >
-                  {/* Enhanced Card Header */}
-                  <View className="flex-row items-center justify-between mb-5">
-                    <View>
+                  <View
+                    className="bg-white p-8 rounded-3xl border border-blue-50"
+                    style={{
+                      shadowColor: "#3b82f6",
+                      shadowOffset: { width: 0, height: 8 },
+                      shadowOpacity: 0.12,
+                      shadowRadius: 20,
+                      elevation: 10,
+                      minHeight: 280,
+                    }}
+                  >
+                    {/* Enhanced Card Header */}
+                    <View className="flex-row items-center justify-between mb-6">
+                      <View className="flex-1">
+                        <Text
+                          className="text-blue-600 text-base mb-2"
+                          style={{
+                            fontFamily: "Inter_500Medium",
+                            letterSpacing: 0.2,
+                          }}
+                        >
+                          {card.bank}
+                        </Text>
+                        <Text
+                          className="text-blue-900 text-xl"
+                          style={{
+                            fontFamily: "Inter_700Bold",
+                            letterSpacing: -0.3,
+                            lineHeight: 28,
+                          }}
+                        >
+                          {card.name}
+                        </Text>
+                      </View>
+                      <View
+                        style={{ backgroundColor: "#dbeafe" }}
+                        className="w-14 h-14 rounded-xl items-center justify-center"
+                      >
+                        <Ionicons name="card" size={28} color="#2563eb" />
+                      </View>
+                    </View>
+
+                    {/* Enhanced Card Benefits */}
+                    <View className="mb-6">
+                      {card.perks.map((perk, idx) => (
+                        <View key={idx} className="flex-row items-center mb-4">
+                          <View
+                            style={{ backgroundColor: "#dbeafe" }}
+                            className="w-7 h-7 rounded-full items-center justify-center mr-4"
+                          >
+                            <Ionicons
+                              name="checkmark"
+                              size={16}
+                              color="#2563eb"
+                            />
+                          </View>
+                          <Text
+                            className="text-blue-800 text-base flex-1"
+                            style={{
+                              fontFamily: "Inter_500Medium",
+                              letterSpacing: 0.1,
+                              lineHeight: 22,
+                            }}
+                          >
+                            {perk}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+
+                    {/* Enhanced Why This Card */}
+                    <View
+                      style={{ backgroundColor: "#f0f9ff" }}
+                      className="p-5 rounded-xl mb-6 border border-blue-100"
+                    >
                       <Text
-                        className="text-blue-600 text-sm mb-1"
+                        className="text-blue-700 text-base"
                         style={{
                           fontFamily: "Inter_500Medium",
-                          letterSpacing: 0.2,
+                          letterSpacing: 0.1,
+                          lineHeight: 22,
                         }}
                       >
-                        {card.bank}
+                        {card.whyThisCard}
+                      </Text>
+                    </View>
+
+                    {/* Enhanced Potential Savings */}
+                    <View className="flex-row items-center justify-between">
+                      <Text
+                        className="text-blue-700 text-base"
+                        style={{
+                          fontFamily: "Inter_600SemiBold",
+                          letterSpacing: 0.1,
+                        }}
+                      >
+                        Potential Savings
                       </Text>
                       <Text
-                        className="text-blue-900 text-lg"
+                        className="text-xl"
                         style={{
                           fontFamily: "Inter_700Bold",
+                          color: "#2563eb",
                           letterSpacing: -0.3,
                         }}
                       >
-                        {card.name}
+                        {card.potentialSavings}
                       </Text>
                     </View>
-                    <View
-                      style={{ backgroundColor: "#dbeafe" }}
-                      className="w-12 h-12 rounded-xl items-center justify-center"
-                    >
-                      <Ionicons name="card" size={24} color="#2563eb" />
-                    </View>
                   </View>
-
-                  {/* Enhanced Card Benefits */}
-                  <View className="mb-5">
-                    {card.perks.map((perk, idx) => (
-                      <View key={idx} className="flex-row items-center mb-3">
-                        <View
-                          style={{ backgroundColor: "#dbeafe" }}
-                          className="w-6 h-6 rounded-full items-center justify-center mr-3"
-                        >
-                          <Ionicons
-                            name="checkmark"
-                            size={14}
-                            color="#2563eb"
-                          />
-                        </View>
-                        <Text
-                          className="text-blue-800 text-sm flex-1"
-                          style={{
-                            fontFamily: "Inter_500Medium",
-                            letterSpacing: 0.1,
-                          }}
-                        >
-                          {perk}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-
-                  {/* Enhanced Why This Card */}
-                  <View
-                    style={{ backgroundColor: "#f0f9ff" }}
-                    className="p-4 rounded-xl mb-5 border border-blue-100"
-                  >
-                    <Text
-                      className="text-blue-700 text-sm"
-                      style={{
-                        fontFamily: "Inter_500Medium",
-                        letterSpacing: 0.1,
-                      }}
-                    >
-                      {card.whyThisCard}
-                    </Text>
-                  </View>
-
-                  {/* Enhanced Potential Savings */}
-                  <View className="flex-row items-center justify-between">
-                    <Text
-                      className="text-blue-700 text-sm"
-                      style={{
-                        fontFamily: "Inter_600SemiBold",
-                        letterSpacing: 0.1,
-                      }}
-                    >
-                      Potential Savings
-                    </Text>
-                    <Text
-                      className="text-lg"
-                      style={{
-                        fontFamily: "Inter_700Bold",
-                        color: "#2563eb",
-                        letterSpacing: -0.3,
-                      }}
-                    >
-                      {card.potentialSavings}
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
         </View>
       </ScrollView>
 
