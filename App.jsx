@@ -31,6 +31,7 @@ import CardManagementScreen from "./screens/CardManagementScreen";
 import HomeScreen from "./screens/HomeScreen";
 import TransactionDetailScreen from "./screens/TransactionDetailScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import GoogleAuthScreen from "./screens/GoogleAuthScreen";
 
 const Stack = createStackNavigator();
 
@@ -79,7 +80,8 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style="light" backgroundColor="#000000" />
       <NavigationContainer>
-        <Stack.Navigator
+        <GoogleAuthScreen />
+        {/* <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
             headerShown: false,
@@ -100,7 +102,7 @@ export default function App() {
             component={CardManagementScreen}
           />
           <Stack.Screen name="Profile" component={ProfileScreen} />
-        </Stack.Navigator>
+        </Stack.Navigator> */}
       </NavigationContainer>
     </GestureHandlerRootView>
   );
