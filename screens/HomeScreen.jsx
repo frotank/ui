@@ -143,19 +143,19 @@ export default function HomeScreen({ navigation }) {
     return (
       <View>
         {/* Total Summary at Top */}
-        <View className="bg-gradient-to-r from-red-50 to-rose-50 rounded-2xl p-6 mb-6 border border-red-100">
+        <View className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-6 border border-blue-100">
           <View className="items-center">
-            <View className="bg-red-100 rounded-full p-6 mb-4">
+            <View className="bg-blue-100 rounded-full p-6 mb-4">
               <Svg width="48" height="48" viewBox="0 0 24 24" fill="none">
                 <Path
                   d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
-                  stroke="#ef4444"
+                  stroke="#3b82f6"
                   strokeWidth="2"
-                  fill="#fecaca"
+                  fill="#bfdbfe"
                 />
                 <Path
                   d="M9 12l2 2 4-4"
-                  stroke="#dc2626"
+                  stroke="#1e40af"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -163,13 +163,13 @@ export default function HomeScreen({ navigation }) {
               </Svg>
             </View>
             <Text
-              className="text-red-600 text-sm mb-2"
+              className="text-blue-600 text-base mb-2"
               style={{ fontFamily: "Inter_500Medium" }}
             >
               Total Missed Rewards
             </Text>
             <Text
-              className="text-red-900 text-3xl"
+              className="text-blue-900 text-base"
               style={{ fontFamily: "Inter_700Bold" }}
             >
               ₹{totalMissed}
@@ -204,13 +204,13 @@ export default function HomeScreen({ navigation }) {
                 {/* Simple Header */}
                 <View className="flex-row items-center justify-between mb-3">
                   <Text
-                    className="text-gray-900 text-lg"
+                    className="text-gray-900 text-base"
                     style={{ fontFamily: "Inter_600SemiBold" }}
                   >
                     {item.category}
                   </Text>
                   <Text
-                    className="text-gray-900 text-lg"
+                    className="text-gray-900 text-base"
                     style={{ fontFamily: "Inter_700Bold" }}
                   >
                     ₹{item.amount}
@@ -234,10 +234,6 @@ export default function HomeScreen({ navigation }) {
         </View>
       </View>
     );
-  };
-
-  const HorizontalSwipeCards = ({ data }) => {
-    // ... existing code ...
   };
 
   return (
@@ -507,41 +503,34 @@ export default function HomeScreen({ navigation }) {
               className="flex-row items-center justify-between px-6 pt-6 mb-10"
               style={{ zIndex: 2 }}
             >
-              <View className="flex-row items-center flex-1">
-                <View
-                  className="bg-white/60 backdrop-blur-md rounded-2xl p-3 mr-4"
-                  style={{
-                    shadowColor: "#1e40af",
-                    shadowOffset: { width: 0, height: 4 },
-                    shadowOpacity: 0.15,
-                    shadowRadius: 8,
-                    elevation: 4,
-                    borderWidth: 1,
-                    borderColor: "rgba(30, 64, 175, 0.2)",
-                  }}
-                >
-                  <Image
-                    source={require("../assets/logo.png")}
-                    style={{
-                      width: 32,
-                      height: 24,
-                      resizeMode: "contain",
-                      tintColor: "#1e40af",
-                    }}
-                  />
-                </View>
+              <View className="flex-row items-center">
                 <Text
-                  className="text-blue-900 text-2xl"
+                  className="text-blue-900 text-base mr-4"
                   style={{
                     fontFamily: "Inter_700Bold",
-                    letterSpacing: -0.8,
+                    letterSpacing: -1.2,
                     textShadowColor: "rgba(255, 255, 255, 0.8)",
-                    textShadowOffset: { width: 0, height: 1 },
-                    textShadowRadius: 2,
+                    textShadowOffset: { width: 0, height: 2 },
+                    textShadowRadius: 4,
+                    lineHeight: 44,
                   }}
                 >
-                  ZashIt
+                  Devansh
                 </Text>
+                <View
+                  className="bg-white/70 backdrop-blur-md rounded-2xl p-4"
+                  style={{
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 6 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 12,
+                    elevation: 8,
+                    borderWidth: 1,
+                    borderColor: "rgba(30, 64, 175, 0.3)",
+                  }}
+                >
+                  <Text className="text-base">👋</Text>
+                </View>
               </View>
 
               <TouchableOpacity
@@ -574,59 +563,13 @@ export default function HomeScreen({ navigation }) {
               </TouchableOpacity>
             </View>
 
-            {/* Enhanced Light Blue-themed Greeting Section */}
+            {/* Missed Rewards Card */}
             <View className="px-6 mb-8" style={{ zIndex: 2 }}>
-              <View className="flex-row items-center mb-6">
-                <View
-                  className="bg-white/70 backdrop-blur-md rounded-2xl p-4 mr-4"
-                  style={{
-                    shadowColor: "#1e40af",
-                    shadowOffset: { width: 0, height: 6 },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 12,
-                    elevation: 8,
-                    borderWidth: 1,
-                    borderColor: "rgba(30, 64, 175, 0.3)",
-                  }}
-                >
-                  <Text className="text-3xl">🌅</Text>
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="text-blue-700 text-lg mb-2"
-                    style={{
-                      fontFamily: "Inter_500Medium",
-                      letterSpacing: 0.8,
-                      opacity: 0.9,
-                      textShadowColor: "rgba(255, 255, 255, 0.6)",
-                      textShadowOffset: { width: 0, height: 1 },
-                      textShadowRadius: 2,
-                    }}
-                  >
-                    Good morning,
-                  </Text>
-                  <Text
-                    className="text-blue-900 text-4xl"
-                    style={{
-                      fontFamily: "Inter_700Bold",
-                      letterSpacing: -1.2,
-                      textShadowColor: "rgba(255, 255, 255, 0.8)",
-                      textShadowOffset: { width: 0, height: 2 },
-                      textShadowRadius: 4,
-                      lineHeight: 44,
-                    }}
-                  >
-                    Devansh
-                  </Text>
-                </View>
-              </View>
-
-              {/* Missed Rewards Alert in Header - Light Blue Theme */}
               <View
-                className="bg-white/50 backdrop-blur-md rounded-2xl p-6"
+                className="bg-white rounded-2xl p-6"
                 style={{
-                  borderWidth: 1,
-                  borderColor: "rgba(30, 64, 175, 0.2)",
+                  borderWidth: 2,
+                  borderColor: "#ffffff",
                   shadowColor: "#1e40af",
                   shadowOffset: { width: 0, height: 8 },
                   shadowOpacity: 0.15,
@@ -637,34 +580,31 @@ export default function HomeScreen({ navigation }) {
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center flex-1">
                     <View
-                      className="bg-orange-100 rounded-xl p-3 mr-4"
+                      className="bg-white rounded-xl p-3 mr-4"
                       style={{
                         shadowColor: "#f97316",
                         shadowOffset: { width: 0, height: 3 },
                         shadowOpacity: 0.2,
                         shadowRadius: 6,
                         elevation: 4,
-                        borderWidth: 1,
-                        borderColor: "rgba(249, 115, 22, 0.3)",
+                        borderWidth: 2,
+                        borderColor: "#ffffff",
                       }}
                     >
-                      <Text className="text-2xl">💸</Text>
+                      <Text className="text-base">💸</Text>
                     </View>
                     <View className="flex-1">
                       <Text
-                        className="text-blue-900 text-lg mb-1"
+                        className="text-blue-900 text-base mb-1"
                         style={{
                           fontFamily: "Inter_600SemiBold",
                           letterSpacing: 0.3,
-                          textShadowColor: "rgba(255, 255, 255, 0.6)",
-                          textShadowOffset: { width: 0, height: 1 },
-                          textShadowRadius: 2,
                         }}
                       >
                         Missed Rewards
                       </Text>
                       <Text
-                        className="text-blue-600 text-sm"
+                        className="text-blue-600 text-base"
                         style={{
                           fontFamily: "Inter_400Regular",
                           letterSpacing: 0.2,
@@ -677,39 +617,19 @@ export default function HomeScreen({ navigation }) {
                   </View>
                   <View className="items-end">
                     <Text
-                      className="text-blue-900 text-4xl mb-2"
+                      className="text-blue-950 text-2xl"
                       style={{
-                        fontFamily: "Inter_700Bold",
-                        letterSpacing: -1,
-                        textShadowColor: "rgba(255, 255, 255, 0.8)",
+                        fontFamily: "Inter_900Black",
+                        letterSpacing: -1.5,
+                        fontSize: 28,
+                        fontWeight: "900",
+                        textShadowColor: "rgba(30, 64, 175, 0.2)",
                         textShadowOffset: { width: 0, height: 2 },
                         textShadowRadius: 4,
                       }}
                     >
                       ₹{totalMissed}
                     </Text>
-                    <View
-                      className="bg-orange-200 rounded-lg px-4 py-2"
-                      style={{
-                        borderWidth: 1,
-                        borderColor: "rgba(249, 115, 22, 0.4)",
-                        shadowColor: "#f97316",
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 4,
-                        elevation: 3,
-                      }}
-                    >
-                      <Text
-                        className="text-orange-700 text-sm"
-                        style={{
-                          fontFamily: "Inter_600SemiBold",
-                          letterSpacing: 0.3,
-                        }}
-                      >
-                        OPTIMIZE
-                      </Text>
-                    </View>
                   </View>
                 </View>
               </View>
@@ -735,20 +655,7 @@ export default function HomeScreen({ navigation }) {
         {/* Content with Better Spacing */}
         <View style={{ marginTop: -20, paddingTop: 20 }}>
           {/* Enhanced Missed Rewards Breakdown */}
-          <View className="px-2 pt-10">
-            <Text
-              className="text-blue-900 text-2xl mb-8 px-4"
-              style={{
-                fontFamily: "Inter_700Bold",
-                letterSpacing: -0.5,
-                textShadowColor: "rgba(29, 78, 216, 0.05)",
-                textShadowOffset: { width: 0, height: 1 },
-                textShadowRadius: 2,
-              }}
-            >
-              Missed Rewards Breakdown
-            </Text>
-
+          <View className="px-2 pt-20">
             <View
               style={{
                 position: "relative",
@@ -763,11 +670,8 @@ export default function HomeScreen({ navigation }) {
                 elevation: 12,
               }}
             >
-              {/* Enhanced blue gradient background */}
-              <LinearGradient
-                colors={["#e0e7ff", "#f0fdfa", "#f3e8ff"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
+              {/* Consistent blue background */}
+              <View
                 style={{
                   position: "absolute",
                   top: 0,
@@ -775,6 +679,7 @@ export default function HomeScreen({ navigation }) {
                   right: 0,
                   bottom: 0,
                   borderRadius: 32,
+                  backgroundColor: "#dbeafe", // Light blue consistent with theme
                 }}
               />
               {/* Enhanced geometric pattern overlay */}
@@ -830,7 +735,7 @@ export default function HomeScreen({ navigation }) {
           {/* Enhanced Recent Transactions */}
           <View className="px-6 pt-6">
             <Text
-              className="text-blue-900 text-2xl mb-8"
+              className="text-blue-900 text-base mb-8"
               style={{
                 fontFamily: "Inter_700Bold",
                 letterSpacing: -0.5,
@@ -839,58 +744,51 @@ export default function HomeScreen({ navigation }) {
                 textShadowRadius: 2,
               }}
             >
-              Frequent Transactions
+              Recent Transactions
             </Text>
 
-            <View className="space-y-8">
-              {frequentTransactions.map((transaction) => (
+            <View className="space-y-6 mx-2">
+              {frequentTransactions.map((transaction, index) => (
                 <TouchableOpacity
                   key={transaction.id}
-                  onPress={() =>
-                    navigation.navigate("TransactionDetail", { transaction })
-                  }
-                  className="bg-white p-6 rounded-2xl border border-blue-50"
+                  className="bg-white rounded-2xl p-6 border border-gray-100"
                   style={{
-                    shadowColor: "#3b82f6",
+                    shadowColor: "#1e40af",
                     shadowOffset: { width: 0, height: 4 },
                     shadowOpacity: 0.08,
                     shadowRadius: 12,
                     elevation: 6,
-                    marginBottom: 12,
                   }}
+                  onPress={() =>
+                    navigation.navigate("TransactionDetail", { transaction })
+                  }
                 >
-                  <View className="flex-row items-center mb-5">
+                  <View className="flex-row items-center mb-4">
                     <View
-                      className="w-16 h-16 rounded-2xl items-center justify-center mr-5"
+                      className="bg-blue-50 rounded-xl p-3 mr-4"
                       style={{
-                        backgroundColor: transaction.isOptimal
-                          ? "#dcfce7"
-                          : "#fef2f2",
-                        shadowColor: transaction.isOptimal
-                          ? "#10b981"
-                          : "#ef4444",
+                        shadowColor: "#3b82f6",
                         shadowOffset: { width: 0, height: 2 },
                         shadowOpacity: 0.1,
                         shadowRadius: 4,
                         elevation: 2,
                       }}
                     >
-                      <Text className="text-3xl">{transaction.icon}</Text>
+                      <Text className="text-base">{transaction.icon}</Text>
                     </View>
-
                     <View className="flex-1">
+                      <Text
+                        className="text-slate-900 text-base mb-2"
+                        style={{
+                          fontFamily: "Inter_600SemiBold",
+                          letterSpacing: 0.2,
+                        }}
+                      >
+                        {transaction.merchant}
+                      </Text>
                       <View className="flex-row items-center justify-between">
                         <Text
-                          className="text-slate-900 text-xl mb-2"
-                          style={{
-                            fontFamily: "Inter_600SemiBold",
-                            letterSpacing: -0.3,
-                          }}
-                        >
-                          {transaction.merchant}
-                        </Text>
-                        <Text
-                          className="text-slate-900 text-xl"
+                          className="text-slate-900 text-base"
                           style={{
                             fontFamily: "Inter_700Bold",
                             letterSpacing: -0.3,
@@ -899,88 +797,68 @@ export default function HomeScreen({ navigation }) {
                           {transaction.amount}
                         </Text>
                       </View>
-
-                      <View className="flex-row items-center justify-end">
-                        <Text
-                          className="text-slate-500 text-base"
-                          style={{ fontFamily: "Inter_500Medium" }}
-                        >
-                          {transaction.cardUsed}
-                        </Text>
-                      </View>
+                      <Text
+                        className="text-slate-500 text-base"
+                        style={{
+                          fontFamily: "Inter_400Regular",
+                          letterSpacing: 0.1,
+                          marginTop: 4,
+                        }}
+                      >
+                        {transaction.cardUsed}
+                      </Text>
                     </View>
                   </View>
 
-                  {/* Enhanced Reward Status */}
+                  {/* Optimization Status */}
                   <View
-                    className="p-5 rounded-2xl"
+                    className={`rounded-xl p-4 ${
+                      transaction.isOptimal
+                        ? "bg-green-50 border border-green-100"
+                        : "bg-blue-50 border border-blue-100"
+                    }`}
                     style={{
-                      backgroundColor: transaction.isOptimal
-                        ? "#f0fdf4"
-                        : "#fef2f2",
-                      borderWidth: 1,
-                      borderColor: transaction.isOptimal
-                        ? "#bbf7d0"
-                        : "#fecaca",
+                      shadowColor: transaction.isOptimal
+                        ? "#10b981"
+                        : "#3b82f6",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.06,
+                      shadowRadius: 6,
+                      elevation: 2,
                     }}
                   >
                     {transaction.isOptimal ? (
-                      <View className="flex-row items-center">
-                        <View
-                          className="rounded-full p-3 mr-4"
-                          style={{
-                            backgroundColor: "#10b981",
-                            shadowColor: "#10b981",
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.2,
-                            shadowRadius: 4,
-                            elevation: 2,
-                          }}
-                        >
-                          <Ionicons name="checkmark" size={16} color="white" />
-                        </View>
+                      <Text
+                        className="text-green-700 text-base flex-1"
+                        style={{
+                          fontFamily: "Inter_500Medium",
+                          letterSpacing: 0.2,
+                        }}
+                      >
+                        ✅ Optimal card used! Earned {transaction.earnedReward}
+                      </Text>
+                    ) : (
+                      <View>
                         <Text
-                          className="text-green-700 text-lg flex-1"
+                          className="text-blue-700 text-base mb-2"
                           style={{
                             fontFamily: "Inter_600SemiBold",
-                            letterSpacing: -0.2,
+                            letterSpacing: 0.2,
                           }}
                         >
-                          Earned {transaction.earnedReward} in rewards
+                          ⚠️ Suboptimal card choice
                         </Text>
-                      </View>
-                    ) : (
-                      <View className="flex-row items-center">
-                        <View
-                          className="rounded-full p-3 mr-4"
+                        <Text
+                          className="text-blue-600/80 text-base"
                           style={{
-                            backgroundColor: "#ef4444",
-                            shadowColor: "#ef4444",
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.2,
-                            shadowRadius: 4,
-                            elevation: 2,
+                            fontFamily: "Inter_400Regular",
+                            letterSpacing: 0.1,
+                            lineHeight: 20,
                           }}
                         >
-                          <Ionicons name="alert" size={16} color="white" />
-                        </View>
-                        <View className="flex-1">
-                          <Text
-                            className="text-red-700 text-lg mb-2"
-                            style={{
-                              fontFamily: "Inter_600SemiBold",
-                              letterSpacing: -0.2,
-                            }}
-                          >
-                            Missed {transaction.missedReward} in rewards
-                          </Text>
-                          <Text
-                            className="text-red-600/80 text-base"
-                            style={{ fontFamily: "Inter_500Medium" }}
-                          >
-                            Use {transaction.betterCard} next time
-                          </Text>
-                        </View>
+                          Use {transaction.betterCard} next time to earn{" "}
+                          {transaction.missedReward} more rewards
+                        </Text>
                       </View>
                     )}
                   </View>
@@ -989,156 +867,142 @@ export default function HomeScreen({ navigation }) {
             </View>
           </View>
 
-          {/* Enhanced Recommended Cards */}
-          <View className="px-6 pt-12 pb-8">
+          {/* Recommended Cards Section */}
+          <View className="px-4 py-10">
             <Text
-              className="text-blue-900 text-2xl mb-10"
+              className="text-blue-900 text-lg mb-10"
               style={{
                 fontFamily: "Inter_700Bold",
                 letterSpacing: -0.5,
-                textShadowColor: "rgba(29, 78, 216, 0.05)",
-                textShadowOffset: { width: 0, height: 1 },
-                textShadowRadius: 2,
+                textAlign: "center",
               }}
             >
-              Recommended for You
+              Recommended Cards for You
             </Text>
 
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              className="mx-[-24px]"
+              className="mx-[-16px]"
               contentContainerStyle={{
-                paddingHorizontal: 24,
-                paddingRight: 48,
+                paddingHorizontal: 16,
+                paddingRight: 32,
               }}
             >
               {recommendedCards.map((card, index) => (
-                <TouchableOpacity
+                <View
                   key={card.id}
-                  className="mr-6"
-                  style={{ width: width * 0.85 }}
-                  onPress={() => navigation.navigate("CardDetail", { card })}
+                  className="bg-white rounded-3xl p-8 border border-gray-100 mr-6"
+                  style={{
+                    width: width * 0.85,
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 8 },
+                    shadowOpacity: 0.1,
+                    shadowRadius: 20,
+                    elevation: 10,
+                  }}
                 >
-                  <View
-                    className="bg-white p-8 rounded-3xl border border-blue-50"
+                  <View className="mb-6">
+                    <Text
+                      className="text-blue-600 text-sm mb-2"
+                      style={{
+                        fontFamily: "Inter_500Medium",
+                        letterSpacing: 0.3,
+                        opacity: 0.8,
+                      }}
+                    >
+                      {card.bank}
+                    </Text>
+                    <Text
+                      className="text-blue-900 text-lg"
+                      style={{
+                        fontFamily: "Inter_700Bold",
+                        letterSpacing: -0.5,
+                        lineHeight: 28,
+                      }}
+                    >
+                      {card.name}
+                    </Text>
+                  </View>
+
+                  {/* Card Benefits */}
+                  <View className="space-y-4 mb-8">
+                    {card.perks.map((perk, perkIndex) => (
+                      <View key={perkIndex} className="flex-row items-center">
+                        <View
+                          className="bg-blue-100 rounded-full w-2 h-2 mr-4"
+                          style={{ opacity: 0.8 }}
+                        />
+                        <Text
+                          className="text-blue-800 text-base flex-1"
+                          style={{
+                            fontFamily: "Inter_400Regular",
+                            letterSpacing: 0.2,
+                            lineHeight: 22,
+                          }}
+                        >
+                          {perk}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+
+                  {/* Why This Card & Savings */}
+                  <View className="space-y-4">
+                    <Text
+                      className="text-blue-700 text-base"
+                      style={{
+                        fontFamily: "Inter_500Medium",
+                        letterSpacing: 0.2,
+                        lineHeight: 22,
+                      }}
+                    >
+                      {card.whyThisCard}
+                    </Text>
+                    <Text
+                      className="text-blue-700 text-base"
+                      style={{
+                        fontFamily: "Inter_600SemiBold",
+                        letterSpacing: 0.2,
+                      }}
+                    >
+                      Potential savings: {card.potentialSavings}
+                    </Text>
+                  </View>
+
+                  {/* Apply Button */}
+                  <TouchableOpacity
+                    className="bg-blue-600 rounded-2xl py-4 px-8 mt-8"
                     style={{
-                      shadowColor: "#3b82f6",
-                      shadowOffset: { width: 0, height: 8 },
-                      shadowOpacity: 0.12,
-                      shadowRadius: 20,
-                      elevation: 10,
-                      minHeight: 280,
+                      shadowColor: "#2563eb",
+                      shadowOffset: { width: 0, height: 4 },
+                      shadowOpacity: 0.3,
+                      shadowRadius: 8,
+                      elevation: 6,
                     }}
                   >
-                    {/* Enhanced Card Header */}
-                    <View className="flex-row items-center justify-between mb-6">
-                      <View className="flex-1">
-                        <Text
-                          className="text-blue-600 text-base mb-2"
-                          style={{
-                            fontFamily: "Inter_500Medium",
-                            letterSpacing: 0.2,
-                          }}
-                        >
-                          {card.bank}
-                        </Text>
-                        <Text
-                          className="text-blue-900 text-xl"
-                          style={{
-                            fontFamily: "Inter_700Bold",
-                            letterSpacing: -0.3,
-                            lineHeight: 28,
-                          }}
-                        >
-                          {card.name}
-                        </Text>
-                      </View>
-                      <View
-                        style={{ backgroundColor: "#dbeafe" }}
-                        className="w-14 h-14 rounded-xl items-center justify-center"
-                      >
-                        <Ionicons name="card" size={28} color="#2563eb" />
-                      </View>
-                    </View>
-
-                    {/* Enhanced Card Benefits */}
-                    <View className="mb-6">
-                      {card.perks.map((perk, idx) => (
-                        <View key={idx} className="flex-row items-center mb-4">
-                          <View
-                            style={{ backgroundColor: "#dbeafe" }}
-                            className="w-7 h-7 rounded-full items-center justify-center mr-4"
-                          >
-                            <Ionicons
-                              name="checkmark"
-                              size={16}
-                              color="#2563eb"
-                            />
-                          </View>
-                          <Text
-                            className="text-blue-800 text-base flex-1"
-                            style={{
-                              fontFamily: "Inter_500Medium",
-                              letterSpacing: 0.1,
-                              lineHeight: 22,
-                            }}
-                          >
-                            {perk}
-                          </Text>
-                        </View>
-                      ))}
-                    </View>
-
-                    {/* Enhanced Why This Card */}
-                    <View
-                      style={{ backgroundColor: "#f0f9ff" }}
-                      className="p-5 rounded-xl mb-6 border border-blue-100"
+                    <Text
+                      className="text-white text-base text-center"
+                      style={{
+                        fontFamily: "Inter_600SemiBold",
+                        letterSpacing: 0.3,
+                      }}
                     >
-                      <Text
-                        className="text-blue-700 text-base"
-                        style={{
-                          fontFamily: "Inter_500Medium",
-                          letterSpacing: 0.1,
-                          lineHeight: 22,
-                        }}
-                      >
-                        {card.whyThisCard}
-                      </Text>
-                    </View>
-
-                    {/* Enhanced Potential Savings */}
-                    <View className="flex-row items-center justify-between">
-                      <Text
-                        className="text-blue-700 text-base"
-                        style={{
-                          fontFamily: "Inter_600SemiBold",
-                          letterSpacing: 0.1,
-                        }}
-                      >
-                        Potential Savings
-                      </Text>
-                      <Text
-                        className="text-xl"
-                        style={{
-                          fontFamily: "Inter_700Bold",
-                          color: "#2563eb",
-                          letterSpacing: -0.3,
-                        }}
-                      >
-                        {card.potentialSavings}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
+                      Learn More
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               ))}
             </ScrollView>
           </View>
+
+          {/* Footer spacing for bottom navigation */}
+          <View style={{ height: 40 }} />
         </View>
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <BottomNavigation navigation={navigation} activeTab="Home" />
+      <BottomNavigation navigation={navigation} activeTab="home" />
     </SafeAreaView>
   );
 }

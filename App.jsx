@@ -80,8 +80,8 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style="light" backgroundColor="#000000" />
       <NavigationContainer>
-        <GoogleAuthScreen />
-        {/* <Stack.Navigator
+        {/* <GoogleAuthScreen /> */}
+        <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
             headerShown: false,
@@ -102,7 +102,7 @@ export default function App() {
             component={CardManagementScreen}
           />
           <Stack.Screen name="Profile" component={ProfileScreen} />
-        </Stack.Navigator> */}
+        </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
   );

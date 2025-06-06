@@ -11,53 +11,41 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        // Inter for headings and titles (replacing Cirka)
+        // Inter as the primary font family for all text
+        sans: [
+          "Inter_400Regular",
+          "Inter_500Medium",
+          "Inter_600SemiBold",
+          "Inter_700Bold",
+        ],
+        // Inter for all variants
         heading: ["Inter_700Bold", "Inter_600SemiBold"],
         title: ["Inter_700Bold", "Inter_600SemiBold"],
         display: ["Inter_700Bold", "Inter_600SemiBold"],
-
-        // Poppins for body text and general content (replacing Gilroy)
-        body: ["Poppins_400Regular", "Poppins_500Medium"],
-        sans: [
-          "Poppins_400Regular",
-          "Poppins_500Medium",
-          "Poppins_600SemiBold",
-          "Poppins_700Bold",
-        ],
-        gilroy: [
-          "Poppins_400Regular",
-          "Poppins_500Medium",
-          "Poppins_600SemiBold",
-          "Poppins_700Bold",
-        ],
-
-        // Inter alternative mapping
+        body: ["Inter_400Regular", "Inter_500Medium"],
         inter: [
           "Inter_400Regular",
           "Inter_500Medium",
           "Inter_600SemiBold",
           "Inter_700Bold",
         ],
-
-        // Poppins alternative mapping
+        // Keep Poppins as fallback
         poppins: [
           "Poppins_400Regular",
           "Poppins_500Medium",
           "Poppins_600SemiBold",
           "Poppins_700Bold",
         ],
-
-        // Overpass Mono for monospace text
+        // Monospace remains the same
         mono: [
           "OverpassMono_400Regular",
           "OverpassMono_600SemiBold",
           "OverpassMono_700Bold",
         ],
-        overpass: [
-          "OverpassMono_400Regular",
-          "OverpassMono_600SemiBold",
-          "OverpassMono_700Bold",
-        ],
+      },
+      fontSize: {
+        // Set text-base to 16px as the primary size
+        base: "16px",
       },
       colors: {
         primary: {
