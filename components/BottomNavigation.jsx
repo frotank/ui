@@ -24,7 +24,7 @@ export default function BottomNavigation({
     >
       <View className="flex-row justify-around py-4 px-6">
         {tabs.map((tab) => {
-          const isActive = activeTab === tab.name;
+          const isActive = activeTab.toLowerCase() === tab.name.toLowerCase();
           return (
             <TouchableOpacity
               key={tab.name}

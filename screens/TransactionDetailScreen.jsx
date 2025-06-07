@@ -126,7 +126,7 @@ export default function TransactionDetailScreen({ route, navigation }) {
           end={{ x: 1, y: 1 }}
           style={{
             paddingHorizontal: 24,
-            paddingVertical: 24,
+            paddingVertical: 32,
             borderBottomLeftRadius: 32,
             borderBottomRightRadius: 32,
           }}
@@ -226,157 +226,154 @@ export default function TransactionDetailScreen({ route, navigation }) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 32 }}
       >
-        {/* Transaction Context Card */}
-        <View className="px-6 pt-6 pb-4">
+        {/* Transaction Details Card */}
+        <View className="px-6 pt-8 pb-6">
           <View
-            className="bg-white rounded-2xl p-6 border border-gray-100"
+            className="bg-white rounded-2xl p-8 border border-gray-100"
             style={{
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.05,
-              shadowRadius: 8,
-              elevation: 4,
+              shadowColor: "#3b82f6",
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 6,
             }}
           >
-            <View className="flex-row items-center justify-between mb-4">
-              <View className="flex-row items-center flex-1">
-                <View
-                  className="w-14 h-14 rounded-xl items-center justify-center mr-4"
-                  style={{ backgroundColor: "#f3f4f6" }}
-                >
-                  <Text className="text-3xl">{transaction.icon}</Text>
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="text-gray-900 text-xl mb-1"
-                    style={{ fontFamily: "Inter_700Bold" }}
-                  >
-                    {transaction.merchant}
-                  </Text>
-                  <Text
-                    className="text-gray-500 text-sm"
-                    style={{ fontFamily: "Inter_500Medium" }}
-                  >
-                    {transaction.category} • {transaction.date}
-                  </Text>
-                </View>
-              </View>
+            <View className="flex-row items-center justify-between mb-6">
               <Text
-                className="text-gray-900 text-2xl"
-                style={{ fontFamily: "Inter_700Bold" }}
+                className="text-gray-900 text-xl mb-2"
+                style={{
+                  fontFamily: "Inter_700Bold",
+                  letterSpacing: -0.5,
+                }}
               >
-                {transaction.amount}
+                Transaction Details
               </Text>
+              <View className="bg-blue-100 rounded-xl px-4 py-2">
+                <Text
+                  className="text-blue-700 text-sm"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  {transaction.category}
+                </Text>
+              </View>
             </View>
 
-            {/* Card Used */}
-            <View
-              className="bg-gray-50 rounded-xl p-4"
-              style={{ borderLeftWidth: 4, borderLeftColor: "#6b7280" }}
-            >
-              <Text
-                className="text-gray-600 text-xs mb-2"
-                style={{ fontFamily: "Inter_500Medium" }}
-              >
-                PAID WITH
-              </Text>
+            <View className="bg-gray-50 rounded-xl p-6">
+              <View className="flex-row items-center justify-between mb-4">
+                <Text
+                  className="text-gray-600 text-xs mb-2"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Card Used
+                </Text>
+                <Text
+                  className="text-gray-900 text-base mb-2"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  {transaction.cardUsed}
+                </Text>
+              </View>
+              <View className="flex-row items-center justify-between mb-4">
+                <Text
+                  className="text-gray-600 text-xs mb-2"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Cashback Rate
+                </Text>
+                <Text
+                  className="text-gray-900 text-base mb-2"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  {transaction.currentCashbackRate}
+                </Text>
+              </View>
               <View className="flex-row items-center justify-between">
-                <View>
-                  <Text
-                    className="text-gray-900 text-base mb-1"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    {transaction.cardUsed}
-                  </Text>
-                  <Text
-                    className="text-gray-500 text-sm"
-                    style={{ fontFamily: "Inter_500Medium" }}
-                  >
-                    {transaction.currentCashbackRate} cashback • Earned ₹
-                    {transaction.actualEarned}
-                  </Text>
-                </View>
-                <View className="w-10 h-10 bg-gray-200 rounded-lg items-center justify-center">
-                  <Ionicons name="card" size={20} color="#6b7280" />
-                </View>
+                <Text
+                  className="text-gray-600 text-xs"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Earned
+                </Text>
+                <Text
+                  className="text-gray-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  ₹{transaction.actualEarned}
+                </Text>
               </View>
             </View>
           </View>
         </View>
 
-        {/* Loss Analysis */}
-        <View className="px-6 pb-6">
+        {/* Missed Rewards Alert */}
+        <View className="px-6 pb-8">
           <View
-            className="bg-red-50 rounded-2xl p-6 border border-red-200"
+            className="bg-red-50 rounded-2xl p-8 border border-red-200"
             style={{
               shadowColor: "#ef4444",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.1,
-              shadowRadius: 12,
-              elevation: 6,
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 4,
             }}
           >
-            <View className="flex-row items-center mb-4">
-              <View className="w-12 h-12 bg-red-100 rounded-full items-center justify-center mr-4">
-                <Ionicons name="trending-down" size={24} color="#ef4444" />
-              </View>
-              <View className="flex-1">
-                <Text
-                  className="text-red-900 text-lg mb-1"
-                  style={{ fontFamily: "Inter_700Bold" }}
-                >
-                  Suboptimal Reward Rate
-                </Text>
-                <Text
-                  className="text-red-600 text-sm"
-                  style={{ fontFamily: "Inter_500Medium" }}
-                >
-                  You're earning below market rate for this category
-                </Text>
-              </View>
+            <View className="flex-row items-center mb-6">
+              <Text
+                className="text-red-900 text-lg mb-2"
+                style={{
+                  fontFamily: "Inter_700Bold",
+                  letterSpacing: -0.3,
+                }}
+              >
+                🚨 Missed Rewards Alert
+              </Text>
             </View>
 
-            {/* Loss Breakdown */}
-            <View className="bg-white/60 rounded-xl p-4">
-              <View className="flex-row items-center justify-between mb-2">
+            <View className="bg-white/60 rounded-xl p-6">
+              <View className="flex-row items-center justify-between mb-3">
                 <Text
-                  className="text-red-800 text-sm"
+                  className="text-red-700 text-sm"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Current earnings
+                  You could have earned
                 </Text>
                 <Text
-                  className="text-red-800 text-lg"
-                  style={{ fontFamily: "Inter_700Bold" }}
-                >
-                  ₹{transaction.actualEarned}
-                </Text>
-              </View>
-              <View className="flex-row items-center justify-between mb-2">
-                <Text
-                  className="text-gray-600 text-sm"
-                  style={{ fontFamily: "Inter_500Medium" }}
-                >
-                  Optimal earnings
-                </Text>
-                <Text
-                  className="text-gray-800 text-lg"
+                  className="text-red-900 text-lg"
                   style={{ fontFamily: "Inter_700Bold" }}
                 >
                   ₹{transaction.potentialEarned}
                 </Text>
               </View>
-              <View className="border-t border-red-200 pt-2 mt-2">
+
+              <View className="flex-row items-center justify-between mb-3">
+                <Text
+                  className="text-red-700 text-sm"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  You actually earned
+                </Text>
+                <Text
+                  className="text-red-900 text-lg"
+                  style={{ fontFamily: "Inter_700Bold" }}
+                >
+                  ₹{transaction.actualEarned}
+                </Text>
+              </View>
+
+              <View className="border-t border-red-200 pt-3 mt-3">
                 <View className="flex-row items-center justify-between">
                   <Text
-                    className="text-red-900 text-base"
-                    style={{ fontFamily: "Inter_700Bold" }}
+                    className="text-red-800 text-base"
+                    style={{ fontFamily: "Inter_600SemiBold" }}
                   >
-                    Opportunity loss
+                    Missed Amount
                   </Text>
                   <Text
                     className="text-red-900 text-xl"
-                    style={{ fontFamily: "Inter_700Bold" }}
+                    style={{
+                      fontFamily: "Inter_700Bold",
+                      letterSpacing: -0.5,
+                    }}
                   >
                     ₹{transaction.missedAmount}
                   </Text>
@@ -386,141 +383,109 @@ export default function TransactionDetailScreen({ route, navigation }) {
           </View>
         </View>
 
-        {/* Optimal Card Analysis */}
-        <View className="px-6 pb-6">
+        {/* Optimal Cards for This Transaction */}
+        <View className="px-6 pb-8">
           <Text
-            className="text-gray-900 text-lg mb-4"
-            style={{ fontFamily: "Inter_700Bold" }}
+            className="text-gray-900 text-lg mb-6"
+            style={{
+              fontFamily: "Inter_700Bold",
+              letterSpacing: -0.5,
+            }}
           >
-            Optimal Cards for Dining
+            Better Cards for This Transaction
           </Text>
 
           {optimalCardsForThisTransaction.map((card, index) => (
             <View
               key={index}
-              className="bg-white rounded-2xl p-5 border border-gray-100 mb-4"
+              className="bg-white rounded-2xl p-6 border border-gray-100 mb-6"
               style={{
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 8,
-                elevation: 4,
+                shadowColor: "#3b82f6",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.08,
+                shadowRadius: 16,
+                elevation: 6,
               }}
             >
-              <View className="flex-row items-center justify-between mb-4">
-                <View className="flex-row items-center">
-                  <View
-                    className="w-10 h-10 rounded-lg items-center justify-center mr-3"
-                    style={{ backgroundColor: card.bgColor }}
-                  >
-                    <Ionicons
-                      name={card.icon}
-                      size={20}
-                      color={card.iconColor}
-                    />
-                  </View>
-                  <View>
-                    <Text
-                      className="text-gray-900 text-base mb-1"
-                      style={{ fontFamily: "Inter_600SemiBold" }}
-                    >
-                      {card.name}
-                    </Text>
-                    <Text
-                      className="text-green-600 text-sm"
-                      style={{ fontFamily: "Inter_500Medium" }}
-                    >
-                      {card.cashback}
-                    </Text>
-                  </View>
-                </View>
+              <View className="flex-row items-center justify-between mb-6">
                 <Text
-                  className="text-green-600 text-xl"
-                  style={{ fontFamily: "Inter_700Bold" }}
+                  className="text-gray-900 text-base mb-2"
+                  style={{
+                    fontFamily: "Inter_600SemiBold",
+                    letterSpacing: 0.2,
+                  }}
                 >
-                  ₹{card.rewardsForThisTransaction}
+                  {card.name}
                 </Text>
+                <View
+                  className="rounded-xl p-4"
+                  style={{
+                    backgroundColor: card.bgColor,
+                    borderColor: card.borderColor,
+                    borderWidth: 1,
+                  }}
+                >
+                  <Ionicons name={card.icon} size={24} color={card.iconColor} />
+                </View>
               </View>
 
-              {/* Quick Benefits for each card */}
-              <View
-                className="rounded-xl p-4"
-                style={{
-                  backgroundColor: card.bgColor,
-                  borderColor: card.borderColor,
-                  borderWidth: 1,
-                }}
+              <Text
+                className="text-gray-600 text-sm mb-4"
+                style={{ fontFamily: "Inter_400Regular" }}
               >
-                <View className="flex-row items-center justify-between">
-                  <Text
-                    className="text-green-800 text-sm"
-                    style={{ fontFamily: "Inter_500Medium" }}
-                  >
-                    Annual fee
-                  </Text>
-                  <Text
-                    className="text-green-800 text-sm"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    {card.annualFee}
-                  </Text>
-                </View>
-                <View className="flex-row items-center justify-between mt-2">
-                  <Text
-                    className="text-green-800 text-sm"
-                    style={{ fontFamily: "Inter_500Medium" }}
-                  >
-                    Additional earnings
-                  </Text>
-                  <Text
-                    className="text-green-800 text-sm"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    ₹{card.additionalEarnings}
-                  </Text>
-                </View>
+                {card.cashback}
+              </Text>
+
+              <View className="flex-row items-center justify-between mt-3">
+                <Text
+                  className="text-gray-700 text-sm"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Would have earned: ₹{card.rewardsForThisTransaction}
+                </Text>
+                <Text
+                  className="text-green-600 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  +₹{card.additionalEarnings} more
+                </Text>
               </View>
             </View>
           ))}
         </View>
 
-        {/* Monthly Impact Insight */}
+        {/* Quick Apply Section */}
         <View className="px-6 pb-8">
           <View
-            className="bg-blue-50 rounded-xl p-4 border border-blue-200"
+            className="bg-blue-50 rounded-xl p-6 border border-blue-200"
             style={{
               shadowColor: "#3b82f6",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: 0.05,
-              shadowRadius: 8,
-              elevation: 3,
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.08,
+              shadowRadius: 16,
+              elevation: 4,
             }}
           >
-            <View className="flex-row items-center">
-              <View className="w-8 h-8 bg-blue-100 rounded-full items-center justify-center mr-3">
-                <Ionicons name="analytics" size={16} color="#3b82f6" />
-              </View>
-              <View className="flex-1">
-                <Text
-                  className="text-blue-900 text-sm mb-1"
-                  style={{ fontFamily: "Inter_600SemiBold" }}
-                >
-                  Monthly dining spend: ₹{transaction.monthlySpending}
-                </Text>
-                <Text
-                  className="text-blue-600 text-xs"
-                  style={{ fontFamily: "Inter_500Medium" }}
-                >
-                  You could save ₹
-                  {Math.round(
-                    parseFloat(
-                      optimalCardsForThisTransaction[0].annualSavings
-                    ) / 12
-                  )}
-                  /month with better optimization
-                </Text>
-              </View>
-            </View>
+            <Text
+              className="text-blue-900 text-sm mb-2"
+              style={{
+                fontFamily: "Inter_600SemiBold",
+                letterSpacing: 0.2,
+              }}
+            >
+              💡 Smart Recommendation
+            </Text>
+            <Text
+              className="text-blue-700 text-sm leading-5"
+              style={{
+                fontFamily: "Inter_400Regular",
+                opacity: 0.9,
+              }}
+            >
+              Switch to HDFC Swiggy Card for dining transactions to maximize
+              your rewards. You could save ₹{potentialSavings}/month on similar
+              spending.
+            </Text>
           </View>
         </View>
       </ScrollView>

@@ -108,7 +108,7 @@ export default function CardManagementScreen({ navigation }) {
   };
 
   const renderCard = (card) => (
-    <TouchableOpacity key={card.id} className="mb-6">
+    <TouchableOpacity key={card.id} className="mb-8">
       <View
         className="rounded-3xl overflow-hidden"
         style={{
@@ -140,8 +140,8 @@ export default function CardManagementScreen({ navigation }) {
             <View
               style={{
                 position: "absolute",
-                top: 30,
-                right: 30,
+                top: 32,
+                right: 32,
                 width: 80,
                 height: 80,
                 borderRadius: 40,
@@ -151,8 +151,8 @@ export default function CardManagementScreen({ navigation }) {
             <View
               style={{
                 position: "absolute",
-                top: 60,
-                right: 60,
+                top: 64,
+                right: 64,
                 width: 40,
                 height: 40,
                 borderRadius: 20,
@@ -163,10 +163,10 @@ export default function CardManagementScreen({ navigation }) {
               style={{
                 position: "absolute",
                 bottom: 40,
-                left: 30,
-                width: 60,
-                height: 60,
-                borderRadius: 30,
+                left: 32,
+                width: 64,
+                height: 64,
+                borderRadius: 32,
                 backgroundColor: "#fff",
               }}
             />
@@ -174,7 +174,7 @@ export default function CardManagementScreen({ navigation }) {
 
           {/* Card Header */}
           <View
-            className="flex-row items-start justify-between mb-6"
+            className="flex-row items-start justify-between mb-8"
             style={{ zIndex: 1 }}
           >
             <View>
@@ -204,7 +204,7 @@ export default function CardManagementScreen({ navigation }) {
                 </Text>
               </View>
             </View>
-            <View className="bg-white/25 backdrop-blur-md rounded-lg px-3 py-2 border border-white/20">
+            <View className="bg-white/25 rounded-lg px-4 py-2">
               <Text
                 className="text-white text-xs"
                 style={{ fontFamily: "Inter_600SemiBold" }}
@@ -215,19 +215,22 @@ export default function CardManagementScreen({ navigation }) {
           </View>
 
           {/* Card Number */}
-          <View className="flex-1 justify-center" style={{ zIndex: 1 }}>
+          <View className="mb-8" style={{ zIndex: 1 }}>
             <Text
               className="text-white/80 text-sm mb-2"
-              style={{ fontFamily: "Inter_500Medium" }}
+              style={{
+                fontFamily: "Inter_500Medium",
+                letterSpacing: 0.5,
+              }}
             >
-              Card Number
+              CARD NUMBER
             </Text>
             <Text
-              className="text-white text-2xl mb-4"
+              className="text-white text-xl mb-6"
               style={{
-                fontFamily: "Inter_600SemiBold",
-                letterSpacing: 3,
-                textShadowColor: "#00000030",
+                fontFamily: "Inter_700Bold",
+                letterSpacing: 2,
+                textShadowColor: "rgba(0,0,0,0.2)",
                 textShadowOffset: { width: 0, height: 1 },
                 textShadowRadius: 2,
               }}
@@ -243,35 +246,66 @@ export default function CardManagementScreen({ navigation }) {
           >
             <View>
               <Text
-                className="text-white/80 text-sm mb-1"
-                style={{ fontFamily: "Inter_500Medium" }}
+                className="text-white/80 text-sm mb-2"
+                style={{
+                  fontFamily: "Inter_500Medium",
+                  letterSpacing: 0.5,
+                }}
               >
-                {card.holder}
+                CARD HOLDER
               </Text>
               <Text
                 className="text-white text-base"
                 style={{
                   fontFamily: "Inter_600SemiBold",
-                  textShadowColor: "#00000020",
+                  letterSpacing: 1,
+                  textShadowColor: "rgba(0,0,0,0.2)",
                   textShadowOffset: { width: 0, height: 1 },
                   textShadowRadius: 2,
                 }}
               >
-                Exp {card.expiry}
+                {card.holder.toUpperCase()}
               </Text>
             </View>
             <View>
               <Text
-                className="text-white/80 text-sm mb-1"
-                style={{ fontFamily: "Inter_500Medium" }}
+                className="text-white/80 text-sm mb-2"
+                style={{
+                  fontFamily: "Inter_500Medium",
+                  letterSpacing: 0.5,
+                }}
               >
-                Balance
+                EXPIRES
               </Text>
               <Text
-                className="text-white text-xl"
+                className="text-white text-base"
+                style={{
+                  fontFamily: "Inter_600SemiBold",
+                  letterSpacing: 1,
+                  textShadowColor: "rgba(0,0,0,0.2)",
+                  textShadowOffset: { width: 0, height: 1 },
+                  textShadowRadius: 2,
+                }}
+              >
+                {card.expiry}
+              </Text>
+            </View>
+            <View>
+              <Text
+                className="text-white/80 text-sm mb-2"
+                style={{
+                  fontFamily: "Inter_500Medium",
+                  letterSpacing: 0.5,
+                }}
+              >
+                BALANCE
+              </Text>
+              <Text
+                className="text-white text-base"
                 style={{
                   fontFamily: "Inter_700Bold",
-                  textShadowColor: "#00000030",
+                  letterSpacing: 0.5,
+                  textShadowColor: "rgba(0,0,0,0.2)",
                   textShadowOffset: { width: 0, height: 1 },
                   textShadowRadius: 2,
                 }}
@@ -286,145 +320,108 @@ export default function CardManagementScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-50">
+    <SafeAreaView className="flex-1" style={{ backgroundColor: "#f8fafc" }}>
       {/* Header */}
-      <View className="px-6 py-6 bg-white border-b border-blue-100">
+      <View className="px-6 py-8 bg-white border-b border-gray-100">
         <View className="flex-row items-center justify-between">
-          <View className="flex-1">
+          <View>
             <Text
-              className="text-blue-600 text-base mb-2"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Manage your
-            </Text>
-            <Text
-              className="text-blue-900 text-2xl"
-              style={{ fontFamily: "Inter_700Bold" }}
-            >
-              Cards
-            </Text>
-          </View>
-
-          <TouchableOpacity className="bg-blue-50 rounded-2xl p-4">
-            <Ionicons name="notifications-outline" size={24} color="#2563eb" />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <ScrollView
-        className="flex-1"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 120 }}
-      >
-        {/* My Cards Section */}
-        <View className="px-6 py-6">
-          <View className="flex-row items-center justify-between mb-6">
-            <Text
-              className="text-blue-900 text-xl"
+              className="text-gray-900 text-2xl mb-2"
               style={{
                 fontFamily: "Inter_700Bold",
-                letterSpacing: -0.5,
+                letterSpacing: -1,
               }}
             >
-              My Cards ({cards.length})
+              My Cards
             </Text>
-            <TouchableOpacity
-              onPress={() => setShowAddCardModal(true)}
-              className="bg-blue-600 rounded-xl px-4 py-2"
+            <Text
+              className="text-gray-500 text-base"
+              style={{ fontFamily: "Inter_400Regular" }}
             >
+              Manage your payment cards
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => setShowAddCardModal(true)}
+            className="bg-blue-600 rounded-2xl px-6 py-4"
+            style={{
+              shadowColor: "#3b82f6",
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.2,
+              shadowRadius: 12,
+              elevation: 8,
+            }}
+          >
+            <View className="flex-row items-center">
+              <Ionicons name="add" size={20} color="white" />
               <Text
-                className="text-white text-sm"
+                className="text-white text-base ml-2"
                 style={{ fontFamily: "Inter_600SemiBold" }}
               >
                 Add Card
               </Text>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
 
-          {/* Render Cards */}
-          {cards.map(renderCard)}
+      {/* Cards List */}
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: 24, paddingBottom: 120 }}
+      >
+        {cards.map((card) => renderCard(card))}
 
-          {/* Card Benefits Section */}
-          <View
-            className="bg-white rounded-3xl p-6 mt-4"
+        {/* Statistics Card */}
+        <View
+          className="bg-white rounded-3xl p-8 border border-gray-100"
+          style={{
+            shadowColor: "#3b82f6",
+            shadowOffset: { width: 0, height: 8 },
+            shadowOpacity: 0.08,
+            shadowRadius: 20,
+            elevation: 10,
+          }}
+        >
+          <Text
+            className="text-gray-900 text-xl mb-8"
             style={{
-              shadowColor: "#3b82f6",
-              shadowOffset: { width: 0, height: 8 },
-              shadowOpacity: 0.12,
-              shadowRadius: 20,
-              elevation: 10,
+              fontFamily: "Inter_700Bold",
+              letterSpacing: -0.5,
             }}
           >
-            <Text
-              className="text-blue-900 text-xl mb-6"
-              style={{
-                fontFamily: "Inter_700Bold",
-                letterSpacing: -0.5,
-              }}
-            >
-              Card Benefits
-            </Text>
+            Card Statistics
+          </Text>
 
-            <View className="space-y-4">
-              <View className="flex-row items-center mb-4">
-                <View className="w-12 h-12 bg-blue-100 rounded-xl items-center justify-center mr-4">
-                  <Ionicons name="shield-checkmark" size={24} color="#3b82f6" />
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="text-blue-900 text-base mb-1"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    Fraud Protection
-                  </Text>
-                  <Text
-                    className="text-blue-600 text-sm"
-                    style={{ fontFamily: "Inter_400Regular" }}
-                  >
-                    24/7 monitoring and instant alerts
-                  </Text>
-                </View>
-              </View>
-
-              <View className="flex-row items-center mb-4">
-                <View className="w-12 h-12 bg-green-100 rounded-xl items-center justify-center mr-4">
-                  <Ionicons name="gift" size={24} color="#10b981" />
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="text-green-900 text-base mb-1"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    Cashback Rewards
-                  </Text>
-                  <Text
-                    className="text-green-600 text-sm"
-                    style={{ fontFamily: "Inter_400Regular" }}
-                  >
-                    Earn up to 5% on every purchase
-                  </Text>
-                </View>
-              </View>
-
-              <View className="flex-row items-center">
-                <View className="w-12 h-12 bg-purple-100 rounded-xl items-center justify-center mr-4">
-                  <Ionicons name="airplane" size={24} color="#8b5cf6" />
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="text-purple-900 text-base mb-1"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    Travel Benefits
-                  </Text>
-                  <Text
-                    className="text-purple-600 text-sm"
-                    style={{ fontFamily: "Inter_400Regular" }}
-                  >
-                    Airport lounge access and travel insurance
-                  </Text>
-                </View>
-              </View>
+          <View className="space-y-6">
+            <View className="flex-row items-center justify-between">
+              <Text
+                className="text-gray-600 text-base"
+                style={{ fontFamily: "Inter_500Medium" }}
+              >
+                Total Cards
+              </Text>
+              <Text
+                className="text-gray-900 text-xl"
+                style={{ fontFamily: "Inter_700Bold" }}
+              >
+                {cards.length}
+              </Text>
+            </View>
+            <View className="flex-row items-center justify-between">
+              <Text
+                className="text-gray-600 text-base"
+                style={{ fontFamily: "Inter_500Medium" }}
+              >
+                Total Balance
+              </Text>
+              <Text
+                className="text-green-600 text-xl"
+                style={{ fontFamily: "Inter_700Bold" }}
+              >
+                ${cards.reduce((sum, card) => sum + card.balance, 0).toFixed(2)}
+              </Text>
             </View>
           </View>
         </View>
@@ -432,154 +429,155 @@ export default function CardManagementScreen({ navigation }) {
 
       {/* Add Card Modal */}
       <Modal
-        animationType="slide"
-        transparent={true}
         visible={showAddCardModal}
+        animationType="slide"
+        presentationStyle="pageSheet"
         onRequestClose={() => setShowAddCardModal(false)}
       >
-        <View className="flex-1 justify-end bg-black/50">
-          <View className="bg-white rounded-t-3xl p-6 pb-8">
-            <View className="flex-row items-center justify-between mb-6">
+        <SafeAreaView className="flex-1 bg-white">
+          <View className="px-6 py-8 border-b border-gray-100">
+            <View className="flex-row items-center justify-between">
               <Text
-                className="text-blue-900 text-xl"
+                className="text-gray-900 text-xl"
                 style={{ fontFamily: "Inter_700Bold" }}
               >
                 Add New Card
               </Text>
               <TouchableOpacity
                 onPress={() => setShowAddCardModal(false)}
-                className="w-8 h-8 bg-gray-100 rounded-full items-center justify-center"
+                className="w-10 h-10 bg-gray-100 rounded-full items-center justify-center"
               >
                 <Ionicons name="close" size={20} color="#6b7280" />
               </TouchableOpacity>
             </View>
+          </View>
 
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {/* Card Type */}
-              <View className="mb-4">
+          <ScrollView className="flex-1 px-6 py-8">
+            <View className="space-y-6">
+              <View>
                 <Text
-                  className="text-blue-900 text-base mb-2"
+                  className="text-gray-700 text-base mb-3"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   Card Type
                 </Text>
                 <TextInput
+                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                  placeholder="e.g., VISA PLATINUM"
                   value={newCard.type}
                   onChangeText={(text) =>
                     setNewCard({ ...newCard, type: text })
                   }
-                  placeholder="e.g., VISA PLATINUM"
-                  className="bg-blue-50 rounded-xl p-4 text-blue-900 border border-blue-100"
                   style={{ fontFamily: "Inter_500Medium" }}
                 />
               </View>
 
-              {/* Card Number */}
-              <View className="mb-4">
+              <View>
                 <Text
-                  className="text-blue-900 text-base mb-2"
+                  className="text-gray-700 text-base mb-3"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   Card Number
                 </Text>
                 <TextInput
+                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                  placeholder="1234 5678 9012 3456"
                   value={newCard.number}
                   onChangeText={(text) =>
                     setNewCard({ ...newCard, number: text })
                   }
-                  placeholder="1234 5678 9012 3456"
                   keyboardType="numeric"
-                  className="bg-blue-50 rounded-xl p-4 text-blue-900 border border-blue-100"
+                  maxLength={19}
                   style={{ fontFamily: "Inter_500Medium" }}
                 />
               </View>
 
-              {/* Card Holder */}
-              <View className="mb-4">
+              <View>
                 <Text
-                  className="text-blue-900 text-base mb-2"
+                  className="text-gray-700 text-base mb-3"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   Card Holder Name
                 </Text>
                 <TextInput
+                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                  placeholder="John Doe"
                   value={newCard.holder}
                   onChangeText={(text) =>
                     setNewCard({ ...newCard, holder: text })
                   }
-                  placeholder="John Doe"
-                  className="bg-blue-50 rounded-xl p-4 text-blue-900 border border-blue-100"
                   style={{ fontFamily: "Inter_500Medium" }}
                 />
               </View>
 
-              {/* Expiry and CVV */}
-              <View className="flex-row space-x-4 mb-6">
+              <View className="flex-row space-x-4">
                 <View className="flex-1">
                   <Text
-                    className="text-blue-900 text-base mb-2"
+                    className="text-gray-700 text-base mb-3"
                     style={{ fontFamily: "Inter_600SemiBold" }}
                   >
                     Expiry Date
                   </Text>
                   <TextInput
+                    className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                    placeholder="MM/YY"
                     value={newCard.expiry}
                     onChangeText={(text) =>
                       setNewCard({ ...newCard, expiry: text })
                     }
-                    placeholder="MM/YY"
                     keyboardType="numeric"
-                    className="bg-blue-50 rounded-xl p-4 text-blue-900 border border-blue-100"
+                    maxLength={5}
                     style={{ fontFamily: "Inter_500Medium" }}
                   />
                 </View>
                 <View className="flex-1">
                   <Text
-                    className="text-blue-900 text-base mb-2"
+                    className="text-gray-700 text-base mb-3"
                     style={{ fontFamily: "Inter_600SemiBold" }}
                   >
                     CVV
                   </Text>
                   <TextInput
+                    className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                    placeholder="123"
                     value={newCard.cvv}
                     onChangeText={(text) =>
                       setNewCard({ ...newCard, cvv: text })
                     }
-                    placeholder="123"
                     keyboardType="numeric"
+                    maxLength={4}
                     secureTextEntry
-                    className="bg-blue-50 rounded-xl p-4 text-blue-900 border border-blue-100"
                     style={{ fontFamily: "Inter_500Medium" }}
                   />
                 </View>
               </View>
+            </View>
+          </ScrollView>
 
-              {/* Add Card Button */}
-              <TouchableOpacity
-                onPress={handleAddCard}
-                className="bg-blue-600 rounded-xl py-4 items-center"
-                style={{
-                  shadowColor: "#3b82f6",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 12,
-                  elevation: 8,
-                }}
+          <View className="px-6 py-8 border-t border-gray-100">
+            <TouchableOpacity
+              onPress={handleAddCard}
+              className="bg-blue-600 rounded-2xl py-4"
+              style={{
+                shadowColor: "#3b82f6",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.2,
+                shadowRadius: 12,
+                elevation: 8,
+              }}
+            >
+              <Text
+                className="text-white text-center text-base"
+                style={{ fontFamily: "Inter_600SemiBold" }}
               >
-                <Text
-                  className="text-white text-lg"
-                  style={{ fontFamily: "Inter_600SemiBold" }}
-                >
-                  Add Card
-                </Text>
-              </TouchableOpacity>
-            </ScrollView>
+                Add Card
+              </Text>
+            </TouchableOpacity>
           </View>
-        </View>
+        </SafeAreaView>
       </Modal>
 
-      {/* Bottom Navigation */}
-      <BottomNavigation navigation={navigation} activeTab="Cards" />
+      <BottomNavigation navigation={navigation} activeTab="cards" />
     </SafeAreaView>
   );
 }

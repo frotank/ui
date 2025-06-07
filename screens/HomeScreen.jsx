@@ -143,56 +143,117 @@ export default function HomeScreen({ navigation }) {
     return (
       <View>
         {/* Total Summary at Top */}
-        <View className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-6 border border-blue-100">
+        <View
+          className="bg-white rounded-3xl p-8 mb-8 border border-gray-100"
+          style={{
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 12 },
+            shadowOpacity: 0.08,
+            shadowRadius: 24,
+            elevation: 15,
+          }}
+        >
           <View className="items-center">
-            <View className="bg-blue-100 rounded-full p-6 mb-4">
+            {/* Blue Gradient Icon Container */}
+            <LinearGradient
+              colors={["#3b82f6", "#1d4ed8"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={{
+                borderRadius: 50,
+                padding: 24,
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 24,
+                shadowColor: "#3b82f6",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.3,
+                shadowRadius: 16,
+                elevation: 8,
+              }}
+            >
               <Svg width="48" height="48" viewBox="0 0 24 24" fill="none">
                 <Path
-                  d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"
-                  stroke="#3b82f6"
-                  strokeWidth="2"
-                  fill="#bfdbfe"
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                  fill="white"
+                  fillOpacity="0.9"
                 />
                 <Path
-                  d="M9 12l2 2 4-4"
-                  stroke="#1e40af"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  fill="none"
+                  strokeOpacity="0.4"
                 />
               </Svg>
+            </LinearGradient>
+
+            {/* Title with elegant styling */}
+            <Text
+              className="text-gray-600 text-sm mb-3"
+              style={{
+                fontFamily: "Inter_500Medium",
+                letterSpacing: 0.8,
+                textTransform: "uppercase",
+                opacity: 0.7,
+              }}
+            >
+              Missed Cashback
+            </Text>
+
+            {/* Amount with dramatic styling */}
+            <View className="items-center">
+              <Text
+                className="text-gray-900 mb-2"
+                style={{
+                  fontFamily: "Inter_900Black",
+                  fontSize: 42,
+                  letterSpacing: -2,
+                  textShadowColor: "rgba(0, 0, 0, 0.1)",
+                  textShadowOffset: { width: 0, height: 2 },
+                  textShadowRadius: 4,
+                }}
+              >
+                ₹{totalMissed}
+              </Text>
+              <Text
+                className="text-blue-500 text-sm"
+                style={{
+                  fontFamily: "Inter_600SemiBold",
+                  letterSpacing: 0.5,
+                  opacity: 0.8,
+                }}
+              >
+                last month
+              </Text>
             </View>
-            <Text
-              className="text-blue-600 text-base mb-2"
-              style={{ fontFamily: "Inter_500Medium" }}
-            >
-              Total Missed Rewards
-            </Text>
-            <Text
-              className="text-blue-900 text-base"
-              style={{ fontFamily: "Inter_700Bold" }}
-            >
-              ₹{totalMissed}
-            </Text>
+
+            {/* Decorative elements */}
+            <View
+              className="absolute top-4 right-4 w-3 h-3 rounded-full bg-blue-200"
+              style={{ opacity: 0.6 }}
+            />
+            <View
+              className="absolute bottom-4 left-4 w-2 h-2 rounded-full bg-blue-300"
+              style={{ opacity: 0.5 }}
+            />
+            <View
+              className="absolute top-8 left-6 w-1 h-1 rounded-full bg-blue-400"
+              style={{ opacity: 0.7 }}
+            />
           </View>
         </View>
 
         {/* Simplified Progress Bars */}
-        <View className="space-y-8">
+        <View className="space-y-6">
           {data.map((item, index) => {
             const percentage = (item.amount / totalMissed) * 100;
-            const gradientColors = {
-              Dining: "#3b82f6",
-              Travel: "#8b5cf6",
-              Shopping: "#06b6d4",
-              Fuel: "#10b981",
-            };
-            const color = gradientColors[item.category] || "#3b82f6";
+            const color = "#3b82f6"; // All bars use blue color
 
             return (
               <View
                 key={index}
-                className="bg-white rounded-xl p-5 border border-gray-100 mb-4"
+                className="bg-white rounded-xl p-6 border border-gray-100 mb-4"
                 style={{
                   shadowColor: "#000",
                   shadowOffset: { width: 0, height: 2 },
@@ -201,29 +262,48 @@ export default function HomeScreen({ navigation }) {
                   elevation: 3,
                 }}
               >
-                {/* Simple Header */}
-                <View className="flex-row items-center justify-between mb-3">
-                  <Text
-                    className="text-gray-900 text-base"
-                    style={{ fontFamily: "Inter_600SemiBold" }}
-                  >
-                    {item.category}
-                  </Text>
-                  <Text
-                    className="text-gray-900 text-base"
-                    style={{ fontFamily: "Inter_700Bold" }}
-                  >
-                    ₹{item.amount}
-                  </Text>
+                {/* Enhanced Header with Context */}
+                <View className="flex-row items-center justify-between mb-4">
+                  <View className="flex-row items-center">
+                    <Text className="text-2xl mr-3">{item.icon}</Text>
+                    <View>
+                      <Text
+                        className="text-gray-900 text-base"
+                        style={{ fontFamily: "Inter_600SemiBold" }}
+                      >
+                        {item.category}
+                      </Text>
+                      <Text
+                        className="text-gray-500 text-xs"
+                        style={{ fontFamily: "Inter_400Regular" }}
+                      >
+                        Cashback missed
+                      </Text>
+                    </View>
+                  </View>
+                  <View className="items-end">
+                    <Text
+                      className="text-gray-900 text-lg"
+                      style={{ fontFamily: "Inter_700Bold" }}
+                    >
+                      ₹{item.amount}
+                    </Text>
+                    <Text
+                      className="text-blue-600 text-xs"
+                      style={{ fontFamily: "Inter_500Medium" }}
+                    >
+                      {percentage.toFixed(0)}% of total
+                    </Text>
+                  </View>
                 </View>
 
                 {/* Simple Progress Bar */}
-                <View className="bg-gray-100 rounded-full h-2 overflow-hidden">
+                <View className="bg-gray-100 rounded-full h-3 overflow-hidden">
                   <View
                     style={{
                       width: `${percentage}%`,
                       height: "100%",
-                      borderRadius: 4,
+                      borderRadius: 6,
                       backgroundColor: color,
                     }}
                   />
@@ -498,9 +578,143 @@ export default function HomeScreen({ navigation }) {
               </Svg>
             </View>
 
+            {/* Creative Curved White Lines Behind Header Elements */}
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 1,
+                opacity: 0.35,
+              }}
+            >
+              <Svg width="100%" height="100%" viewBox="0 0 400 260">
+                {/* Elegant flowing curves - main focal curves */}
+                <Path
+                  d="M-20,80 Q80,40 160,80 Q240,120 320,80 Q360,60 420,80"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  fill="none"
+                  opacity="1"
+                />
+                <Path
+                  d="M-20,100 Q60,60 140,100 Q220,140 300,100 Q380,60 420,100"
+                  stroke="white"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.8"
+                />
+                <Path
+                  d="M-20,120 Q100,80 200,120 Q300,160 400,120"
+                  stroke="white"
+                  strokeWidth="0.8"
+                  fill="none"
+                  opacity="0.6"
+                />
+
+                {/* Swirling decorative curves around header area */}
+                <Path
+                  d="M50,60 Q90,20 130,60 Q170,100 210,60"
+                  stroke="white"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.7"
+                />
+                <Path
+                  d="M250,70 Q290,30 330,70 Q370,110 410,70"
+                  stroke="white"
+                  strokeWidth="0.8"
+                  fill="none"
+                  opacity="0.6"
+                />
+
+                {/* Circular flowing patterns */}
+                <Path
+                  d="M80,50 Q120,10 160,50 Q200,90 240,50 Q280,10 320,50"
+                  stroke="white"
+                  strokeWidth="0.8"
+                  fill="none"
+                  opacity="0.8"
+                />
+                <Path
+                  d="M60,90 Q100,50 140,90 Q180,130 220,90 Q260,50 300,90"
+                  stroke="white"
+                  strokeWidth="0.6"
+                  fill="none"
+                  opacity="0.6"
+                />
+
+                {/* Vertical flowing lines */}
+                <Path
+                  d="M30,40 Q50,80 30,120 Q10,160 30,200"
+                  stroke="white"
+                  strokeWidth="0.8"
+                  fill="none"
+                  opacity="0.5"
+                />
+                <Path
+                  d="M370,30 Q390,70 370,110 Q350,150 370,190"
+                  stroke="white"
+                  strokeWidth="0.6"
+                  fill="none"
+                  opacity="0.4"
+                />
+
+                {/* Interconnected curves */}
+                <Path
+                  d="M100,40 Q150,80 200,40 Q250,80 300,40"
+                  stroke="white"
+                  strokeWidth="0.7"
+                  fill="none"
+                  opacity="0.7"
+                />
+                <Path
+                  d="M80,110 Q130,70 180,110 Q230,150 280,110"
+                  stroke="white"
+                  strokeWidth="0.5"
+                  fill="none"
+                  opacity="0.5"
+                />
+
+                {/* Spiral-like decorative elements */}
+                <Path
+                  d="M350,40 Q340,50 350,60 Q360,50 350,40"
+                  stroke="white"
+                  strokeWidth="1"
+                  fill="none"
+                  opacity="0.8"
+                />
+                <Path
+                  d="M70,110 Q60,120 70,130 Q80,120 70,110"
+                  stroke="white"
+                  strokeWidth="0.8"
+                  fill="none"
+                  opacity="0.6"
+                />
+
+                {/* Background accent curves */}
+                <Path
+                  d="M-10,140 Q100,100 210,140 Q320,180 430,140"
+                  stroke="white"
+                  strokeWidth="0.5"
+                  fill="none"
+                  opacity="0.5"
+                />
+                <Path
+                  d="M-10,160 Q80,120 170,160 Q260,200 350,160 Q380,140 410,160"
+                  stroke="white"
+                  strokeWidth="0.4"
+                  fill="none"
+                  opacity="0.4"
+                />
+              </Svg>
+            </View>
+
             {/* Top Navigation Bar */}
             <View
-              className="flex-row items-center justify-between px-6 pt-6 mb-10"
+              className="flex-row items-center justify-between px-6 pt-8 mb-8"
               style={{ zIndex: 2 }}
             >
               <View className="flex-row items-center">
@@ -566,7 +780,7 @@ export default function HomeScreen({ navigation }) {
             {/* Missed Rewards Card */}
             <View className="px-6 mb-8" style={{ zIndex: 2 }}>
               <View
-                className="bg-white rounded-2xl p-6"
+                className="bg-white rounded-2xl p-8"
                 style={{
                   borderWidth: 2,
                   borderColor: "#ffffff",
@@ -580,7 +794,7 @@ export default function HomeScreen({ navigation }) {
                 <View className="flex-row items-center justify-between">
                   <View className="flex-row items-center flex-1">
                     <View
-                      className="bg-white rounded-xl p-3 mr-4"
+                      className="bg-white rounded-xl p-4 mr-4"
                       style={{
                         shadowColor: "#f97316",
                         shadowOffset: { width: 0, height: 3 },
@@ -595,13 +809,13 @@ export default function HomeScreen({ navigation }) {
                     </View>
                     <View className="flex-1">
                       <Text
-                        className="text-blue-900 text-base mb-1"
+                        className="text-blue-900 text-base mb-2"
                         style={{
                           fontFamily: "Inter_600SemiBold",
                           letterSpacing: 0.3,
                         }}
                       >
-                        Missed Rewards
+                        Missed Cashback
                       </Text>
                       <Text
                         className="text-blue-600 text-base"
@@ -653,87 +867,16 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Content with Better Spacing */}
-        <View style={{ marginTop: -20, paddingTop: 20 }}>
+        <View style={{ marginTop: -20, paddingTop: 32 }}>
           {/* Enhanced Missed Rewards Breakdown */}
-          <View className="px-2 pt-20">
-            <View
-              style={{
-                position: "relative",
-                overflow: "hidden",
-                borderRadius: 32,
-                marginBottom: 40,
-                marginHorizontal: 4,
-                shadowColor: "#3b82f6",
-                shadowOffset: { width: 0, height: 8 },
-                shadowOpacity: 0.12,
-                shadowRadius: 20,
-                elevation: 12,
-              }}
-            >
-              {/* Consistent blue background */}
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  borderRadius: 32,
-                  backgroundColor: "#dbeafe", // Light blue consistent with theme
-                }}
-              />
-              {/* Enhanced geometric pattern overlay */}
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: 140,
-                  opacity: 0.08,
-                }}
-              >
-                <Svg width="100%" height={140} viewBox="0 0 400 140">
-                  <Path
-                    d="M0,70 Q100,30 200,70 T400,70"
-                    stroke="#1d4ed8"
-                    strokeWidth="2.5"
-                    fill="none"
-                  />
-                  <Path
-                    d="M0,100 Q100,60 200,100 T400,100"
-                    stroke="#2563eb"
-                    strokeWidth="1.5"
-                    fill="none"
-                  />
-                  <Path
-                    d="M60 40 h80 v8 h-80z"
-                    fill="#3b82f6"
-                    opacity="0.12"
-                    rx="4"
-                  />
-                  <Path
-                    d="M280 110 h60 v6 h-60z"
-                    fill="#1e40af"
-                    opacity="0.10"
-                    rx="3"
-                  />
-                  <Path
-                    d="M150,50 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0"
-                    fill="#2563eb"
-                    opacity="0.08"
-                  />
-                </Svg>
-              </View>
-              {/* Enhanced card content */}
-              <View className="p-2" style={{ position: "relative", zIndex: 1 }}>
-                <LoaderStyleBreakdown data={missedRewardsData} />
-              </View>
+          <View className="px-6 pt-16">
+            <View className="p-6">
+              <LoaderStyleBreakdown data={missedRewardsData} />
             </View>
           </View>
 
-          {/* Enhanced Recent Transactions */}
-          <View className="px-6 pt-6">
+          {/* Enhanced Frequent Transactions */}
+          <View className="px-6 pt-8">
             <Text
               className="text-blue-900 text-base mb-8"
               style={{
@@ -744,14 +887,14 @@ export default function HomeScreen({ navigation }) {
                 textShadowRadius: 2,
               }}
             >
-              Recent Transactions
+              Frequent Transactions
             </Text>
 
-            <View className="space-y-6 mx-2">
+            <View className="mx-2">
               {frequentTransactions.map((transaction, index) => (
                 <TouchableOpacity
                   key={transaction.id}
-                  className="bg-white rounded-2xl p-6 border border-gray-100"
+                  className="bg-white rounded-2xl p-8 border border-gray-100 mb-8"
                   style={{
                     shadowColor: "#1e40af",
                     shadowOffset: { width: 0, height: 4 },
@@ -763,9 +906,9 @@ export default function HomeScreen({ navigation }) {
                     navigation.navigate("TransactionDetail", { transaction })
                   }
                 >
-                  <View className="flex-row items-center mb-4">
+                  <View className="flex-row items-center mb-6">
                     <View
-                      className="bg-blue-50 rounded-xl p-3 mr-4"
+                      className="bg-blue-50 rounded-xl p-4 mr-4"
                       style={{
                         shadowColor: "#3b82f6",
                         shadowOffset: { width: 0, height: 2 },
@@ -812,7 +955,7 @@ export default function HomeScreen({ navigation }) {
 
                   {/* Optimization Status */}
                   <View
-                    className={`rounded-xl p-4 ${
+                    className={`rounded-xl p-6 ${
                       transaction.isOptimal
                         ? "bg-green-50 border border-green-100"
                         : "bg-blue-50 border border-blue-100"
@@ -840,7 +983,7 @@ export default function HomeScreen({ navigation }) {
                     ) : (
                       <View>
                         <Text
-                          className="text-blue-700 text-base mb-2"
+                          className="text-blue-700 text-base mb-3"
                           style={{
                             fontFamily: "Inter_600SemiBold",
                             letterSpacing: 0.2,
@@ -868,9 +1011,9 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           {/* Recommended Cards Section */}
-          <View className="px-4 py-10">
+          <View className="px-6 py-12">
             <Text
-              className="text-blue-900 text-lg mb-10"
+              className="text-blue-900 text-lg mb-8"
               style={{
                 fontFamily: "Inter_700Bold",
                 letterSpacing: -0.5,
@@ -892,7 +1035,7 @@ export default function HomeScreen({ navigation }) {
               {recommendedCards.map((card, index) => (
                 <View
                   key={card.id}
-                  className="bg-white rounded-3xl p-8 border border-gray-100 mr-6"
+                  className="bg-white rounded-3xl p-8 border border-gray-100 mr-8"
                   style={{
                     width: width * 0.85,
                     shadowColor: "#1e40af",
@@ -902,7 +1045,7 @@ export default function HomeScreen({ navigation }) {
                     elevation: 10,
                   }}
                 >
-                  <View className="mb-6">
+                  <View className="mb-8">
                     <Text
                       className="text-blue-600 text-sm mb-2"
                       style={{
@@ -997,7 +1140,7 @@ export default function HomeScreen({ navigation }) {
           </View>
 
           {/* Footer spacing for bottom navigation */}
-          <View style={{ height: 40 }} />
+          <View style={{ height: 32 }} />
         </View>
       </ScrollView>
 

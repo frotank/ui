@@ -2,8 +2,10 @@ import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { useFonts } from "expo-font";
+import BottomNavigation from "../components/BottomNavigation";
 
-export default function BankingScreen() {
+export default function BankingScreen({ navigation }) {
   const transactions = [
     {
       id: 1,
@@ -31,211 +33,296 @@ export default function BankingScreen() {
     },
   ];
 
+  let [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <SafeAreaView className="flex-1 bg-slate-50">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-6 py-4">
-        <View className="flex-row items-center">
-          <View className="w-10 h-10 rounded-full bg-gray-300 mr-3">
-            <Image
-              source={{
-                uri: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-              }}
-              className="w-10 h-10 rounded-full"
-            />
-          </View>
+      <View className="px-6 py-8 bg-white border-b border-gray-100">
+        <View className="flex-row items-center justify-between">
           <View>
-            <Text className="text-gray-600 text-sm">Welcome back,</Text>
-            <Text className="text-gray-900 text-lg font-semibold">
-              Sarah Muller
+            <Text
+              className="text-gray-900 text-2xl mb-2"
+              style={{
+                fontFamily: "Inter_700Bold",
+                letterSpacing: -1,
+              }}
+            >
+              Banking
+            </Text>
+            <Text
+              className="text-gray-500 text-base"
+              style={{ fontFamily: "Inter_400Regular" }}
+            >
+              Manage your accounts
             </Text>
           </View>
+          <TouchableOpacity className="bg-blue-50 rounded-2xl p-4">
+            <Ionicons name="notifications-outline" size={24} color="#2563eb" />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity className="p-2">
-          <Ionicons name="notifications-outline" size={24} color="#374151" />
-        </TouchableOpacity>
       </View>
 
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Account Section */}
-        <View className="px-6 mb-6">
-          <Text className="text-gray-900 text-2xl font-bold mb-6">Account</Text>
-
-          {/* Balance Cards */}
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            className="mb-8"
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
+        {/* Account Balance Card */}
+        <View className="px-6 py-8">
+          <View
+            className="bg-white rounded-3xl p-8 border border-gray-100"
+            style={{
+              shadowColor: "#3b82f6",
+              shadowOffset: { width: 0, height: 8 },
+              shadowOpacity: 0.12,
+              shadowRadius: 20,
+              elevation: 10,
+            }}
           >
-            {/* Main Card - Primary Blue */}
-            <View
-              className="bg-primary-500 rounded-2xl p-5 mr-4"
-              style={{ width: 280, height: 180 }}
-            >
-              <View className="flex-row justify-between items-start mb-6">
-                <View className="flex-1">
-                  <Text className="text-white/90 text-xs font-medium mb-1 tracking-wide">
-                    Hi Muller
-                  </Text>
-                  <Text className="text-white text-2xl font-bold">
-                    $40,500.80
-                  </Text>
-                </View>
-                <View className="bg-white/30 rounded-lg p-2">
-                  <Ionicons name="eye-outline" size={18} color="white" />
-                </View>
-              </View>
-
-              <View className="flex-row justify-between items-end mt-auto">
-                <View>
-                  <Text className="text-white/90 text-xs font-medium">
-                    ••••9934
-                  </Text>
-                  <Text className="text-white/90 text-xs font-medium mt-0.5">
-                    05/28
-                  </Text>
-                </View>
-                <View className="bg-white rounded-md px-3 py-1.5">
-                  <Text className="text-primary-600 font-bold text-sm">
-                    VISA
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Secondary Card - Red */}
-            <View
-              className="bg-red-500 rounded-2xl p-5"
-              style={{ width: 280, height: 180 }}
-            >
-              <View className="flex-row justify-between items-start mb-6">
-                <View className="flex-1">
-                  <Text className="text-white/90 text-xs font-medium mb-1 tracking-wide">
-                    SAVINGS
-                  </Text>
-                  <Text className="text-white text-2xl font-bold">Rp4</Text>
-                </View>
-                <View className="bg-white/30 rounded-lg p-2">
-                  <Ionicons name="eye-outline" size={18} color="white" />
-                </View>
-              </View>
-
-              <View className="flex-row justify-between items-end mt-auto">
-                <View>
-                  <Text className="text-white/90 text-xs font-medium">
-                    ••••7732
-                  </Text>
-                  <Text className="text-white/90 text-xs font-medium mt-0.5">
-                    12/26
-                  </Text>
-                </View>
-                <View className="bg-white rounded-md px-3 py-1.5">
-                  <Text className="text-red-600 font-bold text-sm">MASTER</Text>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-
-          {/* Action Buttons */}
-          <View className="flex-row justify-around mb-8">
-            <TouchableOpacity className="items-center">
-              <View className="bg-white rounded-full p-4 shadow-sm mb-2">
-                <Ionicons name="arrow-down-outline" size={24} color="#374151" />
-              </View>
-              <Text className="text-gray-700 text-sm font-medium">Request</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity className="items-center">
-              <View className="bg-white rounded-full p-4 shadow-sm mb-2">
-                <Ionicons name="arrow-up-outline" size={24} color="#374151" />
-              </View>
-              <Text className="text-gray-700 text-sm font-medium">
-                Transfer
+            <View className="items-center mb-8">
+              <Text
+                className="text-gray-600 text-base mb-2"
+                style={{ fontFamily: "Inter_500Medium" }}
+              >
+                Total Balance
               </Text>
+              <Text
+                className="text-gray-900 text-4xl mb-4"
+                style={{
+                  fontFamily: "Inter_700Bold",
+                  letterSpacing: -2,
+                }}
+              >
+                $12,847.50
+              </Text>
+              <View className="bg-green-100 rounded-xl px-4 py-2">
+                <Text
+                  className="text-green-700 text-sm"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  +$234.50 this month
+                </Text>
+              </View>
+            </View>
+
+            <View className="space-y-4">
+              <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
+                <Text
+                  className="text-gray-600 text-base"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Available Balance
+                </Text>
+                <Text
+                  className="text-gray-900 text-lg"
+                  style={{ fontFamily: "Inter_700Bold" }}
+                >
+                  $11,247.50
+                </Text>
+              </View>
+              <View className="flex-row items-center justify-between py-4">
+                <Text
+                  className="text-gray-600 text-base"
+                  style={{ fontFamily: "Inter_500Medium" }}
+                >
+                  Pending Transactions
+                </Text>
+                <Text
+                  className="text-orange-600 text-lg"
+                  style={{ fontFamily: "Inter_700Bold" }}
+                >
+                  $1,600.00
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Quick Actions */}
+        <View className="px-6 pb-8">
+          <Text
+            className="text-gray-900 text-xl mb-6"
+            style={{
+              fontFamily: "Inter_700Bold",
+              letterSpacing: -0.5,
+            }}
+          >
+            Quick Actions
+          </Text>
+
+          <View className="flex-row space-x-4">
+            <TouchableOpacity className="flex-1">
+              <View
+                className="bg-white rounded-2xl p-6 border border-gray-100"
+                style={{
+                  shadowColor: "#3b82f6",
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.08,
+                  shadowRadius: 16,
+                  elevation: 6,
+                }}
+              >
+                <View className="w-12 h-12 bg-blue-100 rounded-xl items-center justify-center mb-4">
+                  <Ionicons name="arrow-up" size={24} color="#3b82f6" />
+                </View>
+                <Text
+                  className="text-gray-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  Send Money
+                </Text>
+              </View>
             </TouchableOpacity>
 
-            <TouchableOpacity className="items-center">
-              <View className="bg-black rounded-full p-4 mb-2">
-                <Ionicons name="add" size={24} color="white" />
+            <TouchableOpacity className="flex-1">
+              <View
+                className="bg-white rounded-2xl p-6 border border-gray-100"
+                style={{
+                  shadowColor: "#3b82f6",
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.08,
+                  shadowRadius: 16,
+                  elevation: 6,
+                }}
+              >
+                <View className="w-12 h-12 bg-green-100 rounded-xl items-center justify-center mb-4">
+                  <Ionicons name="arrow-down" size={24} color="#10b981" />
+                </View>
+                <Text
+                  className="text-gray-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  Request
+                </Text>
               </View>
-              <Text className="text-gray-700 text-sm font-medium">More</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity className="flex-1">
+              <View
+                className="bg-white rounded-2xl p-6 border border-gray-100"
+                style={{
+                  shadowColor: "#3b82f6",
+                  shadowOffset: { width: 0, height: 8 },
+                  shadowOpacity: 0.08,
+                  shadowRadius: 16,
+                  elevation: 6,
+                }}
+              >
+                <View className="w-12 h-12 bg-purple-100 rounded-xl items-center justify-center mb-4">
+                  <Ionicons name="card" size={24} color="#8b5cf6" />
+                </View>
+                <Text
+                  className="text-gray-900 text-base"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  Pay Bills
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* Transaction Section */}
-        <View className="px-6 mb-20">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-gray-900 text-xl font-bold">Transaction</Text>
-            <TouchableOpacity>
-              <Text className="text-primary-500 text-sm font-medium">
-                View all
-              </Text>
-            </TouchableOpacity>
-          </View>
+        {/* Recent Transactions */}
+        <View className="px-6 pb-8">
+          <Text
+            className="text-gray-900 text-xl mb-6"
+            style={{
+              fontFamily: "Inter_700Bold",
+              letterSpacing: -0.5,
+            }}
+          >
+            Recent Transactions
+          </Text>
 
           <View className="space-y-4">
-            <Text className="text-gray-500 text-sm font-medium">TODAY</Text>
-
-            {transactions.map((transaction) => (
-              <View
-                key={transaction.id}
-                className="flex-row items-center justify-between py-3"
-              >
-                <View className="flex-row items-center flex-1">
-                  <View className="bg-gray-100 rounded-full p-3 mr-3">
-                    <Ionicons
-                      name={transaction.icon}
-                      size={20}
-                      color={
-                        transaction.type === "receive" ? "#10B981" : "#6B7280"
-                      }
-                    />
-                  </View>
-                  <View className="flex-1">
-                    <Text className="text-gray-900 font-medium">
-                      {transaction.title}
-                    </Text>
-                    <Text className="text-gray-500 text-sm">
-                      {transaction.time}
-                    </Text>
-                  </View>
+            <TouchableOpacity
+              className="bg-white rounded-2xl p-6 border border-gray-100"
+              style={{
+                shadowColor: "#3b82f6",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.08,
+                shadowRadius: 16,
+                elevation: 6,
+              }}
+            >
+              <View className="flex-row items-center">
+                <View className="w-12 h-12 bg-red-100 rounded-xl items-center justify-center mr-4">
+                  <Ionicons name="restaurant" size={24} color="#ef4444" />
+                </View>
+                <View className="flex-1">
+                  <Text
+                    className="text-gray-900 text-base mb-1"
+                    style={{ fontFamily: "Inter_600SemiBold" }}
+                  >
+                    Starbucks Coffee
+                  </Text>
+                  <Text
+                    className="text-gray-500 text-sm"
+                    style={{ fontFamily: "Inter_400Regular" }}
+                  >
+                    Today, 2:30 PM
+                  </Text>
                 </View>
                 <Text
-                  className={`font-semibold ${
-                    transaction.amount.startsWith("+")
-                      ? "text-green-500"
-                      : "text-gray-900"
-                  }`}
+                  className="text-red-600 text-lg"
+                  style={{ fontFamily: "Inter_700Bold" }}
                 >
-                  {transaction.amount}
+                  -$8.50
                 </Text>
               </View>
-            ))}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              className="bg-white rounded-2xl p-6 border border-gray-100"
+              style={{
+                shadowColor: "#3b82f6",
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.08,
+                shadowRadius: 16,
+                elevation: 6,
+              }}
+            >
+              <View className="flex-row items-center">
+                <View className="w-12 h-12 bg-green-100 rounded-xl items-center justify-center mr-4">
+                  <Ionicons name="arrow-down" size={24} color="#10b981" />
+                </View>
+                <View className="flex-1">
+                  <Text
+                    className="text-gray-900 text-base mb-1"
+                    style={{ fontFamily: "Inter_600SemiBold" }}
+                  >
+                    Salary Deposit
+                  </Text>
+                  <Text
+                    className="text-gray-500 text-sm"
+                    style={{ fontFamily: "Inter_400Regular" }}
+                  >
+                    Yesterday, 9:00 AM
+                  </Text>
+                </View>
+                <Text
+                  className="text-green-600 text-lg"
+                  style={{ fontFamily: "Inter_700Bold" }}
+                >
+                  +$3,200.00
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200">
-        <View className="flex-row justify-around py-3">
-          <TouchableOpacity className="items-center py-2 px-4">
-            <Ionicons name="home" size={24} color="#3b82f6" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center py-2 px-4">
-            <Ionicons name="card-outline" size={24} color="#9CA3AF" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center py-2 px-4">
-            <Ionicons name="bar-chart-outline" size={24} color="#9CA3AF" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="items-center py-2 px-4">
-            <Ionicons name="person-outline" size={24} color="#9CA3AF" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <BottomNavigation navigation={navigation} activeTab="banking" />
     </SafeAreaView>
   );
 }

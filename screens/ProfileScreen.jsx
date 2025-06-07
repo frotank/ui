@@ -86,10 +86,10 @@ export default function ProfileScreen({ navigation }) {
   };
 
   const renderPersonalInfo = () => (
-    <View className="px-6 py-6">
+    <View className="px-6 py-8">
       {/* Profile Header */}
       <View
-        className="bg-white rounded-3xl p-6 mb-8"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
           shadowColor: "#3b82f6",
           shadowOffset: { width: 0, height: 8 },
@@ -99,7 +99,7 @@ export default function ProfileScreen({ navigation }) {
         }}
       >
         <View className="items-center mb-8">
-          <View className="w-28 h-28 rounded-full overflow-hidden mb-6 border-4 border-blue-100">
+          <View className="w-28 h-28 rounded-full overflow-hidden mb-8 border-4 border-blue-100">
             <Image
               source={{
                 uri: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
@@ -133,7 +133,7 @@ export default function ProfileScreen({ navigation }) {
 
       {/* Personal Information */}
       <View
-        className="bg-white rounded-3xl p-6 mb-8"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
           shadowColor: "#3b82f6",
           shadowOffset: { width: 0, height: 8 },
@@ -143,7 +143,7 @@ export default function ProfileScreen({ navigation }) {
         }}
       >
         <Text
-          className="text-blue-900 text-xl mb-6"
+          className="text-blue-900 text-xl mb-8"
           style={{
             fontFamily: "Inter_700Bold",
             letterSpacing: -0.5,
@@ -152,16 +152,16 @@ export default function ProfileScreen({ navigation }) {
           Personal Information
         </Text>
 
-        <View className="space-y-1">
+        <View className="space-y-6">
           {/* Email */}
-          <View className="bg-blue-50 rounded-2xl p-4 border border-blue-100 mb-4">
+          <View className="bg-blue-50 rounded-2xl p-6 border border-blue-100 mb-6">
             <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-blue-100 rounded-xl items-center justify-center mr-4">
+              <View className="w-12 h-12 bg-blue-100 rounded-xl items-center justify-center mr-4">
                 <Ionicons name="mail" size={20} color="#3b82f6" />
               </View>
               <View className="flex-1">
                 <Text
-                  className="text-blue-600 text-sm mb-1"
+                  className="text-blue-600 text-sm mb-2"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
                   {getFieldLabel("email")}
@@ -177,20 +177,20 @@ export default function ProfileScreen({ navigation }) {
           </View>
 
           {/* Phone */}
-          <View className="bg-green-50 rounded-2xl p-4 border border-green-100 mb-4">
+          <View className="bg-blue-50 rounded-2xl p-6 border border-blue-100 mb-6">
             <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center mr-4">
-                <Ionicons name="call" size={20} color="#10b981" />
+              <View className="w-12 h-12 bg-blue-200 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="call" size={20} color="#1d4ed8" />
               </View>
               <View className="flex-1">
                 <Text
-                  className="text-green-600 text-sm mb-1"
+                  className="text-blue-600 text-sm mb-2"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
                   {getFieldLabel("phone")}
                 </Text>
                 <Text
-                  className="text-green-900 text-base"
+                  className="text-blue-900 text-base"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   {personalInfo.phone}
@@ -200,20 +200,20 @@ export default function ProfileScreen({ navigation }) {
           </View>
 
           {/* Date of Birth */}
-          <View className="bg-purple-50 rounded-2xl p-4 border border-purple-100 mb-4">
+          <View className="bg-blue-50 rounded-2xl p-6 border border-blue-100 mb-6">
             <View className="flex-row items-center">
-              <View className="w-10 h-10 bg-purple-100 rounded-xl items-center justify-center mr-4">
-                <Ionicons name="calendar" size={20} color="#8b5cf6" />
+              <View className="w-12 h-12 bg-blue-300 rounded-xl items-center justify-center mr-4">
+                <Ionicons name="calendar" size={20} color="#1e40af" />
               </View>
               <View className="flex-1">
                 <Text
-                  className="text-purple-600 text-sm mb-1"
+                  className="text-blue-600 text-sm mb-2"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
                   {getFieldLabel("dateOfBirth")}
                 </Text>
                 <Text
-                  className="text-purple-900 text-base"
+                  className="text-blue-900 text-base"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   {personalInfo.dateOfBirth}
@@ -223,20 +223,20 @@ export default function ProfileScreen({ navigation }) {
           </View>
 
           {/* Address */}
-          <View className="bg-orange-50 rounded-2xl p-4 border border-orange-100">
+          <View className="bg-blue-50 rounded-2xl p-6 border border-blue-100">
             <View className="flex-row items-start">
-              <View className="w-10 h-10 bg-orange-100 rounded-xl items-center justify-center mr-4 mt-1">
-                <Ionicons name="location" size={20} color="#f97316" />
+              <View className="w-12 h-12 bg-blue-400 rounded-xl items-center justify-center mr-4 mt-1">
+                <Ionicons name="location" size={20} color="#1e3a8a" />
               </View>
               <View className="flex-1">
                 <Text
-                  className="text-orange-600 text-sm mb-1"
+                  className="text-blue-600 text-sm mb-2"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
                   {getFieldLabel("address")}
                 </Text>
                 <Text
-                  className="text-orange-900 text-base leading-6"
+                  className="text-blue-900 text-base leading-6"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   {personalInfo.address}
@@ -250,26 +250,26 @@ export default function ProfileScreen({ navigation }) {
   );
 
   const renderBankCards = () => (
-    <View className="px-6 py-6">
+    <View className="px-6 py-8">
       {/* Connected Banks */}
       <View
-        className="bg-white rounded-3xl p-6 mb-6"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
         }}
       >
         <Text
-          className="text-gray-900 text-xl mb-6"
+          className="text-blue-900 text-xl mb-8"
           style={{ fontFamily: "Inter_700Bold" }}
         >
           Connected Banks
         </Text>
 
-        <View className="space-y-4">
+        <View className="space-y-6">
           <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <View className="flex-row items-center">
               <View className="w-12 h-12 bg-blue-100 rounded-2xl items-center justify-center mr-4">
@@ -277,7 +277,7 @@ export default function ProfileScreen({ navigation }) {
               </View>
               <View>
                 <Text
-                  className="text-gray-900 text-base mb-1"
+                  className="text-gray-900 text-base mb-2"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   Chase Bank
@@ -290,9 +290,9 @@ export default function ProfileScreen({ navigation }) {
                 </Text>
               </View>
             </View>
-            <View className="bg-green-100 rounded-xl px-3 py-1">
+            <View className="bg-blue-100 rounded-xl px-4 py-2">
               <Text
-                className="text-green-700 text-sm"
+                className="text-blue-700 text-sm"
                 style={{ fontFamily: "Inter_600SemiBold" }}
               >
                 Active
@@ -302,12 +302,12 @@ export default function ProfileScreen({ navigation }) {
 
           <View className="flex-row items-center justify-between py-4">
             <View className="flex-row items-center">
-              <View className="w-12 h-12 bg-purple-100 rounded-2xl items-center justify-center mr-4">
-                <Ionicons name="business" size={24} color="#8b5cf6" />
+              <View className="w-12 h-12 bg-blue-200 rounded-2xl items-center justify-center mr-4">
+                <Ionicons name="business" size={24} color="#1d4ed8" />
               </View>
               <View>
                 <Text
-                  className="text-gray-900 text-base mb-1"
+                  className="text-gray-900 text-base mb-2"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
                   Bank of America
@@ -320,9 +320,9 @@ export default function ProfileScreen({ navigation }) {
                 </Text>
               </View>
             </View>
-            <View className="bg-green-100 rounded-xl px-3 py-1">
+            <View className="bg-blue-100 rounded-xl px-4 py-2">
               <Text
-                className="text-green-700 text-sm"
+                className="text-blue-700 text-sm"
                 style={{ fontFamily: "Inter_600SemiBold" }}
               >
                 Active
@@ -334,7 +334,7 @@ export default function ProfileScreen({ navigation }) {
 
       {/* Cards */}
       <View
-        className="bg-white rounded-3xl p-6 mb-6"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
           shadowColor: "#3b82f6",
           shadowOffset: { width: 0, height: 8 },
@@ -344,7 +344,7 @@ export default function ProfileScreen({ navigation }) {
         }}
       >
         <Text
-          className="text-blue-900 text-xl mb-6"
+          className="text-blue-900 text-xl mb-8"
           style={{
             fontFamily: "Inter_700Bold",
             letterSpacing: -0.5,
@@ -353,11 +353,11 @@ export default function ProfileScreen({ navigation }) {
           Your Cards
         </Text>
 
-        <View className="space-y-6">
+        <View className="space-y-8">
           {/* Visa Platinum Card */}
           <TouchableOpacity>
             <View
-              className="rounded-3xl overflow-hidden mx-2 mb-4"
+              className="rounded-3xl overflow-hidden mx-2 mb-6"
               style={{
                 height: 200,
                 width: "100%",
@@ -375,7 +375,7 @@ export default function ProfileScreen({ navigation }) {
                 style={{ flex: 1, padding: 24, position: "relative" }}
               >
                 {/* Card Header */}
-                <View className="flex-row items-start justify-between mb-4">
+                <View className="flex-row items-start justify-between mb-6">
                   <View>
                     <Text
                       className="text-white text-lg tracking-wider"
@@ -389,7 +389,7 @@ export default function ProfileScreen({ navigation }) {
                       VISA PLATINUM
                     </Text>
                   </View>
-                  <View className="bg-white/25 rounded-lg px-3 py-2">
+                  <View className="bg-white/25 rounded-lg px-4 py-2">
                     <Text
                       className="text-white text-xs"
                       style={{ fontFamily: "Inter_600SemiBold" }}
@@ -555,26 +555,26 @@ export default function ProfileScreen({ navigation }) {
   );
 
   const renderHelpSupport = () => (
-    <View className="px-6 py-6">
+    <View className="px-6 py-8">
       {/* Quick Help */}
       <View
-        className="bg-white rounded-3xl p-6 mb-6"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
         }}
       >
         <Text
-          className="text-gray-900 text-xl mb-6"
+          className="text-blue-900 text-xl mb-8"
           style={{ fontFamily: "Inter_700Bold" }}
         >
           Quick Help
         </Text>
 
-        <View className="space-y-4">
+        <View className="space-y-6">
           <TouchableOpacity className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <View className="flex-row items-center">
               <View className="w-12 h-12 bg-blue-100 rounded-2xl items-center justify-center mr-4">
@@ -592,8 +592,8 @@ export default function ProfileScreen({ navigation }) {
 
           <TouchableOpacity className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <View className="flex-row items-center">
-              <View className="w-12 h-12 bg-green-100 rounded-2xl items-center justify-center mr-4">
-                <Ionicons name="chatbubble" size={24} color="#059669" />
+              <View className="w-12 h-12 bg-blue-200 rounded-2xl items-center justify-center mr-4">
+                <Ionicons name="chatbubble" size={24} color="#1d4ed8" />
               </View>
               <Text
                 className="text-gray-900 text-base"
@@ -607,8 +607,8 @@ export default function ProfileScreen({ navigation }) {
 
           <TouchableOpacity className="flex-row items-center justify-between py-4">
             <View className="flex-row items-center">
-              <View className="w-12 h-12 bg-purple-100 rounded-2xl items-center justify-center mr-4">
-                <Ionicons name="call" size={24} color="#8b5cf6" />
+              <View className="w-12 h-12 bg-blue-300 rounded-2xl items-center justify-center mr-4">
+                <Ionicons name="call" size={24} color="#1e40af" />
               </View>
               <Text
                 className="text-gray-900 text-base"
@@ -624,26 +624,26 @@ export default function ProfileScreen({ navigation }) {
 
       {/* Contact Information */}
       <View
-        className="bg-white rounded-3xl p-6 mb-6"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
         }}
       >
         <Text
-          className="text-gray-900 text-xl mb-6"
+          className="text-blue-900 text-xl mb-8"
           style={{ fontFamily: "Inter_700Bold" }}
         >
           Contact Information
         </Text>
 
-        <View className="space-y-4">
-          <View className="py-3 border-b border-gray-100">
+        <View className="space-y-6">
+          <View className="py-4 border-b border-gray-100">
             <Text
-              className="text-gray-500 text-sm mb-1"
+              className="text-gray-500 text-sm mb-2"
               style={{ fontFamily: "Inter_500Medium" }}
             >
               Email Support
@@ -656,9 +656,9 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
 
-          <View className="py-3 border-b border-gray-100">
+          <View className="py-4 border-b border-gray-100">
             <Text
-              className="text-gray-500 text-sm mb-1"
+              className="text-gray-500 text-sm mb-2"
               style={{ fontFamily: "Inter_500Medium" }}
             >
               Phone Support
@@ -671,9 +671,9 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
 
-          <View className="py-3">
+          <View className="py-4">
             <Text
-              className="text-gray-500 text-sm mb-1"
+              className="text-gray-500 text-sm mb-2"
               style={{ fontFamily: "Inter_500Medium" }}
             >
               Business Hours
@@ -690,24 +690,24 @@ export default function ProfileScreen({ navigation }) {
 
       {/* App Information */}
       <View
-        className="bg-white rounded-3xl p-6 mb-6"
+        className="bg-white rounded-3xl p-8 mb-8"
         style={{
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.03,
-          shadowRadius: 16,
-          elevation: 4,
+          shadowColor: "#3b82f6",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 20,
+          elevation: 10,
         }}
       >
         <Text
-          className="text-gray-900 text-xl mb-6"
+          className="text-blue-900 text-xl mb-8"
           style={{ fontFamily: "Inter_700Bold" }}
         >
           App Information
         </Text>
 
-        <View className="space-y-4">
-          <View className="flex-row items-center justify-between py-3 border-b border-gray-100">
+        <View className="space-y-6">
+          <View className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <Text
               className="text-gray-500 text-base"
               style={{ fontFamily: "Inter_500Medium" }}
@@ -722,7 +722,7 @@ export default function ProfileScreen({ navigation }) {
             </Text>
           </View>
 
-          <TouchableOpacity className="flex-row items-center justify-between py-3 border-b border-gray-100">
+          <TouchableOpacity className="flex-row items-center justify-between py-4 border-b border-gray-100">
             <Text
               className="text-gray-900 text-base"
               style={{ fontFamily: "Inter_600SemiBold" }}
@@ -732,7 +732,7 @@ export default function ProfileScreen({ navigation }) {
             <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center justify-between py-3">
+          <TouchableOpacity className="flex-row items-center justify-between py-4">
             <Text
               className="text-gray-900 text-base"
               style={{ fontFamily: "Inter_600SemiBold" }}
