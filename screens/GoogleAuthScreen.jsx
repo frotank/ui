@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StatusBar, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,10 +14,49 @@ import Svg, { Path, Circle, Polygon } from "react-native-svg";
 import { useAuth } from "../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import * as AuthSession from "expo-auth-session";
+import * as WebBrowser from "expo-web-browser";
+import {
+  GOOGLE_OAUTH_CONFIG,
+  getGmailHeaders,
+  hasGmailScopes,
+} from "../config/googleAuth";
+
+// Complete the auth session for web
+WebBrowser.maybeCompleteAuthSession();
+
+// Define redirect URI at module level to avoid scope issues
+// Use the redirect URI registered in Google Cloud Console
+const REDIRECT_URI = GOOGLE_OAUTH_CONFIG.REDIRECT_URI;
+
+console.log("🔗 Configured Redirect URI:", GOOGLE_OAUTH_CONFIG.REDIRECT_URI);
+console.log(
+  "🔗 Expo AuthSession.getDefaultReturnUrl():",
+  AuthSession.getDefaultReturnUrl()
+);
 
 export default function GoogleAuthScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const { setUser, setAccessToken } = useAuth();
+
+  console.log("🔗 Redirect URI:", REDIRECT_URI);
+
+  // Google OAuth configuration
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    {
+      clientId: GOOGLE_OAUTH_CONFIG.GOOGLE_CLIENT_ID,
+      scopes: GOOGLE_OAUTH_CONFIG.SCOPES,
+      redirectUri: REDIRECT_URI,
+      responseType: AuthSession.ResponseType.Code,
+      additionalParameters: {},
+      extraParams: {
+        access_type: "offline", // To get refresh token
+      },
+    },
+    {
+      authorizationEndpoint: GOOGLE_OAUTH_CONFIG.AUTH_ENDPOINT,
+    }
+  );
 
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
@@ -26,70 +65,276 @@ export default function GoogleAuthScreen({ navigation }) {
     Inter_700Bold,
   });
 
+  // Handle OAuth response
+  useEffect(() => {
+    if (response?.type === "success") {
+      console.log("✅ OAuth response success:", response);
+      handleGoogleAuthSuccess(response.params.code);
+    } else if (response?.type === "error") {
+      console.error("❌ OAuth response error:", response.error);
+      Alert.alert(
+        "Authentication Error",
+        `OAuth failed: ${
+          response.error.description ||
+          response.error.message ||
+          "Unknown error"
+        }`
+      );
+      setLoading(false);
+    } else if (response?.type === "cancel") {
+      console.log("⚠️ OAuth cancelled by user");
+      setLoading(false);
+    } else if (response) {
+      console.log("ℹ️ OAuth response:", response);
+      setLoading(false);
+    }
+  }, [response]);
+
   if (!fontsLoaded) {
     return null;
   }
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleAuthSuccess = async (authCode) => {
     try {
       setLoading(true);
+      console.log("🔐 Google OAuth success, exchanging code for tokens...");
+      console.log("Auth code received:", authCode ? "✅" : "❌");
+      console.log("Auth code length:", authCode?.length);
+      console.log("Client ID:", GOOGLE_OAUTH_CONFIG.GOOGLE_CLIENT_ID);
+      console.log("Redirect URI:", REDIRECT_URI);
 
-      // Your exact API call
+      if (!authCode) {
+        throw new Error("No authorization code received");
+      }
+
+      // Exchange authorization code for tokens
+      console.log("🔄 Making token exchange request...");
+      const tokenRequestBody = new URLSearchParams({
+        client_id: GOOGLE_OAUTH_CONFIG.GOOGLE_CLIENT_ID,
+        client_secret: GOOGLE_OAUTH_CONFIG.GOOGLE_CLIENT_SECRET,
+        code: authCode,
+        grant_type: "authorization_code",
+        redirect_uri: REDIRECT_URI,
+      });
+
+      console.log("📤 Token request body:", tokenRequestBody.toString());
+
+      const tokenResponse = await fetch(GOOGLE_OAUTH_CONFIG.TOKEN_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: tokenRequestBody,
+      });
+
+      console.log("📥 Token response status:", tokenResponse.status);
+      console.log("📥 Token response headers:", tokenResponse.headers);
+
+      const tokenResponseText = await tokenResponse.text();
+      console.log("📥 Token response raw text:", tokenResponseText);
+
+      let tokens;
+      try {
+        tokens = JSON.parse(tokenResponseText);
+      } catch (parseError) {
+        console.error("❌ Failed to parse token response:", parseError);
+        throw new Error(`Invalid token response: ${tokenResponseText}`);
+      }
+
+      console.log("🔑 Token exchange response:", tokens);
+
+      if (tokens.error) {
+        throw new Error(
+          `Token exchange failed: ${tokens.error_description || tokens.error}`
+        );
+      }
+
+      if (!tokens.access_token) {
+        throw new Error("No access token received from Google");
+      }
+
+      console.log("✅ Access token received, getting user profile...");
+
+      // Get user profile from Google
+      const profileResponse = await fetch(
+        GOOGLE_OAUTH_CONFIG.USERINFO_ENDPOINT,
+        {
+          headers: getGmailHeaders(tokens.access_token),
+        }
+      );
+
+      console.log("👤 Profile response status:", profileResponse.status);
+
+      if (!profileResponse.ok) {
+        const profileError = await profileResponse.text();
+        console.error("❌ Profile response error:", profileError);
+        throw new Error(
+          `Failed to get user profile: ${profileResponse.status} - ${profileError}`
+        );
+      }
+
+      const userProfile = await profileResponse.json();
+      console.log("👤 User profile:", userProfile);
+
+      // Store tokens and user data immediately (skip backend for now)
+      console.log("💾 Storing user data...");
+      await AsyncStorage.setItem("googleAccessToken", tokens.access_token);
+      await AsyncStorage.setItem(
+        "googleRefreshToken",
+        tokens.refresh_token || ""
+      );
+      await AsyncStorage.setItem("accessToken", "mock_token_" + Date.now());
+      await AsyncStorage.setItem("user", JSON.stringify(userProfile));
+
+      // Update auth context
+      setAccessToken("mock_token_" + Date.now());
+      setUser(userProfile);
+
+      console.log("✅ Authentication successful!");
+      console.log("📧 User email:", userProfile.email);
+
+      // Show success message
+      Alert.alert(
+        "Success!",
+        `Welcome ${userProfile.name}! You are now signed in.`,
+        [
+          {
+            text: "Continue",
+            onPress: () => {
+              if (navigation && navigation.navigate) {
+                navigation.navigate("Home");
+              }
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error("❌ Google auth error:", error);
+      console.error("❌ Error stack:", error.stack);
+      Alert.alert(
+        "Authentication Error",
+        `Failed to authenticate: ${error.message}. Please try again.`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const testGmailAccess = async (accessToken, email) => {
+    try {
+      console.log("📧 Testing Gmail API access...");
+
+      // Test Gmail profile access
+      const profileResponse = await fetch(
+        `${GOOGLE_OAUTH_CONFIG.GMAIL_API_BASE}/users/me/profile`,
+        {
+          headers: getGmailHeaders(accessToken),
+        }
+      );
+
+      if (!profileResponse.ok) {
+        throw new Error(`Gmail API error: ${profileResponse.status}`);
+      }
+
+      const profile = await profileResponse.json();
+      console.log("📧 Gmail profile:", profile);
+      console.log("✅ Gmail API access confirmed for:", email);
+
+      // Test listing recent messages (optional)
+      try {
+        const messagesResponse = await fetch(
+          `${GOOGLE_OAUTH_CONFIG.GMAIL_API_BASE}/users/me/messages?maxResults=5`,
+          {
+            headers: getGmailHeaders(accessToken),
+          }
+        );
+
+        if (messagesResponse.ok) {
+          const messages = await messagesResponse.json();
+          console.log(
+            `📬 Found ${messages.messages?.length || 0} recent messages`
+          );
+        }
+      } catch (msgError) {
+        console.log(
+          "ℹ️ Message listing test failed (this is optional):",
+          msgError.message
+        );
+      }
+
+      return profile;
+    } catch (error) {
+      console.error("❌ Gmail API access failed:", error);
+      throw error;
+    }
+  };
+
+  const authenticateWithBackend = async (userProfile, googleAccessToken) => {
+    try {
+      console.log("🔐 Authenticating with backend...");
+
       const options = {
         method: "POST",
         url: "https://zashit-backend-production.up.railway.app/api/v1/auth",
         headers: { "Content-Type": "application/json" },
         data: {
-          name: "Devansh",
-          email: "devansh@gmail.com",
-          accessToken: "cool",
+          name: userProfile.name,
+          email: userProfile.email,
+          accessToken: googleAccessToken, // Send the real Google access token
+          googleId: userProfile.id,
+          picture: userProfile.picture,
         },
       };
 
       const { data } = await axios.request(options);
-      console.log("🔐 Auth API Response:", data);
+      console.log("🔐 Backend Auth Response:", data);
 
-      if (data.success && data.accessToken) {
-        // Store the real token from backend response
-        await AsyncStorage.setItem("accessToken", data.accessToken);
-        await AsyncStorage.setItem(
-          "user",
-          JSON.stringify(
-            data.data || {
-              name: "Devansh",
-              email: "devansh@gmail.com",
-              id: data.data?.id || "user_devansh",
-            }
-          )
-        );
-
-        // Update auth context state
-        setAccessToken(data.accessToken);
-        setUser(
-          data.data || {
-            name: "Devansh",
-            email: "devansh@gmail.com",
-            id: data.data?.id || "user_devansh",
-          }
-        );
-
-        console.log("✅ Real authentication successful");
-        console.log(
-          "🔑 Token stored:",
-          data.accessToken.substring(0, 30) + "..."
-        );
-        console.log("✅ Authentication complete - redirecting to app");
-      } else {
-        throw new Error(data.message || "Authentication failed");
-      }
+      return data;
     } catch (error) {
-      console.error("❌ Auth error:", error);
-      console.error("❌ Auth error response:", error.response?.data);
+      console.error("❌ Backend auth error:", error);
+      // Fallback to mock authentication if backend fails
+      return {
+        success: true,
+        accessToken: "fallback_token_" + Date.now(),
+        data: userProfile,
+      };
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      console.log("🚀 Starting Google OAuth flow...");
+
+      // CRITICAL: Log the redirect URI that will be used for the request.
+      console.log(
+        "========================================================================================"
+      );
+      console.log(
+        "‼️ COPY THIS URI AND ADD IT TO YOUR GOOGLE CLOUD CONSOLE AUTHORIZED REDIRECT URIS ‼️"
+      );
+      console.log(`➡️  ${REDIRECT_URI}`);
+      console.log(
+        "========================================================================================"
+      );
+
+      if (!request) {
+        console.error("❌ OAuth request not ready");
+        Alert.alert("Error", "Google OAuth not ready. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      console.log("📱 Launching OAuth prompt...");
+      // Start the OAuth flow
+      const result = await promptAsync();
+      console.log("📱 OAuth prompt result:", result);
+    } catch (error) {
+      console.error("❌ OAuth error:", error);
       Alert.alert(
         "Authentication Error",
-        `Failed to authenticate: ${error.message}`
+        `Failed to start Google authentication: ${error.message}`
       );
-    } finally {
       setLoading(false);
     }
   };

@@ -30,6 +30,10 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
 
 # typescript
 *.tsbuildinfo
+
+GOOGLE_CLIENT_ID=36022447291-6fak7c3gsr1p7jgvu58lnerumvs077c7.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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

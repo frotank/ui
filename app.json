@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
-    
+    "scheme": "projectfuncpro",
 
     "splash": {
       "image": "./assets/splash.png",
