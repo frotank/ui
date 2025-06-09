@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StatusBar, Image } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StatusBar, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,8 +11,14 @@ import {
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import Svg, { Path, Circle, Polygon } from "react-native-svg";
+import { useAuth } from "../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 export default function GoogleAuthScreen({ navigation }) {
+  const [loading, setLoading] = useState(false);
+  const { setUser, setAccessToken } = useAuth();
+
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -25,13 +31,72 @@ export default function GoogleAuthScreen({ navigation }) {
   }
 
   const handleGoogleSignIn = async () => {
-    // TODO: Implement Google Sign-In
-    console.log("Google Sign-In initiated");
+    try {
+      setLoading(true);
+
+      // Your exact API call
+      const options = {
+        method: "POST",
+        url: "https://zashit-backend-production.up.railway.app/api/v1/auth",
+        headers: { "Content-Type": "application/json" },
+        data: {
+          name: "Devansh",
+          email: "devansh@gmail.com",
+          accessToken: "cool",
+        },
+      };
+
+      const { data } = await axios.request(options);
+      console.log("🔐 Auth API Response:", data);
+
+      if (data.success && data.accessToken) {
+        // Store the real token from backend response
+        await AsyncStorage.setItem("accessToken", data.accessToken);
+        await AsyncStorage.setItem(
+          "user",
+          JSON.stringify(
+            data.data || {
+              name: "Devansh",
+              email: "devansh@gmail.com",
+              id: data.data?.id || "user_devansh",
+            }
+          )
+        );
+
+        // Update auth context state
+        setAccessToken(data.accessToken);
+        setUser(
+          data.data || {
+            name: "Devansh",
+            email: "devansh@gmail.com",
+            id: data.data?.id || "user_devansh",
+          }
+        );
+
+        console.log("✅ Real authentication successful");
+        console.log(
+          "🔑 Token stored:",
+          data.accessToken.substring(0, 30) + "..."
+        );
+        console.log("✅ Authentication complete - redirecting to app");
+      } else {
+        throw new Error(data.message || "Authentication failed");
+      }
+    } catch (error) {
+      console.error("❌ Auth error:", error);
+      console.error("❌ Auth error response:", error.response?.data);
+      Alert.alert(
+        "Authentication Error",
+        `Failed to authenticate: ${error.message}`
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSkip = () => {
     if (navigation && navigation.navigate) {
-      navigation.navigate("MainApp");
+      navigation.navigate("Home");
     }
   };
 
@@ -149,7 +214,10 @@ export default function GoogleAuthScreen({ navigation }) {
             {/* Google Sign In Button */}
             <TouchableOpacity
               onPress={handleGoogleSignIn}
-              className="bg-white rounded-xl p-5 border border-gray-200 flex-row items-center justify-center"
+              disabled={loading}
+              className={`rounded-xl p-5 border border-gray-200 flex-row items-center justify-center ${
+                loading ? "bg-gray-100" : "bg-white"
+              }`}
               style={{
                 shadowColor: "#000",
                 shadowOffset: { width: 0, height: 3 },
@@ -164,15 +232,21 @@ export default function GoogleAuthScreen({ navigation }) {
                 </View>
               </View>
               <Text
-                className="text-gray-800 text-lg"
+                className={`text-lg ${
+                  loading ? "text-gray-400" : "text-gray-800"
+                }`}
                 style={{ fontFamily: "Inter_600SemiBold" }}
               >
-                Continue with Google
+                {loading ? "Signing in..." : "Continue with Google"}
               </Text>
             </TouchableOpacity>
 
             {/* Skip Button */}
-            <TouchableOpacity onPress={handleSkip} className="py-4">
+            <TouchableOpacity
+              onPress={handleSkip}
+              className="py-4"
+              disabled={loading}
+            >
               <Text
                 className="text-gray-500 text-base text-center"
                 style={{ fontFamily: "Inter_500Medium" }}

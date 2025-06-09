@@ -18,11 +18,14 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
+import api from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 
 // Import reusable components
 import BottomNavigation from "../components/BottomNavigation";
 
 export default function CardManagementScreen({ navigation }) {
+  const { isAuthenticated, user } = useAuth();
   const [showAddCardModal, setShowAddCardModal] = useState(false);
   const [cards, setCards] = useState([
     {
@@ -55,10 +58,12 @@ export default function CardManagementScreen({ navigation }) {
   ]);
 
   const [newCard, setNewCard] = useState({
-    type: "",
-    number: "",
-    holder: "",
-    expiry: "",
+    last4Digits: "",
+    cardNetwork: "",
+    bankName: "",
+    cardName: "",
+    expiryMonth: "",
+    expiryYear: "",
     cvv: "",
   });
 
@@ -81,30 +86,91 @@ export default function CardManagementScreen({ navigation }) {
     ["#f59e0b", "#f97316", "#ea580c"], // Orange
   ];
 
-  const handleAddCard = () => {
+  const handleAddCard = async () => {
+    // Check authentication first
+    if (!isAuthenticated) {
+      Alert.alert(
+        "Authentication Required",
+        "Please log in to add credit cards.",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Go to Login", onPress: () => navigation.navigate("Auth") },
+        ]
+      );
+      return;
+    }
+
     if (
-      !newCard.type ||
-      !newCard.number ||
-      !newCard.holder ||
-      !newCard.expiry
+      !newCard.last4Digits ||
+      !newCard.cardNetwork ||
+      !newCard.bankName ||
+      !newCard.cardName ||
+      !newCard.expiryMonth ||
+      !newCard.expiryYear
     ) {
       Alert.alert("Error", "Please fill in all required fields");
       return;
     }
 
-    const randomGradient =
-      cardGradients[Math.floor(Math.random() * cardGradients.length)];
-    const cardToAdd = {
-      id: cards.length + 1,
-      ...newCard,
-      gradient: randomGradient,
-      balance: 0.0,
-    };
+    try {
+      console.log("🔐 User authenticated:", user?.name || "Unknown user");
 
-    setCards([...cards, cardToAdd]);
-    setNewCard({ type: "", number: "", holder: "", expiry: "", cvv: "" });
-    setShowAddCardModal(false);
-    Alert.alert("Success", "Card added successfully!");
+      const cardData = {
+        last4Digits: newCard.last4Digits,
+        cardNetwork: newCard.cardNetwork.toLowerCase(),
+        bankName: newCard.bankName.toLowerCase(),
+        cardName: newCard.cardName.toLowerCase(),
+        expiryMonth: parseInt(newCard.expiryMonth),
+        expiryYear: parseInt(newCard.expiryYear),
+      };
+
+      console.log("📤 Sending card data:", cardData);
+
+      const { data } = await api.post(
+        "/financial-data/credit-cards/",
+        cardData
+      );
+      console.log("✅ API Response:", data);
+
+      // Add card to local state for UI display
+      const randomGradient =
+        cardGradients[Math.floor(Math.random() * cardGradients.length)];
+      const cardToAdd = {
+        id: cards.length + 1,
+        type: `${newCard.cardNetwork.toUpperCase()} ${newCard.cardName.toUpperCase()}`,
+        number: `**** **** **** ${newCard.last4Digits}`,
+        holder: "Card Holder", // Default name since API doesn't require it
+        expiry: `${newCard.expiryMonth.padStart(2, "0")}/${newCard.expiryYear
+          .toString()
+          .slice(-2)}`,
+        gradient: randomGradient,
+        balance: 0.0,
+      };
+
+      setCards([...cards, cardToAdd]);
+      setNewCard({
+        last4Digits: "",
+        cardNetwork: "",
+        bankName: "",
+        cardName: "",
+        expiryMonth: "",
+        expiryYear: "",
+        cvv: "",
+      });
+      setShowAddCardModal(false);
+      Alert.alert("Success", "Card added successfully!");
+    } catch (error) {
+      console.error("❌ Error adding card:", error);
+      console.error("❌ Error response:", error.response?.data);
+      console.error("❌ Error status:", error.response?.status);
+      console.error("❌ Error headers:", error.response?.headers);
+
+      if (error.response?.status === 401) {
+        Alert.alert("Authentication Error", "Please log in again to continue.");
+      } else {
+        Alert.alert("Error", `Failed to add card: ${error.message}`);
+      }
+    }
   };
 
   const renderCard = (card) => (
@@ -372,59 +438,6 @@ export default function CardManagementScreen({ navigation }) {
         contentContainerStyle={{ padding: 24, paddingBottom: 120 }}
       >
         {cards.map((card) => renderCard(card))}
-
-        {/* Statistics Card */}
-        <View
-          className="bg-white rounded-3xl p-8 border border-gray-100"
-          style={{
-            shadowColor: "#3b82f6",
-            shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.08,
-            shadowRadius: 20,
-            elevation: 10,
-          }}
-        >
-          <Text
-            className="text-gray-900 text-xl mb-8"
-            style={{
-              fontFamily: "Inter_700Bold",
-              letterSpacing: -0.5,
-            }}
-          >
-            Card Statistics
-          </Text>
-
-          <View className="space-y-6">
-            <View className="flex-row items-center justify-between">
-              <Text
-                className="text-gray-600 text-base"
-                style={{ fontFamily: "Inter_500Medium" }}
-              >
-                Total Cards
-              </Text>
-              <Text
-                className="text-gray-900 text-xl"
-                style={{ fontFamily: "Inter_700Bold" }}
-              >
-                {cards.length}
-              </Text>
-            </View>
-            <View className="flex-row items-center justify-between">
-              <Text
-                className="text-gray-600 text-base"
-                style={{ fontFamily: "Inter_500Medium" }}
-              >
-                Total Balance
-              </Text>
-              <Text
-                className="text-green-600 text-xl"
-                style={{ fontFamily: "Inter_700Bold" }}
-              >
-                ${cards.reduce((sum, card) => sum + card.balance, 0).toFixed(2)}
-              </Text>
-            </View>
-          </View>
-        </View>
       </ScrollView>
 
       {/* Add Card Modal */}
@@ -459,35 +472,17 @@ export default function CardManagementScreen({ navigation }) {
                   className="text-gray-700 text-base mb-3"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  Card Type
+                  Last 4 Digits
                 </Text>
                 <TextInput
                   className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
-                  placeholder="e.g., VISA PLATINUM"
-                  value={newCard.type}
+                  placeholder="1234"
+                  value={newCard.last4Digits}
                   onChangeText={(text) =>
-                    setNewCard({ ...newCard, type: text })
-                  }
-                  style={{ fontFamily: "Inter_500Medium" }}
-                />
-              </View>
-
-              <View>
-                <Text
-                  className="text-gray-700 text-base mb-3"
-                  style={{ fontFamily: "Inter_600SemiBold" }}
-                >
-                  Card Number
-                </Text>
-                <TextInput
-                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
-                  placeholder="1234 5678 9012 3456"
-                  value={newCard.number}
-                  onChangeText={(text) =>
-                    setNewCard({ ...newCard, number: text })
+                    setNewCard({ ...newCard, last4Digits: text })
                   }
                   keyboardType="numeric"
-                  maxLength={19}
+                  maxLength={4}
                   style={{ fontFamily: "Inter_500Medium" }}
                 />
               </View>
@@ -497,14 +492,50 @@ export default function CardManagementScreen({ navigation }) {
                   className="text-gray-700 text-base mb-3"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  Card Holder Name
+                  Card Network
                 </Text>
                 <TextInput
                   className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
-                  placeholder="John Doe"
-                  value={newCard.holder}
+                  placeholder="e.g., visa, mastercard, rupay"
+                  value={newCard.cardNetwork}
                   onChangeText={(text) =>
-                    setNewCard({ ...newCard, holder: text })
+                    setNewCard({ ...newCard, cardNetwork: text })
+                  }
+                  style={{ fontFamily: "Inter_500Medium" }}
+                />
+              </View>
+
+              <View>
+                <Text
+                  className="text-gray-700 text-base mb-3"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  Bank Name
+                </Text>
+                <TextInput
+                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                  placeholder="e.g., hdfc, icici, sbi"
+                  value={newCard.bankName}
+                  onChangeText={(text) =>
+                    setNewCard({ ...newCard, bankName: text })
+                  }
+                  style={{ fontFamily: "Inter_500Medium" }}
+                />
+              </View>
+
+              <View>
+                <Text
+                  className="text-gray-700 text-base mb-3"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  Card Name
+                </Text>
+                <TextInput
+                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                  placeholder="e.g., millenia, platinum, gold"
+                  value={newCard.cardName}
+                  onChangeText={(text) =>
+                    setNewCard({ ...newCard, cardName: text })
                   }
                   style={{ fontFamily: "Inter_500Medium" }}
                 />
@@ -516,17 +547,17 @@ export default function CardManagementScreen({ navigation }) {
                     className="text-gray-700 text-base mb-3"
                     style={{ fontFamily: "Inter_600SemiBold" }}
                   >
-                    Expiry Date
+                    Expiry Month
                   </Text>
                   <TextInput
                     className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
-                    placeholder="MM/YY"
-                    value={newCard.expiry}
+                    placeholder="MM"
+                    value={newCard.expiryMonth}
                     onChangeText={(text) =>
-                      setNewCard({ ...newCard, expiry: text })
+                      setNewCard({ ...newCard, expiryMonth: text })
                     }
                     keyboardType="numeric"
-                    maxLength={5}
+                    maxLength={2}
                     style={{ fontFamily: "Inter_500Medium" }}
                   />
                 </View>
@@ -535,21 +566,39 @@ export default function CardManagementScreen({ navigation }) {
                     className="text-gray-700 text-base mb-3"
                     style={{ fontFamily: "Inter_600SemiBold" }}
                   >
-                    CVV
+                    Expiry Year
                   </Text>
                   <TextInput
                     className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
-                    placeholder="123"
-                    value={newCard.cvv}
+                    placeholder="YYYY"
+                    value={newCard.expiryYear}
                     onChangeText={(text) =>
-                      setNewCard({ ...newCard, cvv: text })
+                      setNewCard({ ...newCard, expiryYear: text })
                     }
                     keyboardType="numeric"
                     maxLength={4}
-                    secureTextEntry
                     style={{ fontFamily: "Inter_500Medium" }}
                   />
                 </View>
+              </View>
+
+              <View>
+                <Text
+                  className="text-gray-700 text-base mb-3"
+                  style={{ fontFamily: "Inter_600SemiBold" }}
+                >
+                  CVV (Optional)
+                </Text>
+                <TextInput
+                  className="bg-gray-50 rounded-2xl px-4 py-4 text-gray-900 text-base border border-gray-200"
+                  placeholder="123"
+                  value={newCard.cvv}
+                  onChangeText={(text) => setNewCard({ ...newCard, cvv: text })}
+                  keyboardType="numeric"
+                  maxLength={4}
+                  secureTextEntry
+                  style={{ fontFamily: "Inter_500Medium" }}
+                />
               </View>
             </View>
           </ScrollView>

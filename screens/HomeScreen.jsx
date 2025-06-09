@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Path, Circle, Polygon } from "react-native-svg";
+import { useAuth } from "../context/AuthContext";
+import { apiCalls } from "../utils/api";
+import api from "../utils/api";
 import {
   useFonts,
   Inter_400Regular,
@@ -31,12 +34,191 @@ import BottomNavigation from "../components/BottomNavigation";
 const { width } = Dimensions.get("window");
 
 export default function HomeScreen({ navigation }) {
+  const { user, logout } = useAuth();
+  const [recommendedCards, setRecommendedCards] = useState([]);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
+  const [frequentTransactions, setFrequentTransactions] = useState([]);
+  const [loadingTransactions, setLoadingTransactions] = useState(true);
+
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
     Inter_700Bold,
   });
+
+  // Fetch recommended cards
+  const fetchRecommendedCards = async () => {
+    try {
+      console.log("🔍 Fetching recommended cards...");
+      const { data } = await api.get(
+        "/financial-data/credit-cards/recommended"
+      );
+      console.log("✅ Recommended cards API response:", data);
+
+      if (data.code === 200 && data.data.recommendedCards) {
+        // Take only first 2 cards as requested
+        const cards = data.data.recommendedCards
+          .slice(0, 2)
+          .map((card, index) => ({
+            id: card.id,
+            name: card.cardName,
+            bank: card.issuer, // Bank name (issuer)
+            perks: card.features || [card.rewardRate], // Features as perks
+            whyThisCard: card.description,
+            potentialSavings: index === 0 ? "₹2,400/month" : "₹1,800/month", // Static potential savings
+            annualFeeWaiver:
+              card.annualFeeWaiver || `Annual fee: ₹${card.annualFee}`,
+            color: index === 0 ? "#1e40af" : "#3b82f6",
+          }));
+        setRecommendedCards(cards);
+      }
+    } catch (error) {
+      console.error("❌ Error fetching recommended cards:", error);
+      // Fallback to static data if API fails
+      setRecommendedCards([
+        {
+          id: 1,
+          name: "HDFC Infinia",
+          bank: "HDFC Bank",
+          perks: [
+            "5X rewards on dining",
+            "3X on travel",
+            "Airport lounge access",
+          ],
+          whyThisCard: "Perfect for your dining & travel spending pattern",
+          potentialSavings: "₹2,400/month",
+          annualFeeWaiver: "Annual fee waived on ₹4L annual spend",
+          color: "#1e40af",
+        },
+        {
+          id: 2,
+          name: "ICICI Amazon Pay",
+          bank: "ICICI Bank",
+          perks: ["5% on Amazon", "2% on bill payments", "1% on other spends"],
+          whyThisCard: "Ideal for your frequent online shopping",
+          potentialSavings: "₹1,800/month",
+          annualFeeWaiver: "No annual fee",
+          color: "#3b82f6",
+        },
+      ]);
+    } finally {
+      setLoadingRecommendations(false);
+    }
+  };
+
+  // Fetch frequent transactions
+  const fetchFrequentTransactions = async () => {
+    try {
+      console.log("🔍 Fetching frequent transactions...");
+      const { data } = await api.get("/financial-data/transactions/frequent");
+      console.log("✅ Frequent transactions API response:", data);
+
+      if (data.code === 200 && data.data.frequentMerchants) {
+        // Get category icon mapping
+        const getCategoryIcon = (category) => {
+          const iconMap = {
+            transportation: "🚗",
+            dining: "🍔",
+            shopping: "📦",
+            fuel: "⛽",
+            groceries: "🛒",
+            entertainment: "🎬",
+            utilities: "💡",
+          };
+          return iconMap[category.toLowerCase()] || "💳";
+        };
+
+        // Take only first 4 transactions as requested
+        const transactions = data.data.frequentMerchants
+          .slice(0, 4)
+          .map((merchant, index) => ({
+            id: index + 1,
+            merchant: merchant.merchantName,
+            category:
+              merchant.category.charAt(0).toUpperCase() +
+              merchant.category.slice(1),
+            amount: `₹${Math.round(merchant.totalAmount)}`, // Using totalAmount
+            cardUsed: "SBI Platinum", // Static as requested
+            isOptimal: index % 2 === 1, // Alternate for variety
+            betterCard: "HDFC Swiggy Card", // Static as requested
+            missedReward: `₹${Math.round(merchant.totalAmount * 0.1)}`, // Static calculation
+            earnedReward:
+              index % 2 === 1
+                ? `₹${Math.round(merchant.totalAmount * 0.05)}`
+                : null,
+            icon: getCategoryIcon(merchant.category),
+          }));
+        setFrequentTransactions(transactions);
+      }
+    } catch (error) {
+      console.error("❌ Error fetching frequent transactions:", error);
+      // Fallback to static data if API fails
+      setFrequentTransactions([
+        {
+          id: 1,
+          merchant: "Zomato",
+          category: "Dining",
+          amount: "₹850",
+          cardUsed: "SBI Platinum",
+          isOptimal: false,
+          betterCard: "HDFC Swiggy Card",
+          missedReward: "₹85",
+          icon: "🍔",
+        },
+        {
+          id: 2,
+          merchant: "Amazon",
+          category: "Shopping",
+          amount: "₹2,400",
+          cardUsed: "ICICI Amazon Pay",
+          isOptimal: true,
+          earnedReward: "₹120",
+          icon: "📦",
+        },
+        {
+          id: 3,
+          merchant: "Indian Oil",
+          category: "Fuel",
+          amount: "₹3,000",
+          cardUsed: "HDFC Regalia",
+          isOptimal: false,
+          betterCard: "BPCL SBI Card",
+          missedReward: "₹150",
+          icon: "⛽",
+        },
+        {
+          id: 4,
+          merchant: "Rapido",
+          category: "Transportation",
+          amount: "₹450",
+          cardUsed: "SBI Platinum",
+          isOptimal: true,
+          earnedReward: "₹22",
+          icon: "🚗",
+        },
+      ]);
+    } finally {
+      setLoadingTransactions(false);
+    }
+  };
+
+  // Test API call function
+  const testApiCall = async () => {
+    try {
+      console.log("🧪 Testing API call...");
+      const response = await apiCalls.getUserProfile();
+      console.log("✅ API Response:", response.data);
+    } catch (error) {
+      console.log("❌ API Error:", error.message);
+      console.log("🔍 Error details:", error.response?.data || error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecommendedCards();
+    fetchFrequentTransactions();
+  }, []);
 
   if (!fontsLoaded) {
     return null;
@@ -78,64 +260,6 @@ export default function HomeScreen({ navigation }) {
     (sum, item) => sum + item.amount,
     0
   );
-
-  // Frequent transactions with optimization status
-  const frequentTransactions = [
-    {
-      id: 1,
-      merchant: "Zomato",
-      category: "Dining",
-      amount: "₹850",
-      cardUsed: "SBI Platinum",
-      isOptimal: false,
-      betterCard: "HDFC Swiggy Card",
-      missedReward: "₹85",
-      icon: "🍔",
-    },
-    {
-      id: 2,
-      merchant: "Amazon",
-      category: "Shopping",
-      amount: "₹2,400",
-      cardUsed: "ICICI Amazon Pay",
-      isOptimal: true,
-      earnedReward: "₹120",
-      icon: "📦",
-    },
-    {
-      id: 3,
-      merchant: "Indian Oil",
-      category: "Fuel",
-      amount: "₹3,000",
-      cardUsed: "HDFC Regalia",
-      isOptimal: false,
-      betterCard: "BPCL SBI Card",
-      missedReward: "₹150",
-      icon: "⛽",
-    },
-  ];
-
-  // Top recommended cards
-  const recommendedCards = [
-    {
-      id: 1,
-      name: "HDFC Infinia",
-      bank: "HDFC Bank",
-      perks: ["5X rewards on dining", "3X on travel", "Airport lounge access"],
-      whyThisCard: "Perfect for your dining & travel spending pattern",
-      potentialSavings: "₹2,400/month",
-      color: "#1e40af",
-    },
-    {
-      id: 2,
-      name: "ICICI Amazon Pay",
-      bank: "ICICI Bank",
-      perks: ["5% on Amazon", "2% on bill payments", "1% on other spends"],
-      whyThisCard: "Ideal for your frequent online shopping",
-      potentialSavings: "₹1,800/month",
-      color: "#3b82f6",
-    },
-  ];
 
   const LoaderStyleBreakdown = ({ data }) => {
     const totalMissed = data.reduce((sum, item) => sum + item.amount, 0);
@@ -729,7 +853,7 @@ export default function HomeScreen({ navigation }) {
                     lineHeight: 44,
                   }}
                 >
-                  Devansh
+                  {user?.name || "Guest"}
                 </Text>
                 <View
                   className="bg-white/70 backdrop-blur-md rounded-2xl p-4"
@@ -747,34 +871,68 @@ export default function HomeScreen({ navigation }) {
                 </View>
               </View>
 
-              <TouchableOpacity
-                className="bg-white/60 backdrop-blur-md rounded-2xl p-4"
-                style={{
-                  shadowColor: "#1e40af",
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 12,
-                  elevation: 6,
-                  borderWidth: 1,
-                  borderColor: "rgba(30, 64, 175, 0.2)",
-                }}
-              >
-                <Ionicons
-                  name="notifications-outline"
-                  size={24}
-                  color="#1e40af"
-                />
-                <View
-                  className="absolute -top-1 -right-1 bg-orange-500 rounded-full w-3 h-3"
+              <View className="flex-row space-x-3">
+                <TouchableOpacity
+                  className="bg-white/60 backdrop-blur-md rounded-2xl p-4"
                   style={{
-                    shadowColor: "#f97316",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.6,
-                    shadowRadius: 4,
-                    elevation: 3,
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 12,
+                    elevation: 6,
+                    borderWidth: 1,
+                    borderColor: "rgba(30, 64, 175, 0.2)",
                   }}
-                />
-              </TouchableOpacity>
+                >
+                  <Ionicons
+                    name="notifications-outline"
+                    size={24}
+                    color="#1e40af"
+                  />
+                  <View
+                    className="absolute -top-1 -right-1 bg-orange-500 rounded-full w-3 h-3"
+                    style={{
+                      shadowColor: "#f97316",
+                      shadowOffset: { width: 0, height: 2 },
+                      shadowOpacity: 0.6,
+                      shadowRadius: 4,
+                      elevation: 3,
+                    }}
+                  />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={testApiCall}
+                  className="bg-white/60 backdrop-blur-md rounded-2xl p-4"
+                  style={{
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 12,
+                    elevation: 6,
+                    borderWidth: 1,
+                    borderColor: "rgba(30, 64, 175, 0.2)",
+                  }}
+                >
+                  <Ionicons name="flask-outline" size={24} color="#1e40af" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={logout}
+                  className="bg-white/60 backdrop-blur-md rounded-2xl p-4"
+                  style={{
+                    shadowColor: "#1e40af",
+                    shadowOffset: { width: 0, height: 4 },
+                    shadowOpacity: 0.15,
+                    shadowRadius: 12,
+                    elevation: 6,
+                    borderWidth: 1,
+                    borderColor: "rgba(30, 64, 175, 0.2)",
+                  }}
+                >
+                  <Ionicons name="log-out-outline" size={24} color="#1e40af" />
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Missed Rewards Card */}
@@ -1023,120 +1181,141 @@ export default function HomeScreen({ navigation }) {
               Recommended Cards for You
             </Text>
 
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="mx-[-16px]"
-              contentContainerStyle={{
-                paddingHorizontal: 16,
-                paddingRight: 32,
-              }}
-            >
-              {recommendedCards.map((card, index) => (
-                <View
-                  key={card.id}
-                  className="bg-white rounded-3xl p-8 border border-gray-100 mr-8"
-                  style={{
-                    width: width * 0.85,
-                    shadowColor: "#1e40af",
-                    shadowOffset: { width: 0, height: 8 },
-                    shadowOpacity: 0.1,
-                    shadowRadius: 20,
-                    elevation: 10,
-                  }}
+            {loadingRecommendations ? (
+              <View className="items-center justify-center py-8">
+                <Text
+                  className="text-gray-500 text-base"
+                  style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  <View className="mb-8">
-                    <Text
-                      className="text-blue-600 text-sm mb-2"
-                      style={{
-                        fontFamily: "Inter_500Medium",
-                        letterSpacing: 0.3,
-                        opacity: 0.8,
-                      }}
-                    >
-                      {card.bank}
-                    </Text>
-                    <Text
-                      className="text-blue-900 text-lg"
-                      style={{
-                        fontFamily: "Inter_700Bold",
-                        letterSpacing: -0.5,
-                        lineHeight: 28,
-                      }}
-                    >
-                      {card.name}
-                    </Text>
-                  </View>
-
-                  {/* Card Benefits */}
-                  <View className="space-y-4 mb-8">
-                    {card.perks.map((perk, perkIndex) => (
-                      <View key={perkIndex} className="flex-row items-center">
-                        <View
-                          className="bg-blue-100 rounded-full w-2 h-2 mr-4"
-                          style={{ opacity: 0.8 }}
-                        />
-                        <Text
-                          className="text-blue-800 text-base flex-1"
-                          style={{
-                            fontFamily: "Inter_400Regular",
-                            letterSpacing: 0.2,
-                            lineHeight: 22,
-                          }}
-                        >
-                          {perk}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-
-                  {/* Why This Card & Savings */}
-                  <View className="space-y-4">
-                    <Text
-                      className="text-blue-700 text-base"
-                      style={{
-                        fontFamily: "Inter_500Medium",
-                        letterSpacing: 0.2,
-                        lineHeight: 22,
-                      }}
-                    >
-                      {card.whyThisCard}
-                    </Text>
-                    <Text
-                      className="text-blue-700 text-base"
-                      style={{
-                        fontFamily: "Inter_600SemiBold",
-                        letterSpacing: 0.2,
-                      }}
-                    >
-                      Potential savings: {card.potentialSavings}
-                    </Text>
-                  </View>
-
-                  {/* Apply Button */}
-                  <TouchableOpacity
-                    className="bg-blue-600 rounded-2xl py-4 px-8 mt-8"
+                  Loading recommendations...
+                </Text>
+              </View>
+            ) : (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className="mx-[-16px]"
+                contentContainerStyle={{
+                  paddingHorizontal: 16,
+                  paddingRight: 32,
+                }}
+              >
+                {recommendedCards.map((card, index) => (
+                  <View
+                    key={card.id}
+                    className="bg-white rounded-3xl p-8 border border-gray-100 mr-8"
                     style={{
-                      shadowColor: "#2563eb",
-                      shadowOffset: { width: 0, height: 4 },
-                      shadowOpacity: 0.3,
-                      shadowRadius: 8,
-                      elevation: 6,
+                      width: width * 0.85,
+                      shadowColor: "#1e40af",
+                      shadowOffset: { width: 0, height: 8 },
+                      shadowOpacity: 0.1,
+                      shadowRadius: 20,
+                      elevation: 10,
                     }}
                   >
-                    <Text
-                      className="text-white text-base text-center"
+                    <View className="mb-8">
+                      <Text
+                        className="text-blue-600 text-sm mb-2"
+                        style={{
+                          fontFamily: "Inter_500Medium",
+                          letterSpacing: 0.3,
+                          opacity: 0.8,
+                        }}
+                      >
+                        {card.bank}
+                      </Text>
+                      <Text
+                        className="text-blue-900 text-lg"
+                        style={{
+                          fontFamily: "Inter_700Bold",
+                          letterSpacing: -0.5,
+                          lineHeight: 28,
+                        }}
+                      >
+                        {card.name}
+                      </Text>
+                    </View>
+
+                    {/* Card Benefits */}
+                    <View className="space-y-4 mb-8">
+                      {card.perks.map((perk, perkIndex) => (
+                        <View key={perkIndex} className="flex-row items-center">
+                          <View
+                            className="bg-blue-100 rounded-full w-2 h-2 mr-4"
+                            style={{ opacity: 0.8 }}
+                          />
+                          <Text
+                            className="text-blue-800 text-base flex-1"
+                            style={{
+                              fontFamily: "Inter_400Regular",
+                              letterSpacing: 0.2,
+                              lineHeight: 22,
+                            }}
+                          >
+                            {perk}
+                          </Text>
+                        </View>
+                      ))}
+                    </View>
+
+                    {/* Why This Card, Savings & Annual Fee Waiver */}
+                    <View className="space-y-4">
+                      <Text
+                        className="text-blue-700 text-base"
+                        style={{
+                          fontFamily: "Inter_500Medium",
+                          letterSpacing: 0.2,
+                          lineHeight: 22,
+                        }}
+                      >
+                        {card.whyThisCard}
+                      </Text>
+                      <Text
+                        className="text-blue-700 text-base"
+                        style={{
+                          fontFamily: "Inter_600SemiBold",
+                          letterSpacing: 0.2,
+                        }}
+                      >
+                        Potential savings: {card.potentialSavings}
+                      </Text>
+                      <Text
+                        className="text-blue-600 text-sm"
+                        style={{
+                          fontFamily: "Inter_500Medium",
+                          letterSpacing: 0.2,
+                          opacity: 0.8,
+                        }}
+                      >
+                        {card.annualFeeWaiver}
+                      </Text>
+                    </View>
+
+                    {/* Apply Button */}
+                    <TouchableOpacity
+                      className="bg-blue-600 rounded-2xl py-4 px-8 mt-8"
                       style={{
-                        fontFamily: "Inter_600SemiBold",
-                        letterSpacing: 0.3,
+                        shadowColor: "#2563eb",
+                        shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 8,
+                        elevation: 6,
                       }}
                     >
-                      Learn More
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </ScrollView>
+                      <Text
+                        className="text-white text-base text-center"
+                        style={{
+                          fontFamily: "Inter_600SemiBold",
+                          letterSpacing: 0.3,
+                        }}
+                      >
+                        Learn More
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </ScrollView>
+            )}
           </View>
 
           {/* Footer spacing for bottom navigation */}

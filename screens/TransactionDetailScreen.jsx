@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,14 +17,54 @@ import {
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import Svg, { Path, Circle, Polygon } from "react-native-svg";
+import api from "../utils/api";
 
 export default function TransactionDetailScreen({ route, navigation }) {
+  const [transactionData, setTransactionData] = useState({
+    transactionCount: 0,
+    totalAmount: 0,
+    averageAmount: 0,
+  });
+  const [loadingTransactionData, setLoadingTransactionData] = useState(true);
+
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
     Inter_700Bold,
   });
+
+  // Fetch frequent transactions data
+  const fetchTransactionData = async () => {
+    try {
+      console.log("🔍 Fetching transaction data for details...");
+      const { data } = await api.get("/financial-data/transactions/frequent");
+      console.log("✅ Transaction data API response:", data);
+
+      if (
+        data.code === 200 &&
+        data.data.frequentMerchants &&
+        data.data.frequentMerchants.length > 0
+      ) {
+        // Use the first merchant's data for the transaction details
+        const firstMerchant = data.data.frequentMerchants[0];
+        setTransactionData({
+          transactionCount: firstMerchant.transactionCount,
+          totalAmount: Math.round(firstMerchant.totalAmount),
+          averageAmount: Math.round(firstMerchant.averageAmount),
+        });
+      }
+    } catch (error) {
+      console.error("❌ Error fetching transaction data:", error);
+      // Keep default static values on error
+    } finally {
+      setLoadingTransactionData(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactionData();
+  }, []);
 
   if (!fontsLoaded) {
     return null;
@@ -264,13 +304,15 @@ export default function TransactionDetailScreen({ route, navigation }) {
                   className="text-gray-600 text-xs mb-2"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Card Used
+                  Transaction Count
                 </Text>
                 <Text
                   className="text-gray-900 text-base mb-2"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  {transaction.cardUsed}
+                  {loadingTransactionData
+                    ? "Loading..."
+                    : transactionData.transactionCount}
                 </Text>
               </View>
               <View className="flex-row items-center justify-between mb-4">
@@ -278,13 +320,15 @@ export default function TransactionDetailScreen({ route, navigation }) {
                   className="text-gray-600 text-xs mb-2"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Cashback Rate
+                  Total Amount
                 </Text>
                 <Text
                   className="text-gray-900 text-base mb-2"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  {transaction.currentCashbackRate}
+                  {loadingTransactionData
+                    ? "Loading..."
+                    : `₹${transactionData.totalAmount}`}
                 </Text>
               </View>
               <View className="flex-row items-center justify-between">
@@ -292,13 +336,15 @@ export default function TransactionDetailScreen({ route, navigation }) {
                   className="text-gray-600 text-xs"
                   style={{ fontFamily: "Inter_500Medium" }}
                 >
-                  Earned
+                  Average Amount
                 </Text>
                 <Text
                   className="text-gray-900 text-base"
                   style={{ fontFamily: "Inter_600SemiBold" }}
                 >
-                  ₹{transaction.actualEarned}
+                  {loadingTransactionData
+                    ? "Loading..."
+                    : `₹${transactionData.averageAmount}`}
                 </Text>
               </View>
             </View>
